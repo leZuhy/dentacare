@@ -21,7 +21,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.13" />
     <!-- Not used directly: EF Core SqlServer 10.0.13 brings it through Microsoft.Data.SqlClient 6.1.7 as 9.0.11,
          which has a known vulnerability (GHSA-846f-f764-76mx, reported by "dotnet list package" with the vulnerable option).
          Pinned to the patched version; remove this line once EF Core SqlServer depends on a patched version. -->

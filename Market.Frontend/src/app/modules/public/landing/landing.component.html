@@ -11,14 +11,14 @@
         <h2 class="hero-title">{{ 'LANDING.HERO_TITLE' | translate }}</h2>
         <p class="hero-description">{{ 'LANDING.HERO_DESCRIPTION' | translate }}</p>
         <div class="hero-actions">
-          <a mat-raised-button color="primary" class="cta-button" routerLink="/search">
-            <mat-icon>shopping_bag</mat-icon>
-            {{ 'LANDING.BROWSE_PRODUCTS' | translate }}
+          <a mat-raised-button color="primary" class="cta-button" routerLink="/converter">
+            <mat-icon>currency_exchange</mat-icon>
+            {{ 'PUBLIC.NAV.CONVERTER' | translate }}
           </a>
           @if (currentUser.isAuthenticated()) {
-            <a mat-stroked-button class="secondary-button" routerLink="/client/orders">
-              <mat-icon>receipt_long</mat-icon>
-              {{ 'PUBLIC.NAV.MY_ORDERS' | translate }}
+            <a mat-stroked-button class="secondary-button" routerLink="/client/profile">
+              <mat-icon>manage_accounts</mat-icon>
+              {{ 'PUBLIC.NAV.MY_PROFILE' | translate }}
             </a>
           } @else {
             <a mat-stroked-button class="secondary-button" routerLink="/auth/login">
@@ -29,14 +29,6 @@
         </div>
       </div>
       <div class="hero-image">
-        <div class="floating-card card-1">
-          <mat-icon>inventory_2</mat-icon>
-          <span>{{ 'LANDING.STATS_PRODUCTS' | translate: { count: home?.stats?.totalProducts ?? 0 } }}</span>
-        </div>
-        <div class="floating-card card-2">
-          <mat-icon>category</mat-icon>
-          <span>{{ 'LANDING.STATS_CATEGORIES' | translate: { count: home?.stats?.totalCategories ?? 0 } }}</span>
-        </div>
         <div class="floating-card card-3">
           <mat-icon>currency_exchange</mat-icon>
           <span>{{ 'LANDING.STATS_CURRENCIES' | translate }}</span>
@@ -44,75 +36,6 @@
       </div>
     </div>
   </section>
-
-  @if (isLoading) {
-    <section class="state-section">
-      <mat-spinner diameter="48"></mat-spinner>
-      <p>{{ 'LANDING.LOADING' | translate }}</p>
-    </section>
-  } @else if (errorMessage) {
-    <section class="state-section">
-      <mat-icon class="state-icon">error_outline</mat-icon>
-      <p>{{ 'LANDING.ERROR' | translate }}</p>
-      <button mat-stroked-button color="primary" type="button" (click)="loadHome()">
-        <mat-icon>refresh</mat-icon>
-        {{ 'COMMON.RETRY' | translate }}
-      </button>
-    </section>
-  } @else if (home) {
-    <!-- Promocije (baneri) -->
-    @if (home.promotions.length > 0) {
-      <section class="catalog-section">
-        <app-promotions-carousel [promotions]="home.promotions" />
-      </section>
-    }
-
-    <!-- Kategorije → pretraga filtrirana po kategoriji -->
-    @if (home.categories.length > 0) {
-      <section class="catalog-section">
-        <div class="section-header">
-          <h2 class="section-title">{{ 'LANDING.CATEGORIES_TITLE' | translate }}</h2>
-        </div>
-        <div class="category-list">
-          @for (category of home.categories; track category.id) {
-            <a
-              mat-stroked-button
-              class="category-chip"
-              routerLink="/search"
-              [queryParams]="{ categoryId: category.id }"
-            >
-              <mat-icon>category</mat-icon>
-              {{ category.name }}
-            </a>
-          }
-        </div>
-      </section>
-    }
-
-    <!-- Najnoviji proizvodi -->
-    <section class="catalog-section">
-      <div class="section-header">
-        <h2 class="section-title">{{ 'LANDING.NEWEST_TITLE' | translate }}</h2>
-        <p class="section-subtitle">{{ 'LANDING.NEWEST_SUBTITLE' | translate }}</p>
-      </div>
-
-      @if (home.newestProducts.length > 0) {
-        <div class="products-grid">
-          @for (product of home.newestProducts; track product.id) {
-            <app-product-card [product]="product" />
-          }
-        </div>
-        <div class="section-footer">
-          <a mat-stroked-button color="primary" routerLink="/search">
-            {{ 'LANDING.ALL_PRODUCTS' | translate }}
-            <mat-icon iconPositionEnd>arrow_forward</mat-icon>
-          </a>
-        </div>
-      } @else {
-        <p class="empty-text">{{ 'LANDING.NO_PRODUCTS' | translate }}</p>
-      }
-    </section>
-  }
 
   <!-- CTA Section (samo za neprijavljene) -->
   @if (!currentUser.isAuthenticated()) {

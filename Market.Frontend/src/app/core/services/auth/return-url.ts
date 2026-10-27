@@ -1,11 +1,11 @@
 /**
- * returnUrl: stranica na koju se korisnik vraća nakon prijave (/auth/login?returnUrl=/checkout).
+ * returnUrl: stranica na koju se korisnik vraća nakon prijave (/auth/login?returnUrl=/client/profile).
  *
  * returnUrl dolazi iz adrese, a adresu može napisati bilo ko (link u mailu, poruci...).
  * Zato poslije prijave idemo SAMO na putanju unutar aplikacije – inače bi se neko mogao
  * "vratiti" na tuđi sajt koji izgleda kao naš (open redirect).
  *
- * Dozvoljeno:  "/checkout", "/admin/orders?status=1"
+ * Dozvoljeno:  "/client/profile", "/admin/exchange-rates?currencyId=3"
  * Odbijeno:    "https://evil.com", "//evil.com", "/\evil.com", "javascript:...", "/auth/..."
  */
 export function isSafeReturnUrl(url: string | null | undefined): url is string {

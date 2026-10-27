@@ -42,7 +42,7 @@ const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
  *
  * @param errors   control.errors
  * @param custom   poruke specifične za formu: ključ greške → ključ prevoda,
- *                 npr. { nameTaken: 'PRODUCTS.FORM.NAME_TAKEN' } (imaju prednost nad default-ima)
+ *                 npr. { nameTaken: 'MODULE.FORM.NAME_TAKEN' } (imaju prednost nad default-ima)
  *
  * U templateu se ne poziva direktno – koristi <app-fit-field-error [control]="...">.
  */

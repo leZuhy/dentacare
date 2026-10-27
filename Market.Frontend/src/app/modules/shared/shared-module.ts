@@ -13,7 +13,6 @@ import { FitFieldErrorComponent } from './components/fit-field-error/fit-field-e
 import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
 import { StoreHeaderComponent } from './components/store-header/store-header.component';
 import { MoneyPipe } from './pipes/money.pipe';
-import { ApiUrlPipe } from './pipes/api-url.pipe';
 
 
 
@@ -26,8 +25,7 @@ import { ApiUrlPipe } from './pipes/api-url.pipe';
     FitFieldErrorComponent,
     CurrencySelectorComponent,
     StoreHeaderComponent,
-    MoneyPipe,
-    ApiUrlPipe
+    MoneyPipe
   ],
   imports: [
     CommonModule,
@@ -53,7 +51,6 @@ import { ApiUrlPipe } from './pipes/api-url.pipe';
     CurrencySelectorComponent,
     StoreHeaderComponent,
     MoneyPipe,
-    ApiUrlPipe,
     materialModules
   ]
 })

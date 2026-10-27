@@ -13,8 +13,8 @@ import { BaseComponent } from './base-component';
  * 4. Call initForm(isEdit) in ngOnInit
  *
  * TForm (opciono) je tip forme – tipizirana forma daje tipove i u save():
- *   export class PromotionUpsertComponent
- *     extends BaseFormComponent<GetPromotionByIdQueryDto, FormGroup<PromotionForm>> { ... }
+ *   export class ItemUpsertComponent
+ *     extends BaseFormComponent<GetItemByIdQueryDto, FormGroup<ItemForm>> { ... }
  *   this.form.controls.title.value   // string, ne any
  */
 @Directive()

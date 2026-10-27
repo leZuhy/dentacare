@@ -16,10 +16,10 @@ export interface HasUnsavedChanges {
  * (fit-confirm-dialog preko DialogHelperService). "Da" → napušta stranicu, "Ne" → ostaje.
  *
  * Ruta:
- *   { path: 'orders/:id/edit', component: OrderEditComponent, canDeactivate: [unsavedChangesGuard] }
+ *   { path: 'items/:id/edit', component: ItemEditComponent, canDeactivate: [unsavedChangesGuard] }
  *
  * Guard pokriva navigaciju UNUTAR aplikacije (link, back dugme browsera). Zatvaranje taba ili
- * refresh hvata komponenta preko 'window:beforeunload' (vidi OrderEditComponent).
+ * refresh hvata komponenta preko 'window:beforeunload' (@HostListener u komponenti).
  */
 export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (component) => {
   if (!component.hasUnsavedChanges()) {
