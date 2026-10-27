@@ -24,14 +24,8 @@ public partial class Program
             //
             // 1) Standard builder (includes appsettings.json, appsettings.{ENV}.json,
             //    environment variables, user-secrets (Dev), and command-line args)
-            //    WebRootPath is set explicitly, so the wwwroot folder is created on startup if it is missing
-            //    (otherwise ASP.NET Core serves no static files, e.g. uploaded product images).
             //
-            var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-            {
-                Args = args,
-                WebRootPath = "wwwroot"
-            });
+            var builder = WebApplication.CreateBuilder(args);
 
             // 2) Promote Serilog to full configuration from builder.Configuration
             //    (reads "Serilog" section from appsettings + ENV overrides)
@@ -99,18 +93,6 @@ public partial class Program
             app.UseHttpsRedirection();
             // UseCors ide prije UseAuthentication i UseAuthorization
             app.UseCors(CorsPolicyName);
-
-            // Static files from wwwroot (uploaded images in wwwroot/uploads, see LocalFileStorage).
-            // Placed before authentication/authorization, so they are served anonymously.
-            app.UseStaticFiles();
-
-            // A missing uploaded file ends here with "404". Otherwise the request would reach authorization,
-            // and the fallback policy would answer "401" to anonymous visitors.
-            app.Map("/uploads", uploads => uploads.Run(context =>
-            {
-                context.Response.StatusCode = StatusCodes.Status404NotFound;
-                return Task.CompletedTask;
-            }));
 
             app.UseAuthentication();
             app.UseAuthorization();

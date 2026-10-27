@@ -5,33 +5,12 @@
   </a>
 
   <nav class="store-nav">
-    <a mat-button class="nav-button" routerLink="/search" routerLinkActive="active">
-      <mat-icon>search</mat-icon>
-      <span class="nav-label">{{ 'PUBLIC.NAV.SEARCH_PRODUCTS' | translate }}</span>
-    </a>
-
     <a mat-button class="nav-button" routerLink="/converter" routerLinkActive="active">
       <mat-icon>currency_exchange</mat-icon>
       <span class="nav-label">{{ 'PUBLIC.NAV.CONVERTER' | translate }}</span>
     </a>
 
     <app-currency-selector />
-
-    <a
-      mat-icon-button
-      routerLink="/cart"
-      routerLinkActive="active"
-      [matTooltip]="'PUBLIC.NAV.CART' | translate"
-      [attr.aria-label]="'PUBLIC.NAV.CART' | translate"
-    >
-      <mat-icon
-        [matBadge]="cart.itemCount()"
-        [matBadgeHidden]="cart.itemCount() === 0"
-        matBadgeColor="warn"
-        aria-hidden="false"
-        >shopping_cart</mat-icon
-      >
-    </a>
 
     @if (currentUser.isAuthenticated()) {
       <button mat-flat-button class="nav-button" type="button" [matMenuTriggerFor]="accountMenu">
@@ -41,10 +20,6 @@
 
       <mat-menu #accountMenu="matMenu">
         <div class="account-email">{{ currentUser.currentUser()?.email }}</div>
-        <a mat-menu-item routerLink="/client/orders">
-          <mat-icon>receipt_long</mat-icon>
-          <span>{{ 'PUBLIC.NAV.MY_ORDERS' | translate }}</span>
-        </a>
         <a mat-menu-item routerLink="/client/profile">
           <mat-icon>manage_accounts</mat-icon>
           <span>{{ 'PUBLIC.NAV.MY_PROFILE' | translate }}</span>

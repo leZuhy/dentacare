@@ -94,88 +94,21 @@
   },
   "PUBLIC": {
     "NAV": {
-      "SEARCH_PRODUCTS": "Search products",
       "MY_ACCOUNT": "My account",
       "LOGIN": "Log in",
       "CONVERTER": "Currency converter",
-      "CART": "Cart",
-      "MY_ORDERS": "My orders",
       "MY_PROFILE": "My profile",
       "ADMIN_PANEL": "Admin panel",
       "LOGOUT": "Log out"
     }
   },
   "LANDING": {
-    "HERO_TITLE": "Your online market",
-    "HERO_DESCRIPTION": "Browse our products, add them to your cart and order in a few steps. Prices can also be shown in other currencies.",
-    "BROWSE_PRODUCTS": "Browse products",
-    "STATS_PRODUCTS": "{{count}} products",
-    "STATS_CATEGORIES": "{{count}} categories",
+    "HERO_TITLE": "Welcome",
+    "HERO_DESCRIPTION": "Log in to access your account. Amounts can be converted to other currencies using the exchange rate list.",
     "STATS_CURRENCIES": "Prices in several currencies",
-    "LOADING": "Loading products...",
-    "ERROR": "The catalog is currently unavailable.",
-    "PROMOTIONS_TITLE": "Special offers",
-    "PROMOTION_MORE": "Learn more",
-    "CATEGORIES_TITLE": "Categories",
-    "NEWEST_TITLE": "Newest products",
-    "NEWEST_SUBTITLE": "See what is new in our store",
-    "ALL_PRODUCTS": "All products",
-    "NO_PRODUCTS": "There are no products at the moment.",
-    "CTA_TITLE": "Ready to shop?",
-    "CTA_TEXT": "Log in to place orders and track them.",
+    "CTA_TITLE": "Have an account?",
+    "CTA_TEXT": "Log in to continue.",
     "CTA_BUTTON": "Log in"
-  },
-  "SEARCH": {
-    "TITLE": "Product search",
-    "SEARCH_LABEL": "Search",
-    "SEARCH_PLACEHOLDER": "Product name...",
-    "CATEGORY_LABEL": "Category",
-    "ALL_CATEGORIES": "All categories",
-    "CLEAR_FILTERS": "Clear filters",
-    "LOADING": "Loading products...",
-    "NO_RESULTS": "No products match your search."
-  },
-  "PRODUCT_CARD": {
-    "ADD_TO_CART": "Add to cart",
-    "OUT_OF_STOCK": "Out of stock"
-  },
-  "CART": {
-    "TITLE": "Cart",
-    "ADDED": "\"{{name}}\" was added to the cart.",
-    "EMPTY_TITLE": "Your cart is empty",
-    "EMPTY_TEXT": "Add products to your cart to place an order.",
-    "CONTINUE_SHOPPING": "Continue shopping",
-    "CHECKOUT": "Proceed to checkout",
-    "REMOVE": "Remove from cart",
-    "INCREASE": "Increase quantity",
-    "DECREASE": "Decrease quantity",
-    "QUANTITY": "Quantity",
-    "SUMMARY": "Summary",
-    "ITEMS_COUNT": "Items",
-    "TOTAL_QUANTITY": "Total quantity",
-    "TOTAL": "Total",
-    "PRICE_NOTE": "Cart prices are for information only; the final amount (with discounts) is calculated when you order."
-  },
-  "CHECKOUT": {
-    "TITLE": "Checkout",
-    "EMPTY_TEXT": "Add products to your cart before checking out.",
-    "STEP_CART": "Cart",
-    "STEP_DETAILS": "Note",
-    "STEP_SUBMIT": "Confirmation",
-    "BACK_TO_CART": "Back to cart",
-    "NEXT": "Next",
-    "BACK": "Back",
-    "NOTE_LABEL": "Note (optional)",
-    "NOTE_PLACEHOLDER": "E.g. delivery time, floor...",
-    "CONFIRM_LABEL": "I have reviewed the order and want to place it.",
-    "CONFIRM_REQUIRED": "Confirm the order to continue.",
-    "SUBMIT": "Place order",
-    "SUBMITTING": "Placing order...",
-    "SUCCESS": "Your order was created successfully.",
-    "DELIVERY_ADDRESS": "Delivery address",
-    "ADDRESS_MISSING": "Address or city is missing.",
-    "ADD_ADDRESS": "Add them in your profile",
-    "ADDRESS_NOTE": "The order is delivered to the address in your profile (My profile)."
   },
   "CURRENCY": {
     "SELECT": "Currency for prices",
@@ -198,21 +131,8 @@
     "HOME": {
       "TITLE": "Welcome",
       "LOGGED_IN_AS": "You are logged in as {{email}}.",
-      "DESCRIPTION": "View your orders or browse our products.",
-      "SEARCH_PRODUCTS": "Search products",
-      "LOGOUT": "Log out",
-      "MY_ORDERS": "My orders"
-    },
-    "ORDERS": {
-      "TITLE": "My orders",
-      "NEW_ORDER": "Shop now",
-      "EMPTY_TITLE": "You have no orders yet",
-      "EMPTY_TEXT": "Once you order products, your orders will appear here.",
-      "START_SHOPPING": "Start shopping"
-    },
-    "ORDER_DETAILS": {
-      "TITLE": "Order {{reference}}",
-      "BACK": "Back to orders"
+      "DESCRIPTION": "Here you can edit your profile.",
+      "LOGOUT": "Log out"
     }
   },
   "ADMIN_PANEL": {
@@ -223,273 +143,16 @@
       "EMPLOYEE": "Employee"
     },
     "MENU": {
-      "CATALOG": "CATALOG",
-      "CATEGORIES": "Product Categories",
-      "PRODUCTS": "Products",
-      "ORDERS_SECTION": "ORDERS",
-      "ORDERS": "Orders Overview",
       "SYSTEM": "SYSTEM",
       "SETTINGS": "Settings",
       "MY_PROFILE": "My profile",
       "LOGOUT": "Logout",
-      "PROMOTIONS": "Promotions",
       "EXCHANGE_RATES": "Exchange rates"
     }
   },
   "ADMIN_SETTINGS": {
     "TITLE": "Settings",
     "EMPTY": "Application settings go here (e.g. company details, default currency, business rules). Personal data and password are on the “My profile” page."
-  },
-  "PRODUCT_CATEGORIES": {
-    "TITLE": "Product Categories",
-    "SUBTITLE": "Manage product categories",
-    "SEARCH_PLACEHOLDER": "Search categories",
-    "SEARCH_INPUT_PLACEHOLDER": "Enter category name...",
-    "ONLY_ENABLED": "Only Active",
-    "NEW_CATEGORY": "New Category",
-    "ADD_NEW": "Add Category",
-    "LOADING": "Loading categories...",
-    "NO_DATA": "No categories to display",
-    "NO_DATA_FILTER": "No results found for search",
-    "TABLE": {
-      "NAME": "Name",
-      "STATUS": "Status",
-      "ENABLED": "Active",
-      "DISABLED": "Inactive",
-      "ACTIONS": "Actions"
-    },
-    "ACTIONS": {
-      "EDIT_TOOLTIP": "Edit category",
-      "DELETE_TOOLTIP": "Delete category"
-    },
-    "FORM": {
-      "NAME": "Category Name",
-      "NAME_PLACEHOLDER": "Enter category name",
-      "LOADING": "Loading...",
-      "CANCEL": "Cancel",
-      "SAVE": "Save",
-      "UPDATE": "Update",
-      "CREATE_TITLE": "New category",
-      "EDIT_TITLE": "Edit category",
-      "IS_ENABLED": "Active (visible to customers)"
-    },
-    "DIALOGS": {
-      "DELETE_TITLE": "Delete Category",
-      "DELETE_MESSAGE": "Are you sure you want to delete category \"{{name}}\"? This will also delete all products in this category.",
-      "CONFIRM_ENABLE": "Are you sure you want to enable category \"{{name}}\"?",
-      "CONFIRM_DISABLE": "Are you sure you want to disable category \"{{name}}\"?",
-      "SUCCESS_CREATE": "Category created successfully.",
-      "SUCCESS_UPDATE": "Category updated successfully.",
-      "SUCCESS_DELETE": "Category deleted successfully.",
-      "SUCCESS_ENABLE": "Category \"{{name}}\" has been enabled successfully.",
-      "SUCCESS_DISABLE": "Category \"{{name}}\" has been disabled successfully.",
-      "ERROR_CREATE": "Error creating category.",
-      "ERROR_UPDATE": "Error updating category.",
-      "ERROR_DELETE": "Error deleting category.",
-      "ERROR_TOGGLE": "Error changing status of category \"{{name}}\".",
-      "ERROR_LOAD": "Error loading the category.",
-      "ERROR_LOAD_LIST": "Error loading categories."
-    }
-  },
-  "PRODUCTS": {
-    "TITLE": "Products",
-    "SUBTITLE": "Manage products",
-    "SEARCH_PLACEHOLDER": "Search products",
-    "SEARCH_INPUT_PLACEHOLDER": "Enter product name...",
-    "NEW_PRODUCT": "New Product",
-    "ADD_NEW": "Add Product",
-    "LOADING": "Loading products...",
-    "NO_DATA": "No products to display",
-    "NO_DATA_FILTER": "No results found for search",
-    "TABLE": {
-      "NAME": "Name",
-      "CATEGORY": "Category",
-      "PRICE": "Price (KM)",
-      "STOCK": "Stock",
-      "ACTIVE": "Active",
-      "ACTIONS": "Actions"
-    },
-    "ACTIONS": {
-      "EDIT_TOOLTIP": "Edit product",
-      "DELETE_TOOLTIP": "Delete product"
-    },
-    "ADD": {
-      "TITLE": "Add New Product",
-      "SAVING": "Saving product..."
-    },
-    "EDIT": {
-      "TITLE": "Edit Product",
-      "LOADING": "Loading product..."
-    },
-    "FORM": {
-      "NAME": "Product Name",
-      "NAME_PLACEHOLDER": "Enter product name",
-      "DESCRIPTION": "Description",
-      "DESCRIPTION_PLACEHOLDER": "Enter product description",
-      "PRICE": "Price",
-      "PRICE_PLACEHOLDER": "0.00",
-      "CATEGORY": "Category",
-      "STOCK": "Stock",
-      "STOCK_PLACEHOLDER": "0",
-      "CANCEL": "Cancel",
-      "SAVE": "Save",
-      "UPDATE": "Update",
-      "IS_ENABLED": "Active (visible to customers)",
-      "NAME_CHECKING": "Checking name...",
-      "NAME_TAKEN": "A product with this name already exists."
-    },
-    "DIALOGS": {
-      "DELETE_TITLE": "Delete Product",
-      "DELETE_MESSAGE": "Are you sure you want to delete product \"{{name}}\"?",
-      "SUCCESS_CREATE": "Product created successfully.",
-      "SUCCESS_UPDATE": "Product updated successfully.",
-      "SUCCESS_DELETE": "Product deleted successfully.",
-      "ERROR_CREATE": "Error creating product.",
-      "ERROR_UPDATE": "Error updating product.",
-      "ERROR_DELETE": "Error deleting product.",
-      "UNSAVED_CHANGES": "You have unsaved changes in the form.",
-      "CONFIRM_CANCEL": "Do you want to cancel changes and go back?",
-      "ERROR_LOAD": "The product was not found or could not be loaded.",
-      "ERROR_LOAD_LIST": "Error loading products.",
-      "ERROR_LOAD_CATEGORIES": "Error loading categories.",
-      "SUCCESS_CREATE_ADD_IMAGE": "The product was created. You can now add an image."
-    },
-    "IMAGE": {
-      "TITLE": "Product image",
-      "NONE": "No image",
-      "PREVIEW": "Selected image preview",
-      "CURRENT": "Current image",
-      "CHOOSE": "Choose image",
-      "REPLACE": "Replace image",
-      "UPLOAD": "Upload",
-      "DELETE": "Delete image",
-      "HINT": "JPG, PNG or WEBP, up to {{max}} MB.",
-      "UPLOADED": "The image was uploaded.",
-      "DELETED": "The image was deleted.",
-      "DELETE_TITLE": "Delete image",
-      "DELETE_MESSAGE": "Are you sure you want to delete the product image?"
-    }
-  },
-  "PROMOTIONS": {
-    "TITLE": "Promotions",
-    "SEARCH": "Search by title",
-    "FILTER_ACTIVE": "Status",
-    "ACTIVE": "Active",
-    "INACTIVE": "Inactive",
-    "NEW": "New promotion",
-    "PERIOD": "Period",
-    "NO_DATA": "No promotions to display",
-    "ADD_TITLE": "New promotion",
-    "EDIT_TITLE": "Edit promotion",
-    "SAVED": "The promotion was saved.",
-    "DELETED": "The promotion was deleted.",
-    "FORM": {
-      "TITLE": "Title",
-      "IMAGE_URL": "Image URL",
-      "IMAGE_URL_HINT": "Absolute image address (https://...)",
-      "TARGET_URL": "Target (optional)",
-      "TARGET_URL_HINT": "App route (/search?categoryId=1) or an https:// address",
-      "STARTS_AT": "Start",
-      "ENDS_AT": "End",
-      "DATE_OPTIONAL": "Empty = no limit",
-      "SORT_ORDER": "Sort order",
-      "SORT_ORDER_HINT": "Lower numbers are shown first",
-      "IS_ACTIVE": "Active (shown on the home page)"
-    }
-  },
-  "ORDERS": {
-    "TITLE": "Orders",
-    "FILTER_STATUS": "Filter by Status",
-    "ALL_STATUSES": "All Statuses",
-    "SEARCH_PLACEHOLDER": "Search orders...",
-    "SEARCH_INPUT_PLACEHOLDER": "Order number, customer name, address...",
-    "SEARCH_MIN_LENGTH": "Enter at least 3 characters to search",
-    "CLEAR_FILTERS": "Clear Filters",
-    "LOADING": "Loading orders...",
-    "RETRY": "Retry",
-    "ERROR_TITLE": "Error Loading Orders",
-    "NO_DATA": "No orders found",
-    "NO_DATA_FILTER": "No orders match your filters",
-    "STATUS": {
-      "DRAFT": "Draft",
-      "CONFIRMED": "Confirmed",
-      "PAID": "Paid",
-      "COMPLETED": "Completed",
-      "CANCELLED": "Cancelled",
-      "UNKNOWN": "Unknown"
-    },
-    "STATUS_DESCRIPTION": {
-      "DRAFT": "Order is created but not yet confirmed",
-      "CONFIRMED": "Order is confirmed and awaiting payment",
-      "PAID": "Payment received and order is being processed",
-      "COMPLETED": "Order has been shipped or delivered",
-      "CANCELLED": "Order has been cancelled"
-    },
-    "TABLE": {
-      "ORDER_NUMBER": "Order #",
-      "CUSTOMER": "Customer",
-      "TOTAL_AMOUNT": "Total",
-      "STATUS": "Status",
-      "ORDER_DATE": "Order Date",
-      "PAID_DATE": "Paid Date",
-      "ACTIONS": "Actions"
-    },
-    "ACTIONS": {
-      "VIEW_DETAILS": "View Details",
-      "CHANGE_STATUS": "Change Status",
-      "EDIT": "Edit order"
-    },
-    "DETAILS": {
-      "TITLE": "Order Details",
-      "LOADING": "Loading order details...",
-      "ORDERED_AT": "Ordered At",
-      "PAID_AT": "Paid At",
-      "CUSTOMER_INFO": "Customer Information",
-      "CUSTOMER_NAME": "Name",
-      "ADDRESS": "Address",
-      "CITY": "City",
-      "ORDER_ITEMS": "Order Items",
-      "PRODUCT": "Product",
-      "QUANTITY": "Quantity",
-      "UNIT_PRICE": "Unit Price",
-      "DISCOUNT": "Discount",
-      "TOTAL": "Total",
-      "ORDER_TOTAL": "Order Total",
-      "NOTE": "Order Note",
-      "LOAD_ERROR": "Error loading order details."
-    },
-    "CHANGE_STATUS": {
-      "TITLE": "Change Order Status",
-      "CURRENT_STATUS": "Current Status",
-      "NEW_STATUS": "New Status",
-      "NO_TRANSITIONS": "No status transitions available for this order",
-      "CANCEL_WARNING": "Warning: Cancelling an order cannot be undone!"
-    },
-    "MESSAGES": {
-      "STATUS_UPDATED": "Order status updated successfully",
-      "CANNOT_CHANGE_STATUS": "This order status cannot be changed",
-      "LOAD_ERROR": "Error loading orders.",
-      "STATUS_UPDATE_ERROR": "Error changing the order status."
-    },
-    "EDIT": {
-      "TITLE": "Edit order",
-      "PRODUCT": "Product",
-      "PRODUCT_PLACEHOLDER": "Type a product name...",
-      "PRODUCT_DISABLED": "disabled – cannot be ordered",
-      "NO_PRODUCTS": "No products match this search",
-      "ADD_ITEM": "Add item",
-      "REMOVE_ITEM": "Remove item",
-      "LINE_TOTAL": "Amount (estimate)",
-      "SERVER_TOTAL": "saved: {{amount}}",
-      "AT_LEAST_ONE_ITEM": "An order must have at least one item.",
-      "NOTE_LABEL": "Note (optional)",
-      "PREVIEW_SUBTOTAL": "Subtotal (estimate, without discounts)",
-      "SERVER_ORDER_TOTAL": "Total with discounts (server, last save)",
-      "TOTALS_HINT": "Prices, discounts and the final amount are calculated by the server on save; amounts in the form are only an estimate.",
-      "SAVED": "The order was saved.",
-      "NOT_DRAFT": "The order is not in Draft status and cannot be changed.",
-      "BACK_TO_LIST": "Back to orders"
-    }
   },
   "EXCHANGE_RATES": {
     "TITLE": "Exchange rates",
@@ -661,11 +324,7 @@
     "CUSTOM": "Validation error",
     "URL_OR_PATH": "Enter an https:// address or an app route starting with \"/\"",
     "MAX_DECIMALS": "At most {{max}} decimals",
-    "DATE_RANGE": "The end must be after the start",
-    "SELECT_FROM_LIST": "Select a value from the list",
-    "DUPLICATE_PRODUCT": "The same product cannot be in two items.",
-    "FILE_TYPE": "Allowed formats: {{types}}",
-    "FILE_SIZE": "The file is larger than {{max}} MB"
+    "DATE_RANGE": "The end must be after the start"
   },
   "ERRORS": {
     "GENERIC": "An error occurred. Please try again.",

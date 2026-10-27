@@ -58,7 +58,7 @@ Ako HTTPS certifikat ne radi, pokrenite backend s profilom `http` i u `src/envir
 | `admin@market.local` | `Admin123!` | administrator (`/admin`) |
 | `manager@market.local` | `Manager123!` | menadžer |
 | `employee@market.local` | `Employee123!` | uposlenik |
-| `nina.bijedic@email.com`, `iris.memic@email.com`, `azra.smajic@email.com` | `Customer123!` | kupci, vlasnici demo narudžbi |
+| `nina.bijedic@email.com`, `iris.memic@email.com`, `azra.smajic@email.com` | `Customer123!` | kupci |
 | `string` | `string` | za Swagger |
 | `test` | `test123` | za testove |
 
@@ -123,10 +123,10 @@ Integracijski testovi koriste in-memory bazu (okruženje `IntegrationTests`).
 
 | Dio | Rute | Ko |
 |---|---|---|
-| Landing (promocije, kategorije, najnoviji proizvodi), pretraga, korpa, checkout, konvertor valuta | `/`, `/search`, `/cart`, `/checkout`, `/converter` | svi (checkout traži prijavu) |
+| Landing, konvertor valuta | `/`, `/converter` | svi |
 | Registracija, zaboravljena lozinka, nova lozinka | `/auth/register`, `/auth/forgot-password`, `/auth/reset-password` | svi |
-| Moje narudžbe, moj profil | `/client`, `/client/orders`, `/client/orders/:id`, `/client/profile` | prijavljeni kupac |
-| Kategorije, proizvodi (slika, zalihe), promocije, narudžbe (pregled, promjena statusa, uređivanje stavki), kursna lista, moj profil (`/admin/profile`), prazna stranica za postavke aplikacije (`/admin/settings`) | `/admin/...` | administrator |
+| Moj profil | `/client`, `/client/profile` | prijavljeni kupac |
+| Kursna lista, moj profil (`/admin/profile`), prazna stranica za postavke aplikacije (`/admin/settings`) | `/admin/...` | administrator |
 
 ### Primjeri formi
 
@@ -134,17 +134,8 @@ Svaki obrazac je urađen jednom, na mjestu gdje mu je prirodno (putanje su u `Ma
 
 | Obrazac | Gdje |
 |---|---|
-| Forma na stranici (add/edit) sa `BaseFormComponent` | `admin/catalogs/products` |
-| Forma u dijalogu | `admin/catalogs/product-categories/product-category-upsert` |
-| Async validator (jedinstven naziv, poziv API-ja) | `admin/catalogs/products/validators` |
-| Upload slike (provjera tipa i veličine, pregled, brisanje) | `admin/catalogs/products/product-image` |
-| Datepicker + cross-field validator (kraj poslije početka) | `admin/catalogs/promotions/promotion-upsert` |
-| Typed FormArray (master-detail) + upozorenje pri napuštanju nesnimljene forme | `admin/orders/order-edit` |
-| Autocomplete sa serverskom pretragom | `admin/orders/order-edit/product-autocomplete` |
-| Stepper (wizard) | `public/checkout` |
 | Cross-field validator za potvrdu lozinke | `auth/register`, `auth/reset-password`, `account/my-profile` |
 | Dvije nezavisne forme na jednoj stranici | `account/my-profile` |
-| Filteri sačuvani u URL-u + straničenje | `public/search-products` |
 | Greške s backenda po polju | `core/forms/server-errors.ts`, korišteno u svim formama |
 | Prevedene poruke validacije | `shared` komponenta `fit-field-error`, `core/forms/validation-messages.ts` |
 
@@ -163,27 +154,6 @@ Svaki obrazac je urađen jednom, na mjestu gdje mu je prirodno (putanje su u `Ma
 - U Development i Testing okruženju email se ne šalje nego ispisuje u konzolu backenda i u `Logs/app-*.log` (red počinje sa `[DEV EMAIL]`), pa link kopirate odatle. Za pravi pregled emailova pokrenite Mailpit ili Papercut i postavite `Email:Smtp:Host=localhost`, `Port=1025`, `EnableSsl=false`.
 - Moj profil (`/client/profile`, za admina `/admin/profile`): ime, prezime, adresa i grad (`GET/PUT /api/auth/me`) i promjena lozinke (`POST /api/auth/change-password`). Promjena ili reset lozinke odjavljuje sve ostale uređaje.
 - Adresa i grad iz profila se prikazuju uz narudžbu.
-
-### Upload slika
-
-Slike proizvoda se snimaju u `Market.API/wwwroot/uploads/products/` (folder je u `.gitignore`) i dostupne su anonimno na `https://localhost:7100/uploads/...`. Dozvoljeni su JPEG, PNG i WEBP do 2 MB; provjerava se sadržaj fajla, ne samo ekstenzija.
-
-### Redis
-
-Keš je podešen, ali ga nijedan handler ne koristi. Dok je `ConnectionStrings:Redis` prazan, `ICacheService` radi u memoriji i Redis server nije potreban. Za Redis upišite npr. `localhost:6379`. Primjer upotrebe je u XML komentarima `ICacheService` i `ICatalogCacheVersionService` (keširanje `GET /Catalog/home` i poništavanje keša nakon izmjene kataloga).
-
-## Kako obrisati ono što vam ne treba
-
-Obrišite dio na oba kraja, pa napravite novu migraciju.
-
-| Dio | Backend | Frontend |
-|---|---|---|
-| Valute | `Modules/Finance`, `Entities/Finance`, `Configurations/Finance`, `CurrenciesController`, `CurrencyConverter`, `FrankfurterExchangeRateProvider`, registracije u DI, seed | `core/services/currency`, `api-services/currencies`, `public/converter`, `admin/finance`, izbor valute u headeru; `\| money` zamijenite sa `\| currency` |
-| Promocije | `Modules/Catalog/Promotions`, `PromotionEntity`, konfiguracija, `PromotionsController`, seed | `admin/catalogs/promotions`, `api-services/promotions`, `promotions-carousel` |
-| Korpa i checkout | – (koristi `POST /Orders`) | `core/services/cart`, `public/cart-page`, `public/checkout`, `cart-items`, ikona korpe u headeru |
-| Redis | `Abstractions/Caching`, `Infrastructure/Caching`, paket `Microsoft.Extensions.Caching.StackExchangeRedis` | – |
-
-Uz svaki obrisani entitet uklonite i njegov `DbSet` u `IAppDbContext`/`DatabaseContext`, rute, stavke menija i prevode (`bs.json` i `en.json`).
 
 ## Izmjene u odnosu na template 2025/26
 
