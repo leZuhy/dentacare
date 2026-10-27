@@ -1,0 +1,5 @@
+// Izgled je zajednički za sve /auth stranice (login, registracija, zaboravljena i nova lozinka)
+@use '../auth-page';
+
+@include auth-page.page;
+@include auth-page.links;

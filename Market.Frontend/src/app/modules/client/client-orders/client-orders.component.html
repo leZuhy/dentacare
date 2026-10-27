@@ -1,0 +1,99 @@
+<div class="orders-page">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>receipt_long</mat-icon>
+      {{ 'CLIENT.ORDERS.TITLE' | translate }}
+    </h1>
+    <a mat-flat-button routerLink="/search">
+      <mat-icon>add_shopping_cart</mat-icon>
+      {{ 'CLIENT.ORDERS.NEW_ORDER' | translate }}
+    </a>
+  </div>
+
+  @if (isLoading && items.length === 0) {
+    <app-fit-table-skeleton [rows]="5" [columns]="4" [showActions]="true" />
+  } @else if (errorMessage) {
+    <mat-card class="state-card" appearance="outlined">
+      <mat-icon class="state-icon error">error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button color="primary" type="button" (click)="loadPagedData()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </mat-card>
+  } @else if (items.length === 0) {
+    <mat-card class="state-card" appearance="outlined">
+      <mat-icon class="state-icon">receipt_long</mat-icon>
+      <h2>{{ 'CLIENT.ORDERS.EMPTY_TITLE' | translate }}</h2>
+      <p>{{ 'CLIENT.ORDERS.EMPTY_TEXT' | translate }}</p>
+      <a mat-flat-button routerLink="/search">
+        <mat-icon>shopping_bag</mat-icon>
+        {{ 'CLIENT.ORDERS.START_SHOPPING' | translate }}
+      </a>
+    </mat-card>
+  } @else {
+    <mat-card class="table-card" appearance="outlined">
+      <table mat-table [dataSource]="items" [class.loading]="isLoading">
+        <ng-container matColumnDef="referenceNumber">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ORDERS.TABLE.ORDER_NUMBER' | translate }}</th>
+          <td mat-cell *matCellDef="let order" class="reference">{{ order.referenceNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="orderedAt">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ORDERS.TABLE.ORDER_DATE' | translate }}</th>
+          <td mat-cell *matCellDef="let order">{{ order.orderedAtUtc | date: 'dd.MM.yyyy HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>{{ 'ORDERS.TABLE.STATUS' | translate }}</th>
+          <td mat-cell *matCellDef="let order">
+            <span class="status-badge" [ngClass]="statusHelper.getColorClass(order.status)">
+              <mat-icon>{{ statusHelper.getIcon(order.status) }}</mat-icon>
+              {{ statusHelper.getLabel(order.status) | translate }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            {{ 'ORDERS.TABLE.TOTAL_AMOUNT' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let order" class="text-right amount">
+            {{ order.totalAmount | money }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let order" class="text-right">
+            <a
+              mat-icon-button
+              [routerLink]="['/client/orders', order.id]"
+              [matTooltip]="'ORDERS.ACTIONS.VIEW_DETAILS' | translate"
+              [attr.aria-label]="'ORDERS.ACTIONS.VIEW_DETAILS' | translate"
+            >
+              <mat-icon>chevron_right</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="data-row"
+          [routerLink]="['/client/orders', row.id]"
+        ></tr>
+      </table>
+
+      @if (!currency.isBaseSelected()) {
+        <p class="km-note">
+          <mat-icon>info</mat-icon>
+          {{ 'CURRENCY.KM_NOTE' | translate }}
+        </p>
+      }
+
+      <app-fit-paginator-bar [vm]="this" />
+    </mat-card>
+  }
+</div>

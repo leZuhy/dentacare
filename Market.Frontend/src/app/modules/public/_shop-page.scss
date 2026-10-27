@@ -1,0 +1,86 @@
+// Zajednički stilovi stranica prodavnice (korpa, checkout, konvertor).
+// Koristi se kao: @use '../shop-page';  pa  .cart-page { @include shop-page.page; }
+// Mixini (a ne gotove klase) → u CSS komponente ulazi samo ono što komponenta koristi.
+
+$primary-blue: #4a90e2;
+$light-blue: #e8f4fd;
+$text-light: #666666;
+
+@mixin page($max-width: 1100px) {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+@mixin page-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 24px;
+  font-size: 32px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: $primary-blue;
+  }
+}
+
+@mixin empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+  text-align: center;
+
+  mat-icon:first-child {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: $primary-blue;
+  }
+
+  h2 {
+    margin: 8px 0 0;
+  }
+
+  p {
+    margin: 0 0 16px;
+    color: $text-light;
+  }
+}
+
+// napomena "Narudžba se obračunava u KM ..."
+@mixin km-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: $light-blue;
+  font-size: 13px;
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $primary-blue;
+  }
+}
+
+@mixin error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid #ef9a9a;
+  border-radius: 8px;
+  background: #ffebee;
+  color: #c62828;
+}

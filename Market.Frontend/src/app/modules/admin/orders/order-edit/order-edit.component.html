@@ -1,0 +1,162 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <a mat-icon-button routerLink="/admin/orders" [attr.aria-label]="'COMMON.BACK' | translate">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <div class="title-icon"><mat-icon>edit_note</mat-icon></div>
+      <div>
+        <h1>{{ 'ORDERS.EDIT.TITLE' | translate }}</h1>
+        @if (order) {
+          <p class="subtitle">{{ order.referenceNumber }}</p>
+        }
+      </div>
+    </div>
+
+    @if (isDraft) {
+      <div class="actions">
+        <a mat-button routerLink="/admin/orders" [class.disabled]="isSaving">
+          <mat-icon>close</mat-icon>
+          {{ 'COMMON.CANCEL' | translate }}
+        </a>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          form="order-edit-form"
+          [disabled]="isSaving || form.invalid || form.pristine"
+        >
+          @if (isSaving) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+          }
+          {{ 'COMMON.SAVE' | translate }}
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (isLoading) {
+    <div class="state">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>{{ 'ORDERS.DETAILS.LOADING' | translate }}</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state">
+      <mat-icon class="state-icon error">error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button color="primary" type="button" (click)="loadOrder()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (order && !isDraft) {
+    <!-- backend dozvoljava izmjenu samo u statusu Draft -->
+    <div class="state">
+      <span class="status-badge" [ngClass]="statusHelper.getColorClass(order.status)">
+        <mat-icon>{{ statusHelper.getIcon(order.status) }}</mat-icon>
+        {{ statusHelper.getLabel(order.status) | translate }}
+      </span>
+      <p>{{ 'ORDERS.EDIT.NOT_DRAFT' | translate }}</p>
+      <a mat-stroked-button routerLink="/admin/orders">{{ 'ORDERS.EDIT.BACK_TO_LIST' | translate }}</a>
+    </div>
+  } @else if (order) {
+    @if (saveError) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ saveError }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" id="order-edit-form" (ngSubmit)="save()">
+      <!-- Stavke (FormArray) -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2>{{ 'ORDERS.DETAILS.ORDER_ITEMS' | translate }}</h2>
+          <button mat-stroked-button color="primary" type="button" (click)="addItem()">
+            <mat-icon>add</mat-icon>
+            {{ 'ORDERS.EDIT.ADD_ITEM' | translate }}
+          </button>
+        </div>
+
+        <div formArrayName="items" class="items">
+          @for (item of items.controls; track item; let i = $index) {
+            <div class="item-row" [formGroupName]="i">
+              <app-product-autocomplete class="product-cell" [control]="item.controls.product" />
+
+              <mat-form-field appearance="outline" class="quantity-cell">
+                <mat-label>{{ 'ORDERS.DETAILS.QUANTITY' | translate }}</mat-label>
+                <input matInput type="number" formControlName="quantity" min="1" step="1" />
+                <mat-error><app-fit-field-error [control]="item.controls.quantity" /></mat-error>
+              </mat-form-field>
+
+              <!-- izračunato, samo za čitanje -->
+              <div class="amount-cell">
+                <span class="amount-label">{{ 'ORDERS.DETAILS.UNIT_PRICE' | translate }}</span>
+                <span>{{ (unitPrice(item) | currency) ?? '–' }}</span>
+              </div>
+              <div class="amount-cell">
+                <span class="amount-label">{{ 'ORDERS.EDIT.LINE_TOTAL' | translate }}</span>
+                <strong>{{ (lineTotal(item) | currency) ?? '–' }}</strong>
+                @if (serverItem(item); as saved) {
+                  <span class="server-amount">
+                    {{ 'ORDERS.EDIT.SERVER_TOTAL' | translate: { amount: (saved.total | currency) } }}
+                  </span>
+                }
+              </div>
+
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                (click)="removeItem(i)"
+                [disabled]="items.length === 1"
+                [matTooltip]="'ORDERS.EDIT.REMOVE_ITEM' | translate"
+                [attr.aria-label]="'ORDERS.EDIT.REMOVE_ITEM' | translate"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- greške na cijelom nizu (validator na FormArray-u) -->
+        @if (items.hasError('duplicateProduct')) {
+          <p class="array-error">{{ 'VALIDATION.DUPLICATE_PRODUCT' | translate }}</p>
+        }
+        @if (items.hasError('required')) {
+          <p class="array-error">{{ 'ORDERS.EDIT.AT_LEAST_ONE_ITEM' | translate }}</p>
+        }
+      </section>
+
+      <!-- Napomena -->
+      <section class="section-card">
+        <h2>{{ 'ORDERS.DETAILS.NOTE' | translate }}</h2>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'ORDERS.EDIT.NOTE_LABEL' | translate }}</mat-label>
+          <textarea matInput formControlName="note" rows="3" [maxlength]="noteMaxLength"></textarea>
+          <mat-hint align="end">{{ form.controls.note.value.length }}/{{ noteMaxLength }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.note" /></mat-error>
+        </mat-form-field>
+      </section>
+
+      <!-- Ukupno: procjena u formi + iznos koji je izračunao server -->
+      <section class="section-card summary">
+        <div class="summary-row">
+          <span>{{ 'ORDERS.EDIT.PREVIEW_SUBTOTAL' | translate }}</span>
+          <strong>{{ previewSubtotal | currency }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>{{ 'ORDERS.EDIT.SERVER_ORDER_TOTAL' | translate }}</span>
+          <strong class="server-total">{{ order.totalAmount | currency }}</strong>
+        </div>
+        <p class="summary-hint">
+          <mat-icon>info</mat-icon>
+          {{ 'ORDERS.EDIT.TOTALS_HINT' | translate }}
+        </p>
+      </section>
+    </form>
+  }
+</div>

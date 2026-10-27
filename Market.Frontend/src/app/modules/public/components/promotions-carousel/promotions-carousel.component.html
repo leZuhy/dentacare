@@ -1,0 +1,53 @@
+@if (current; as slide) {
+  <div class="carousel" [attr.aria-label]="'LANDING.PROMOTIONS_TITLE' | translate" role="region">
+    <div class="slide">
+      <img class="slide-image" [src]="slide.imageUrl" [alt]="slide.title" />
+      <div class="slide-overlay">
+        <h3 class="slide-title">{{ slide.title }}</h3>
+        @if (slide.internalLink) {
+          <a mat-flat-button [routerLink]="slide.internalLink">
+            {{ 'LANDING.PROMOTION_MORE' | translate }}
+          </a>
+        } @else if (slide.externalLink) {
+          <a mat-flat-button [href]="slide.externalLink" target="_blank" rel="noopener noreferrer">
+            {{ 'LANDING.PROMOTION_MORE' | translate }}
+            <mat-icon iconPositionEnd>open_in_new</mat-icon>
+          </a>
+        }
+      </div>
+    </div>
+
+    @if (slides.length > 1) {
+      <button
+        mat-mini-fab
+        type="button"
+        class="nav prev"
+        (click)="previous()"
+        [attr.aria-label]="'COMMON.PREVIOUS' | translate"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button
+        mat-mini-fab
+        type="button"
+        class="nav next"
+        (click)="next()"
+        [attr.aria-label]="'COMMON.NEXT' | translate"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+
+      <div class="dots">
+        @for (s of slides; track s.id; let i = $index) {
+          <button
+            type="button"
+            class="dot"
+            [class.active]="i === index"
+            (click)="goTo(i)"
+            [attr.aria-label]="s.title"
+          ></button>
+        }
+      </div>
+    }
+  </div>
+}

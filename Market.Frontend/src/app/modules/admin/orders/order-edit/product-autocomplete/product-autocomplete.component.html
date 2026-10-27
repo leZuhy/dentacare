@@ -1,0 +1,46 @@
+<mat-form-field appearance="outline" class="product-field">
+  <mat-label>{{ 'ORDERS.EDIT.PRODUCT' | translate }}</mat-label>
+  <input
+    matInput
+    type="text"
+    [formControl]="control"
+    [matAutocomplete]="auto"
+    [placeholder]="'ORDERS.EDIT.PRODUCT_PLACEHOLDER' | translate"
+  />
+  @if (isSearching) {
+    <mat-spinner matSuffix diameter="18" class="search-spinner"></mat-spinner>
+  } @else {
+    <mat-icon matSuffix>search</mat-icon>
+  }
+
+  <!-- bez "requireSelection": uz njega kontrola ne dobija tekst dok korisnik kuca, pa ne bi
+       bilo ni pretrage; da je proizvod izabran iz liste provjerava productSelectedValidator -->
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+    <!-- null = još nije bilo pretrage (postojeća stavka dok korisnik ne kuca) → lista se ne otvara -->
+    @if (options$ | async; as options) {
+      @for (product of options; track product.id) {
+        <!-- onemogućen proizvod se ne može naručiti (backend ga odbija) -->
+        <mat-option [value]="product" [disabled]="!product.isEnabled">
+          <span class="option">
+            <span class="option-name">{{ product.name }}</span>
+            <span class="option-price">{{ product.price | currency }}</span>
+          </span>
+          @if (!product.isEnabled) {
+            <small class="option-disabled">{{ 'ORDERS.EDIT.PRODUCT_DISABLED' | translate }}</small>
+          }
+        </mat-option>
+      } @empty {
+        @if (!isSearching) {
+          <mat-option disabled>{{ 'ORDERS.EDIT.NO_PRODUCTS' | translate }}</mat-option>
+        }
+      }
+    }
+  </mat-autocomplete>
+
+  <mat-error>
+    <app-fit-field-error
+      [control]="control"
+      [messages]="{ productNotSelected: 'VALIDATION.SELECT_FROM_LIST' }"
+    />
+  </mat-error>
+</mat-form-field>

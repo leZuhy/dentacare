@@ -1,0 +1,126 @@
+// Zajednički izgled novih admin stranica (promocije, kursna lista, izmjena narudžbe).
+// Isti stil kao postojeće stranice (proizvodi, narudžbe), ali na jednom mjestu:
+//   @use '../../admin-page';      .container { @include admin-page.container; }
+// Mixini (a ne gotove klase) → u CSS komponente ulazi samo ono što komponenta koristi.
+
+$primary-color: #4976b5;
+$primary-dark: #3a5e91;
+$primary-lighter: #e8f0f9;
+$text-primary: #2c3e50;
+$text-secondary: #546e7a;
+$border-color: rgba(73, 118, 181, 0.15);
+$card-shadow: 0 2px 8px rgba(73, 118, 181, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+
+@mixin container($max-width: 1200px) {
+  padding: 24px;
+  max-width: $max-width;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #f0f5fb 0%, #e3ecf7 100%);
+}
+
+@mixin card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid $border-color;
+  box-shadow: $card-shadow;
+}
+
+// naslov stranice sa ikonom lijevo i akcijama desno
+@mixin header-card {
+  @include card;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+
+  .title-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+    color: #ffffff;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  .subtitle {
+    margin: 2px 0 0;
+    color: $text-secondary;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+@mixin section-card {
+  @include card;
+  padding: 24px;
+  margin-bottom: 24px;
+
+  h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+@mixin error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid #ef9a9a;
+  border-radius: 12px;
+  background: #ffebee;
+  color: #c62828;
+}
+
+@mixin state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
+  color: $text-secondary;
+}
+
+@mixin table-card {
+  @include card;
+  overflow: hidden;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+  }
+
+  th.mat-mdc-header-cell {
+    font-weight: 600;
+    color: $text-primary;
+    background: $primary-lighter;
+  }
+}

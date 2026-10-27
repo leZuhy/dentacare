@@ -1,0 +1,89 @@
+$primary-blue: #4a90e2;
+$light-blue: #e8f4fd;
+$text-light: #666666;
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.product-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  background: $light-blue;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .placeholder {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    color: $primary-blue;
+    opacity: 0.6;
+  }
+}
+
+.product-body {
+  flex: 1;
+  padding-top: 12px;
+}
+
+.category {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: $text-light;
+}
+
+.name {
+  margin: 4px 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.description {
+  margin: 0 0 8px;
+  color: $text-light;
+  font-size: 14px;
+  // najviše dva reda opisa
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: 700;
+  color: $primary-blue;
+}
+
+.product-actions {
+  padding: 0 16px 16px;
+}
+
+.out-of-stock {
+  color: #c62828;
+  font-weight: 500;
+}

@@ -1,0 +1,66 @@
+<div class="search-page">
+  <div class="search-header">
+    <h1>{{ 'SEARCH.TITLE' | translate }}</h1>
+
+    <div class="filters">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>{{ 'SEARCH.SEARCH_LABEL' | translate }}</mat-label>
+        <input
+          matInput
+          type="search"
+          [formControl]="searchControl"
+          [placeholder]="'SEARCH.SEARCH_PLACEHOLDER' | translate"
+          autocomplete="off"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="category-field" subscriptSizing="dynamic">
+        <mat-label>{{ 'SEARCH.CATEGORY_LABEL' | translate }}</mat-label>
+        <mat-select [formControl]="categoryControl">
+          <mat-option [value]="null">{{ 'SEARCH.ALL_CATEGORIES' | translate }}</mat-option>
+          @for (category of categories; track category.id) {
+            <mat-option [value]="category.id">{{ category.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (request.search || request.categoryId) {
+        <button mat-stroked-button type="button" (click)="clearFilters()">
+          <mat-icon>clear_all</mat-icon>
+          {{ 'SEARCH.CLEAR_FILTERS' | translate }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (isLoading && items.length === 0) {
+    <div class="state">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>{{ 'SEARCH.LOADING' | translate }}</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state">
+      <mat-icon class="state-icon error">error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button color="primary" type="button" (click)="loadPagedData()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (items.length === 0) {
+    <div class="state">
+      <mat-icon class="state-icon">search_off</mat-icon>
+      <p>{{ 'SEARCH.NO_RESULTS' | translate }}</p>
+    </div>
+  } @else {
+    <!-- dok se učitava sljedeća stranica, prethodni rezultati ostaju vidljivi (bez "skakanja") -->
+    <div class="products-grid" [class.loading]="isLoading">
+      @for (product of items; track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  }
+
+  <app-fit-paginator-bar [vm]="this" />
+</div>

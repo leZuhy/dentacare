@@ -1,0 +1,107 @@
+@use '../client-page';
+@use '../../shared/styles/order-status';
+
+.details-page {
+  @include client-page.page;
+}
+
+.back-link {
+  margin-bottom: 16px;
+}
+
+.state-card {
+  @include client-page.state-card;
+}
+
+.header-card {
+  margin-bottom: 24px;
+  padding: 24px;
+}
+
+.header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-title {
+  @include client-page.page-title;
+}
+
+.order-info {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 24px;
+  margin: 24px 0 0;
+
+  dt {
+    color: client-page.$text-light;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .note {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    vertical-align: top;
+  }
+
+  th {
+    font-weight: 500;
+    color: client-page.$text-light;
+    text-align: left;
+  }
+
+  tfoot td {
+    border-bottom: none;
+    font-weight: 600;
+  }
+}
+
+.product-name {
+  display: block;
+  font-weight: 600;
+}
+
+.product-category,
+.discount-percent {
+  font-size: 13px;
+  color: client-page.$text-light;
+}
+
+.total {
+  font-weight: 600;
+}
+
+.order-total {
+  font-size: 20px;
+  color: client-page.$primary-blue;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.km-note {
+  @include client-page.km-note;
+  margin: 16px 0 0;
+}

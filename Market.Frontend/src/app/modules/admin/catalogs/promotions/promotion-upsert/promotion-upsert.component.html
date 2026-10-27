@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="header-card">
+    <div class="title-section">
+      <a mat-icon-button routerLink="/admin/promotions" [attr.aria-label]="'COMMON.BACK' | translate">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <div class="title-icon"><mat-icon>campaign</mat-icon></div>
+      <h1>{{ (isEditMode ? 'PROMOTIONS.EDIT_TITLE' : 'PROMOTIONS.ADD_TITLE') | translate }}</h1>
+    </div>
+  </div>
+
+  <div class="section-card">
+    @if (isLoading && isEditMode && !model) {
+      <div class="state">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="promotion-form">
+        @if (errorMessage) {
+          <div class="error-banner" role="alert">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>{{ 'PROMOTIONS.FORM.TITLE' | translate }}</mat-label>
+          <input matInput formControlName="title" [maxlength]="titleMaxLength" />
+          <mat-hint align="end">{{ form.controls.title.value.length }}/{{ titleMaxLength }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.title" /></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>{{ 'PROMOTIONS.FORM.IMAGE_URL' | translate }}</mat-label>
+          <input matInput type="url" formControlName="imageUrl" placeholder="https://..." />
+          <mat-hint>{{ 'PROMOTIONS.FORM.IMAGE_URL_HINT' | translate }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.imageUrl" /></mat-error>
+        </mat-form-field>
+
+        @if (imagePreview; as src) {
+          <img class="preview full" [src]="src" [alt]="form.controls.title.value" />
+        }
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>{{ 'PROMOTIONS.FORM.TARGET_URL' | translate }}</mat-label>
+          <input matInput formControlName="targetUrl" placeholder="/search?categoryId=1" />
+          <mat-hint>{{ 'PROMOTIONS.FORM.TARGET_URL_HINT' | translate }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.targetUrl" /></mat-error>
+        </mat-form-field>
+
+        <!-- PERIOD: dva datepickera + cross-field validator na grupi -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'PROMOTIONS.FORM.STARTS_AT' | translate }}</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startsAtUtc" />
+          <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-hint>{{ 'PROMOTIONS.FORM.DATE_OPTIONAL' | translate }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.startsAtUtc" /></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'PROMOTIONS.FORM.ENDS_AT' | translate }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="endPicker"
+            formControlName="endsAtUtc"
+            [errorStateMatcher]="dateRangeMatcher"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-hint>{{ 'PROMOTIONS.FORM.DATE_OPTIONAL' | translate }}</mat-hint>
+          <mat-error>
+            <!-- greška polja (neispravan datum, server) ima prednost; inače greška grupe -->
+            @if (form.controls.endsAtUtc.invalid) {
+              <app-fit-field-error [control]="form.controls.endsAtUtc" />
+            } @else if (form.hasError('dateRange')) {
+              {{ 'VALIDATION.DATE_RANGE' | translate }}
+            }
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'PROMOTIONS.FORM.SORT_ORDER' | translate }}</mat-label>
+          <input matInput type="number" formControlName="sortOrder" min="0" step="1" />
+          <mat-hint>{{ 'PROMOTIONS.FORM.SORT_ORDER_HINT' | translate }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.sortOrder" /></mat-error>
+        </mat-form-field>
+
+        <div class="checkbox-cell">
+          <mat-checkbox formControlName="isActive">
+            {{ 'PROMOTIONS.FORM.IS_ACTIVE' | translate }}
+          </mat-checkbox>
+        </div>
+
+        <div class="form-actions full">
+          <a mat-stroked-button routerLink="/admin/promotions">
+            <mat-icon>close</mat-icon>
+            {{ 'COMMON.CANCEL' | translate }}
+          </a>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+            @if (isLoading) {
+              <mat-spinner diameter="18"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+            }
+            {{ 'COMMON.SAVE' | translate }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

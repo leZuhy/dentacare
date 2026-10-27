@@ -1,0 +1,65 @@
+<div class="cart-page">
+  <h1 class="page-title">
+    <mat-icon>shopping_cart</mat-icon>
+    {{ 'CART.TITLE' | translate }}
+  </h1>
+
+  @if (cart.isEmpty()) {
+    <mat-card class="empty-cart" appearance="outlined">
+      <mat-icon class="empty-icon">remove_shopping_cart</mat-icon>
+      <h2>{{ 'CART.EMPTY_TITLE' | translate }}</h2>
+      <p>{{ 'CART.EMPTY_TEXT' | translate }}</p>
+      <a mat-flat-button routerLink="/search">
+        <mat-icon>search</mat-icon>
+        {{ 'CART.CONTINUE_SHOPPING' | translate }}
+      </a>
+    </mat-card>
+  } @else {
+    <div class="cart-content">
+      <mat-card class="items-card" appearance="outlined">
+        <mat-card-content>
+          <app-cart-items />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card" appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ 'CART.SUMMARY' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-row">
+            <span>{{ 'CART.ITEMS_COUNT' | translate }}</span>
+            <strong>{{ cart.itemCount() }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>{{ 'CART.TOTAL_QUANTITY' | translate }}</span>
+            <strong>{{ cart.totalQuantity() }}</strong>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="summary-row total">
+            <span>{{ 'CART.TOTAL' | translate }}</span>
+            <strong>{{ cart.total() | money }}</strong>
+          </div>
+
+          @if (!currency.isBaseSelected()) {
+            <p class="km-note">
+              <mat-icon>info</mat-icon>
+              {{ 'CURRENCY.KM_NOTE' | translate }}
+            </p>
+          }
+          <p class="price-note">{{ 'CART.PRICE_NOTE' | translate }}</p>
+        </mat-card-content>
+        <mat-card-actions class="summary-actions">
+          <a mat-flat-button routerLink="/checkout">
+            <mat-icon>shopping_bag</mat-icon>
+            {{ 'CART.CHECKOUT' | translate }}
+          </a>
+          <a mat-button routerLink="/search">
+            <mat-icon>arrow_back</mat-icon>
+            {{ 'CART.CONTINUE_SHOPPING' | translate }}
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
+</div>

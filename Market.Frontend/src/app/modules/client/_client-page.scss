@@ -1,0 +1,68 @@
+// Zajednički stilovi stranica klijentskog dijela (narudžbe, detalji narudžbe).
+// Koristi se kao: @use '../client-page';  pa  .orders-page { @include client-page.page; }
+
+$primary-blue: #4a90e2;
+$light-blue: #e8f4fd;
+$text-light: #666666;
+
+@mixin page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+@mixin page-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: $primary-blue;
+  }
+}
+
+@mixin state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+  text-align: center;
+  color: $text-light;
+
+  .state-icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    color: $primary-blue;
+
+    &.error {
+      color: #c62828;
+    }
+  }
+}
+
+@mixin km-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: $light-blue;
+  font-size: 13px;
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $primary-blue;
+  }
+}

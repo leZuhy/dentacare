@@ -1,0 +1,57 @@
+<section class="product-image">
+  <h2 class="title">{{ 'PRODUCTS.IMAGE.TITLE' | translate }}</h2>
+
+  <div class="image-row">
+    <!-- odabrana slika (pregled prije slanja) ima prednost nad trenutnom -->
+    <div class="image-box" [class.preview]="previewUrl">
+      @if (previewUrl) {
+        <img [src]="previewUrl" [alt]="'PRODUCTS.IMAGE.PREVIEW' | translate" />
+      } @else if (imageUrl | apiUrl; as src) {
+        <img [src]="src" [alt]="'PRODUCTS.IMAGE.CURRENT' | translate" />
+      } @else {
+        <mat-icon aria-hidden="true">image_not_supported</mat-icon>
+        <span>{{ 'PRODUCTS.IMAGE.NONE' | translate }}</span>
+      }
+    </div>
+
+    <div class="image-actions">
+      <!-- skriveni file input; dugme ga otvara -->
+      <input #fileInput type="file" hidden [accept]="accept" (change)="onFileSelected(fileInput)" />
+
+      @if (selectedFile) {
+        <span class="file-name">{{ selectedFile.name }}</span>
+        <div class="buttons">
+          <button mat-flat-button type="button" (click)="upload()" [disabled]="isBusy">
+            @if (isBusy) {
+              <mat-spinner diameter="18"></mat-spinner>
+            } @else {
+              <mat-icon>cloud_upload</mat-icon>
+            }
+            {{ 'PRODUCTS.IMAGE.UPLOAD' | translate }}
+          </button>
+          <button mat-button type="button" (click)="cancelSelection()" [disabled]="isBusy">
+            {{ 'COMMON.CANCEL' | translate }}
+          </button>
+        </div>
+      } @else {
+        <div class="buttons">
+          <button mat-stroked-button type="button" (click)="fileInput.click()" [disabled]="isBusy">
+            <mat-icon>add_photo_alternate</mat-icon>
+            {{ (imageUrl ? 'PRODUCTS.IMAGE.REPLACE' : 'PRODUCTS.IMAGE.CHOOSE') | translate }}
+          </button>
+          @if (imageUrl) {
+            <button mat-button color="warn" type="button" (click)="remove()" [disabled]="isBusy">
+              <mat-icon>delete</mat-icon>
+              {{ 'PRODUCTS.IMAGE.DELETE' | translate }}
+            </button>
+          }
+        </div>
+      }
+
+      <span class="hint">{{ 'PRODUCTS.IMAGE.HINT' | translate: { max: maxSizeMb } }}</span>
+      @if (fileError) {
+        <span class="error" role="alert">{{ fileError }}</span>
+      }
+    </div>
+  </div>
+</section>

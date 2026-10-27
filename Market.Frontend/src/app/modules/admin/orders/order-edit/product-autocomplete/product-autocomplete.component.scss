@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.product-field {
+  width: 100%;
+}
+
+.search-spinner {
+  margin-right: 12px;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.option-price {
+  color: #4976b5;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.option-disabled {
+  display: block;
+  color: #c62828;
+}

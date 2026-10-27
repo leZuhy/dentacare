@@ -1,0 +1,73 @@
+@use '../shop-page';
+
+.converter-page {
+  @include shop-page.page(900px);
+}
+
+.page-title {
+  @include shop-page.page-title;
+  margin-bottom: 8px;
+}
+
+.intro {
+  margin: 0 0 24px;
+  color: shop-page.$text-light;
+}
+
+.converter-form {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 0 12px;
+
+  .amount-field {
+    grid-column: 1 / -1;
+  }
+
+  mat-form-field:last-of-type {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.swap-button {
+  margin-top: 8px;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.result {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  background: shop-page.$light-blue;
+}
+
+.result-amount {
+  font-size: 24px;
+
+  strong {
+    color: shop-page.$primary-blue;
+  }
+}
+
+.result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: shop-page.$text-light;
+}
+
+.error-banner {
+  @include shop-page.error-banner;
+}

@@ -1,0 +1,123 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>campaign</mat-icon></div>
+      <h1>{{ 'PROMOTIONS.TITLE' | translate }}</h1>
+    </div>
+
+    <div class="actions">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
+        <mat-label>{{ 'PROMOTIONS.SEARCH' | translate }}</mat-label>
+        <input matInput type="search" [formControl]="searchControl" autocomplete="off" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-field">
+        <mat-label>{{ 'PROMOTIONS.FILTER_ACTIVE' | translate }}</mat-label>
+        <mat-select [formControl]="activeControl">
+          <mat-option [value]="null">{{ 'COMMON.ALL' | translate }}</mat-option>
+          <mat-option [value]="true">{{ 'PROMOTIONS.ACTIVE' | translate }}</mat-option>
+          <mat-option [value]="false">{{ 'PROMOTIONS.INACTIVE' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <a mat-raised-button color="primary" routerLink="/admin/promotions/add">
+        <mat-icon>add</mat-icon>
+        {{ 'PROMOTIONS.NEW' | translate }}
+      </a>
+    </div>
+  </div>
+
+  @if (isLoading && items.length === 0) {
+    <app-fit-table-skeleton [rows]="5" [columns]="5" [showActions]="true" />
+  } @else if (errorMessage) {
+    <div class="state">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button color="primary" type="button" (click)="loadPagedData()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </div>
+  } @else {
+    <div class="table-card">
+      <table mat-table [dataSource]="items" [class.loading]="isLoading">
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let promo">
+            <img class="thumb" [src]="promo.imageUrl" [alt]="promo.title" loading="lazy" />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>{{ 'PROMOTIONS.FORM.TITLE' | translate }}</th>
+          <td mat-cell *matCellDef="let promo">
+            <span class="title">{{ promo.title }}</span>
+            @if (promo.targetUrl) {
+              <span class="target">{{ promo.targetUrl }}</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.STATUS' | translate }}</th>
+          <td mat-cell *matCellDef="let promo">
+            <mat-icon [class.icon-active]="promo.isActive" [class.icon-inactive]="!promo.isActive">
+              {{ promo.isActive ? 'check_circle' : 'cancel' }}
+            </mat-icon>
+          </td>
+        </ng-container>
+
+        <!-- kalendarski datumi su UTC ponoć (core/forms/utc-date.ts) → prikaz u zoni UTC -->
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>{{ 'PROMOTIONS.PERIOD' | translate }}</th>
+          <td mat-cell *matCellDef="let promo">
+            {{ promo.startsAtUtc ? (promo.startsAtUtc | date: 'dd.MM.yyyy' : 'UTC') : '…' }}
+            –
+            {{ promo.endsAtUtc ? (promo.endsAtUtc | date: 'dd.MM.yyyy' : 'UTC') : '…' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sortOrder">
+          <th mat-header-cell *matHeaderCellDef>{{ 'PROMOTIONS.FORM.SORT_ORDER' | translate }}</th>
+          <td mat-cell *matCellDef="let promo">{{ promo.sortOrder }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.ACTIONS' | translate }}</th>
+          <td mat-cell *matCellDef="let promo">
+            <a
+              mat-icon-button
+              color="primary"
+              [routerLink]="['/admin/promotions', promo.id, 'edit']"
+              [matTooltip]="'COMMON.EDIT' | translate"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="onDelete(promo)"
+              [matTooltip]="'COMMON.DELETE' | translate"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+            {{ 'PROMOTIONS.NO_DATA' | translate }}
+          </td>
+        </tr>
+      </table>
+
+      <app-fit-paginator-bar [vm]="this" />
+    </div>
+  }
+</div>

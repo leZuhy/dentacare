@@ -1,0 +1,24 @@
+<button
+  mat-button
+  type="button"
+  class="currency-button"
+  [matMenuTriggerFor]="currencyMenu"
+  [matTooltip]="'CURRENCY.SELECT' | translate"
+  [attr.aria-label]="'CURRENCY.SELECT' | translate"
+>
+  <mat-icon>currency_exchange</mat-icon>
+  <span>{{ currency.selected().code }}</span>
+</button>
+
+<mat-menu #currencyMenu="matMenu">
+  @for (c of currency.currencies(); track c.code) {
+    <button mat-menu-item type="button" (click)="currency.select(c.code)">
+      <span class="currency-option">
+        <strong>{{ c.code }}</strong> {{ c.name }} ({{ c.symbol }})
+      </span>
+      @if (c.code === currency.selected().code) {
+        <mat-icon class="check-icon">check</mat-icon>
+      }
+    </button>
+  }
+</mat-menu>

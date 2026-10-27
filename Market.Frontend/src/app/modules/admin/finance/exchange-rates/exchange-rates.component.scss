@@ -1,0 +1,68 @@
+@use '../../admin-page';
+
+.container {
+  @include admin-page.container;
+}
+
+.header-card {
+  @include admin-page.header-card;
+}
+
+.section-card {
+  @include admin-page.section-card;
+}
+
+.table-card {
+  @include admin-page.table-card;
+}
+
+.error-banner {
+  @include admin-page.error-banner;
+}
+
+.state {
+  @include admin-page.state;
+}
+
+.rate-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  align-items: start;
+  gap: 0 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.add-button {
+  margin-top: 8px;
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.filter-field {
+  width: 200px;
+}
+
+table {
+  transition: opacity 0.2s ease;
+
+  &.loading {
+    opacity: 0.5;
+  }
+}
+
+.code {
+  font-weight: 600;
+}
+
+.no-data {
+  padding: 32px;
+  text-align: center;
+  color: admin-page.$text-secondary;
+}

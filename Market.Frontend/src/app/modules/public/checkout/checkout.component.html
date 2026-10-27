@@ -1,0 +1,170 @@
+<div class="checkout-page">
+  <h1 class="page-title">
+    <mat-icon>shopping_bag</mat-icon>
+    {{ 'CHECKOUT.TITLE' | translate }}
+  </h1>
+
+  @if (cart.isEmpty() && !isLoading) {
+    <mat-card class="empty-cart" appearance="outlined">
+      <mat-icon>remove_shopping_cart</mat-icon>
+      <h2>{{ 'CART.EMPTY_TITLE' | translate }}</h2>
+      <p>{{ 'CHECKOUT.EMPTY_TEXT' | translate }}</p>
+      <a mat-flat-button routerLink="/search">
+        <mat-icon>search</mat-icon>
+        {{ 'CART.CONTINUE_SHOPPING' | translate }}
+      </a>
+    </mat-card>
+  } @else {
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <mat-stepper linear labelPosition="bottom">
+          <!-- KORAK 1: korpa (nema forme – korak je završen kad korpa nije prazna) -->
+          <mat-step [completed]="!cart.isEmpty()" [editable]="!isLoading">
+            <ng-template matStepLabel>{{ 'CHECKOUT.STEP_CART' | translate }}</ng-template>
+
+            <app-cart-items />
+
+            <div class="step-total">
+              <span>{{ 'CART.TOTAL' | translate }}</span>
+              <strong>{{ cart.total() | money }}</strong>
+            </div>
+            @if (!currency.isBaseSelected()) {
+              <p class="km-note">
+                <mat-icon>info</mat-icon>
+                {{ 'CURRENCY.KM_NOTE' | translate }}
+              </p>
+            }
+
+            <div class="step-actions">
+              <a mat-button routerLink="/cart">
+                <mat-icon>arrow_back</mat-icon>
+                {{ 'CHECKOUT.BACK_TO_CART' | translate }}
+              </a>
+              <button mat-flat-button type="button" matStepperNext>
+                {{ 'CHECKOUT.NEXT' | translate }}
+                <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- KORAK 2: napomena + potvrda ([stepControl] = forma koja mora biti ispravna) -->
+          <mat-step [stepControl]="detailsForm" [editable]="!isLoading">
+            <ng-template matStepLabel>{{ 'CHECKOUT.STEP_DETAILS' | translate }}</ng-template>
+
+            <form [formGroup]="detailsForm" class="details-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'CHECKOUT.NOTE_LABEL' | translate }}</mat-label>
+                <textarea
+                  matInput
+                  formControlName="note"
+                  rows="3"
+                  [maxlength]="noteMaxLength"
+                  [placeholder]="'CHECKOUT.NOTE_PLACEHOLDER' | translate"
+                ></textarea>
+                <mat-hint align="end">
+                  {{ detailsForm.controls.note.value.length }}/{{ noteMaxLength }}
+                </mat-hint>
+                <mat-error><app-fit-field-error [control]="detailsForm.controls.note" /></mat-error>
+              </mat-form-field>
+
+              <mat-checkbox formControlName="confirmed">
+                {{ 'CHECKOUT.CONFIRM_LABEL' | translate }}
+              </mat-checkbox>
+              @if (detailsForm.controls.confirmed.touched && detailsForm.controls.confirmed.invalid) {
+                <div class="checkbox-error">{{ 'CHECKOUT.CONFIRM_REQUIRED' | translate }}</div>
+              }
+            </form>
+
+            <div class="step-actions">
+              <button mat-button type="button" matStepperPrevious>
+                <mat-icon>arrow_back</mat-icon>
+                {{ 'CHECKOUT.BACK' | translate }}
+              </button>
+              <button
+                mat-flat-button
+                type="button"
+                matStepperNext
+                (click)="detailsForm.markAllAsTouched()"
+              >
+                {{ 'CHECKOUT.NEXT' | translate }}
+                <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </mat-step>
+
+          <!-- KORAK 3: pregled i slanje narudžbe -->
+          <mat-step>
+            <ng-template matStepLabel>{{ 'CHECKOUT.STEP_SUBMIT' | translate }}</ng-template>
+
+            @if (errorMessage) {
+              <div class="error-banner">
+                <mat-icon>error</mat-icon>
+                <span>{{ errorMessage }}</span>
+              </div>
+            }
+
+            <dl class="summary">
+              <dt>{{ 'CART.ITEMS_COUNT' | translate }}</dt>
+              <dd>{{ cart.itemCount() }}</dd>
+              <dt>{{ 'CART.TOTAL_QUANTITY' | translate }}</dt>
+              <dd>{{ cart.totalQuantity() }}</dd>
+              <dt>{{ 'CHECKOUT.NOTE_LABEL' | translate }}</dt>
+              <dd>{{ detailsForm.controls.note.value || '–' }}</dd>
+              <!-- adresa iz profila (GET /api/auth/me) – ovdje se samo prikazuje -->
+              <dt>{{ 'CHECKOUT.DELIVERY_ADDRESS' | translate }}</dt>
+              <dd>
+                @if (profile) {
+                  @if (hasDeliveryAddress) {
+                    {{ profile.address }}, {{ profile.city }}
+                  } @else {
+                    <span class="address-missing">{{ 'CHECKOUT.ADDRESS_MISSING' | translate }}</span>
+                    <a routerLink="/client/profile">{{ 'CHECKOUT.ADD_ADDRESS' | translate }}</a>
+                  }
+                } @else if (profileError) {
+                  <span class="address-missing">{{ profileError }}</span>
+                } @else {
+                  <mat-spinner diameter="16"></mat-spinner>
+                }
+              </dd>
+              <dt>{{ 'CART.TOTAL' | translate }}</dt>
+              <dd class="total">{{ cart.total() | money }}</dd>
+            </dl>
+
+            <p class="address-note">
+              <mat-icon>local_shipping</mat-icon>
+              <span>{{ 'CHECKOUT.ADDRESS_NOTE' | translate }}</span>
+            </p>
+
+            @if (!currency.isBaseSelected()) {
+              <p class="km-note">
+                <mat-icon>info</mat-icon>
+                {{ 'CURRENCY.KM_NOTE' | translate }}
+              </p>
+            }
+            <p class="price-note">{{ 'CART.PRICE_NOTE' | translate }}</p>
+
+            <div class="step-actions">
+              <button mat-button type="button" matStepperPrevious [disabled]="isLoading">
+                <mat-icon>arrow_back</mat-icon>
+                {{ 'CHECKOUT.BACK' | translate }}
+              </button>
+              <button
+                mat-flat-button
+                type="button"
+                (click)="submit()"
+                [disabled]="isLoading || cart.isEmpty() || detailsForm.invalid"
+              >
+                @if (isLoading) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else {
+                  <mat-icon>check</mat-icon>
+                }
+                {{ (isLoading ? 'CHECKOUT.SUBMITTING' : 'CHECKOUT.SUBMIT') | translate }}
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

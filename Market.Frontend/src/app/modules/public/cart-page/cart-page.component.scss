@@ -1,0 +1,57 @@
+@use '../shop-page';
+
+.cart-page {
+  @include shop-page.page;
+}
+
+.page-title {
+  @include shop-page.page-title;
+}
+
+.empty-cart {
+  @include shop-page.empty-card;
+}
+
+.cart-content {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  align-items: start;
+  gap: 24px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  position: sticky;
+  top: 88px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+
+  &.total {
+    font-size: 20px;
+  }
+}
+
+.km-note {
+  @include shop-page.km-note;
+}
+
+.price-note {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: shop-page.$text-light;
+}
+
+.summary-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 0 16px 16px;
+}

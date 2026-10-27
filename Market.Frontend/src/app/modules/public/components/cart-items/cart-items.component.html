@@ -1,0 +1,62 @@
+<ul class="cart-items">
+  @for (item of cart.items(); track item.productId) {
+    <li class="cart-item">
+      <div class="thumb">
+        @if (item.imageUrl | apiUrl; as src) {
+          <img [src]="src" [alt]="item.name" />
+        } @else {
+          <mat-icon aria-hidden="true">inventory_2</mat-icon>
+        }
+      </div>
+
+      <div class="info">
+        <span class="name">{{ item.name }}</span>
+        <span class="unit-price">{{ item.price | money }}</span>
+      </div>
+
+      <div class="quantity">
+        <button
+          mat-icon-button
+          type="button"
+          (click)="decrement(item)"
+          [disabled]="item.quantity <= 1"
+          [attr.aria-label]="'CART.DECREASE' | translate"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+        <input
+          #qty
+          type="number"
+          class="quantity-input"
+          min="1"
+          [max]="maxQuantity"
+          [value]="item.quantity"
+          (change)="onQuantityChange(item, qty)"
+          [attr.aria-label]="'CART.QUANTITY' | translate"
+        />
+        <button
+          mat-icon-button
+          type="button"
+          (click)="increment(item)"
+          [disabled]="item.quantity >= maxQuantity"
+          [attr.aria-label]="'CART.INCREASE' | translate"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <span class="line-total">{{ item.price * item.quantity | money }}</span>
+
+      <button
+        mat-icon-button
+        type="button"
+        color="warn"
+        (click)="remove(item)"
+        [matTooltip]="'CART.REMOVE' | translate"
+        [attr.aria-label]="'CART.REMOVE' | translate"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </li>
+  }
+</ul>

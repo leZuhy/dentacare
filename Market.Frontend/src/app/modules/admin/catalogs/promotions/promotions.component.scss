@@ -1,0 +1,74 @@
+@use '../../admin-page';
+
+.container {
+  @include admin-page.container;
+}
+
+.header-card {
+  @include admin-page.header-card;
+}
+
+.table-card {
+  @include admin-page.table-card;
+}
+
+.state {
+  @include admin-page.state;
+}
+
+.search-field {
+  width: 240px;
+}
+
+.filter-field {
+  width: 160px;
+}
+
+table {
+  transition: opacity 0.2s ease;
+
+  &.loading {
+    opacity: 0.5;
+  }
+}
+
+.thumb {
+  display: block;
+  width: 96px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: admin-page.$primary-lighter;
+}
+
+.title {
+  display: block;
+  font-weight: 600;
+}
+
+.target {
+  font-size: 12px;
+  color: admin-page.$text-secondary;
+  overflow-wrap: anywhere;
+}
+
+.icon-active {
+  color: #66bb6a;
+}
+
+.icon-inactive {
+  color: #ef5350;
+}
+
+.error-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #c62828;
+}
+
+.no-data {
+  padding: 32px;
+  text-align: center;
+  color: admin-page.$text-secondary;
+}

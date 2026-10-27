@@ -1,0 +1,3 @@
+# Files uploaded through the API (e.g. product images) are user data, not source code.
+# LocalFileStorage stores them in Market.API/wwwroot/uploads; the folder is created when needed.
+**/wwwroot/uploads/

@@ -1,0 +1,16 @@
+// Izgled je zajednički za sve /auth stranice (vidi modules/auth/_auth-page.scss)
+@use '../auth-page';
+
+// šira kartica: ime i prezime (adresa i grad) su u istom redu
+@include auth-page.page(560px);
+@include auth-page.links;
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 16px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}

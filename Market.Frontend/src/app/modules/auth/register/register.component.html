@@ -1,0 +1,134 @@
+<!-- Isti okvir kao login (stilovi: modules/auth/_auth-page.scss) -->
+<div class="auth-container">
+  <div class="auth-background">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+  </div>
+
+  <div class="auth-content">
+    <div class="auth-brand">
+      <mat-icon class="brand-icon">storefront</mat-icon>
+      <h1 class="brand-name">FIT Market</h1>
+      <p class="brand-tagline">{{ 'AUTH.REGISTER.TAGLINE' | translate }}</p>
+    </div>
+
+    <mat-card class="auth-card mat-elevation-z8">
+      <mat-card-header>
+        <mat-card-title>{{ 'AUTH.REGISTER.TITLE' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'AUTH.REGISTER.SUBTITLE' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (errorMessage) {
+          <div class="error-message" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="field-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'ACCOUNT.FIELDS.FIRSTNAME' | translate }}</mat-label>
+              <input matInput formControlName="firstname" autocomplete="given-name" />
+              <mat-error><app-fit-field-error [control]="form.controls.firstname" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'ACCOUNT.FIELDS.LASTNAME' | translate }}</mat-label>
+              <input matInput formControlName="lastname" autocomplete="family-name" />
+              <mat-error><app-fit-field-error [control]="form.controls.lastname" /></mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'ACCOUNT.FIELDS.EMAIL' | translate }}</mat-label>
+            <input matInput formControlName="email" type="email" autocomplete="email" />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error><app-fit-field-error [control]="form.controls.email" /></mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'ACCOUNT.FIELDS.PASSWORD' | translate }}</mat-label>
+            <input matInput formControlName="password" type="password" autocomplete="new-password" />
+            <mat-icon matPrefix>lock</mat-icon>
+            <!-- isto pravilo kao na backendu (AppValidators.password) -->
+            <mat-hint>{{ 'ACCOUNT.FIELDS.PASSWORD_HINT' | translate: { min: passwordMinLength } }}</mat-hint>
+            <mat-error><app-fit-field-error [control]="form.controls.password" /></mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'ACCOUNT.FIELDS.CONFIRM_PASSWORD' | translate }}</mat-label>
+            <input
+              matInput
+              formControlName="confirmPassword"
+              type="password"
+              autocomplete="new-password"
+              [errorStateMatcher]="passwordMatcher"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-error>
+              <!-- greška polja (required) ima prednost; inače greška grupe -->
+              @if (form.controls.confirmPassword.invalid) {
+                <app-fit-field-error [control]="form.controls.confirmPassword" />
+              } @else if (form.hasError('passwordMismatch')) {
+                {{ 'VALIDATION.PASSWORD_MATCH' | translate }}
+              }
+            </mat-error>
+          </mat-form-field>
+
+          <div class="field-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'ACCOUNT.FIELDS.ADDRESS' | translate }}</mat-label>
+              <input matInput formControlName="address" autocomplete="street-address" />
+              <mat-hint>{{ 'COMMON.OPTIONAL' | translate }}</mat-hint>
+              <mat-error><app-fit-field-error [control]="form.controls.address" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'ACCOUNT.FIELDS.CITY' | translate }}</mat-label>
+              <input matInput formControlName="city" autocomplete="address-level2" />
+              <mat-hint>{{ 'COMMON.OPTIONAL' | translate }}</mat-hint>
+              <mat-error><app-fit-field-error [control]="form.controls.city" /></mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="actions">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              class="submit-button"
+              [disabled]="isLoading"
+            >
+              @if (isLoading) {
+                <mat-progress-spinner mode="indeterminate" diameter="20" strokeWidth="3" />
+              } @else {
+                <mat-icon>person_add</mat-icon>
+              }
+              {{ (isLoading ? 'AUTH.REGISTER.LOADING' : 'AUTH.REGISTER.BUTTON') | translate }}
+            </button>
+          </div>
+
+          <div class="divider">
+            <span>{{ 'AUTH.REGISTER.OR' | translate }}</span>
+          </div>
+
+          <!-- preserve: ?returnUrl ostaje i ako se korisnik vrati na prijavu -->
+          <div class="auth-prompt">
+            <span>{{ 'AUTH.REGISTER.HAVE_ACCOUNT' | translate }}</span>
+            <a routerLink="/auth/login" queryParamsHandling="preserve">{{ 'AUTH.REGISTER.LOGIN' | translate }}</a>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="auth-footer">
+      <a routerLink="/" class="back-link">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'AUTH.REGISTER.BACK_TO_HOME' | translate }}
+      </a>
+    </div>
+  </div>
+</div>

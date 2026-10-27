@@ -1,0 +1,56 @@
+@use '../../../admin-page';
+
+.container {
+  @include admin-page.container(900px);
+}
+
+.header-card {
+  @include admin-page.header-card;
+}
+
+.section-card {
+  @include admin-page.section-card;
+}
+
+.error-banner {
+  @include admin-page.error-banner;
+}
+
+.state {
+  @include admin-page.state;
+}
+
+.promotion-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+
+  .full {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.preview {
+  width: 100%;
+  max-height: 200px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.checkbox-cell {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

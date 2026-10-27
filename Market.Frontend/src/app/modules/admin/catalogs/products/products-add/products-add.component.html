@@ -1,0 +1,133 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card mat-elevation-z2">
+    <h1>{{ 'PRODUCTS.ADD.TITLE' | translate }}</h1>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div *ngIf="isLoading" class="loading-overlay">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>{{ 'PRODUCTS.ADD.SAVING' | translate }}</p>
+      </div>
+
+      <!-- Product Name (async validator: jedinstven naziv) -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'PRODUCTS.FORM.NAME' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          [placeholder]="'PRODUCTS.FORM.NAME_PLACEHOLDER' | translate"
+          [maxlength]="formService.nameMaxLength"
+        />
+        <!-- pending: async validator čeka odgovor servera -->
+        @if (form.controls.name.pending) {
+          <mat-spinner matSuffix diameter="20" class="pending-spinner"></mat-spinner>
+        } @else {
+          <mat-icon matSuffix>inventory_2</mat-icon>
+        }
+        @if (form.controls.name.pending) {
+          <mat-hint>{{ 'PRODUCTS.FORM.NAME_CHECKING' | translate }}</mat-hint>
+        }
+        <mat-error>
+          <app-fit-field-error
+            [control]="form.controls.name"
+            [messages]="{ nameTaken: 'PRODUCTS.FORM.NAME_TAKEN' }"
+          />
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Description -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'PRODUCTS.FORM.DESCRIPTION' | translate }}</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          [placeholder]="'PRODUCTS.FORM.DESCRIPTION_PLACEHOLDER' | translate"
+          rows="4"
+        ></textarea>
+        <mat-icon matSuffix>description</mat-icon>
+        <mat-error><app-fit-field-error [control]="form.controls.description" /></mat-error>
+      </mat-form-field>
+
+      <!-- Price and Category Row -->
+      <div class="form-row">
+        <!-- Price -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'PRODUCTS.FORM.PRICE' | translate }}</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="price"
+            step="0.01"
+            [placeholder]="'PRODUCTS.FORM.PRICE_PLACEHOLDER' | translate"
+          />
+          <span matTextPrefix>KM&nbsp;</span>
+          <mat-icon matSuffix>payments</mat-icon>
+          <mat-error><app-fit-field-error [control]="form.controls.price" /></mat-error>
+        </mat-form-field>
+
+        <!-- Category -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'PRODUCTS.FORM.CATEGORY' | translate }}</mat-label>
+          <mat-select formControlName="categoryId">
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>category</mat-icon>
+          <mat-error><app-fit-field-error [control]="form.controls.categoryId" /></mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Stock and Enabled Row -->
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'PRODUCTS.FORM.STOCK' | translate }}</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="stockQuantity"
+            min="0"
+            step="1"
+            [placeholder]="'PRODUCTS.FORM.STOCK_PLACEHOLDER' | translate"
+          />
+          <mat-icon matSuffix>warehouse</mat-icon>
+          <mat-error><app-fit-field-error [control]="form.controls.stockQuantity" /></mat-error>
+        </mat-form-field>
+
+        <div class="half-width checkbox-cell">
+          <mat-checkbox formControlName="isEnabled">
+            {{ 'PRODUCTS.FORM.IS_ENABLED' | translate }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+          <mat-icon>close</mat-icon>
+          {{ 'PRODUCTS.FORM.CANCEL' | translate }}
+        </button>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="form.invalid || form.pending || isLoading"
+        >
+          <mat-icon>save</mat-icon>
+          {{ 'PRODUCTS.FORM.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

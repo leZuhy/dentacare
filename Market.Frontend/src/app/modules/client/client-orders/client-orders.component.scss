@@ -1,0 +1,60 @@
+@use '../client-page';
+@use '../../shared/styles/order-status';
+
+.orders-page {
+  @include client-page.page;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  @include client-page.page-title;
+}
+
+.state-card {
+  @include client-page.state-card;
+}
+
+.table-card {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  transition: opacity 0.2s ease;
+
+  &.loading {
+    opacity: 0.5;
+  }
+}
+
+.data-row {
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(74, 144, 226, 0.06);
+  }
+}
+
+.reference {
+  font-weight: 600;
+}
+
+.amount {
+  font-weight: 700;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.km-note {
+  @include client-page.km-note;
+}

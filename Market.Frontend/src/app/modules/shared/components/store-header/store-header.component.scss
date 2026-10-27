@@ -1,0 +1,73 @@
+$primary-blue: #4a90e2;
+
+.store-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 600px) {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $primary-blue;
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (max-width: 600px) {
+    span {
+      display: none;
+    }
+  }
+}
+
+.store-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .active {
+    color: $primary-blue;
+  }
+
+  // na uskom ekranu ostaju samo ikone
+  @media (max-width: 840px) {
+    .nav-label {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    gap: 0;
+
+    .nav-button {
+      min-width: 0;
+      padding: 0 10px;
+    }
+  }
+}
+
+.account-email {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #666666;
+}

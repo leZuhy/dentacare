@@ -1,0 +1,24 @@
+// Javni layout: header + stranica (router-outlet) + footer
+// Header je u shared/components/store-header, stilovi početne stranice u landing/landing.component.scss
+
+$text-light: #666666;
+
+.public-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// === CONTENT ===
+.public-content {
+  flex: 1;
+}
+
+// === FOOTER ===
+.public-footer {
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: $text-light;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}

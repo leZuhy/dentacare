@@ -1,0 +1,162 @@
+<div class="profile-page">
+  <h1 class="page-title">
+    <mat-icon>account_circle</mat-icon>
+    {{ 'ACCOUNT.PROFILE.TITLE' | translate }}
+  </h1>
+
+  @if (!model) {
+    <mat-card appearance="outlined" class="state-card">
+      @if (isLoading) {
+        <mat-spinner diameter="48"></mat-spinner>
+        <p>{{ 'ACCOUNT.PROFILE.LOADING' | translate }}</p>
+      } @else {
+        <mat-icon class="state-icon">error_outline</mat-icon>
+        <p>{{ errorMessage }}</p>
+        <button mat-stroked-button color="primary" type="button" (click)="retry()">
+          <mat-icon>refresh</mat-icon>
+          {{ 'COMMON.RETRY' | translate }}
+        </button>
+      }
+    </mat-card>
+  } @else {
+    <div class="cards">
+      <!-- (a) PROFIL: BaseFormComponent (form, onSubmit → save) -->
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon">badge</mat-icon>
+          <mat-card-title>{{ 'ACCOUNT.PROFILE.DATA_TITLE' | translate }}</mat-card-title>
+          <mat-card-subtitle>{{ 'ACCOUNT.PROFILE.DATA_SUBTITLE' | translate }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          @if (errorMessage) {
+            <div class="error-banner" role="alert">
+              <mat-icon>error</mat-icon>
+              <span>{{ errorMessage }}</span>
+            </div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="account-form">
+            <!-- email nije dio forme: samo se prikazuje (PUT /api/auth/me ga ne mijenja) -->
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>{{ 'ACCOUNT.FIELDS.EMAIL' | translate }}</mat-label>
+              <input matInput [value]="model.email" readonly />
+              <mat-icon matSuffix>lock</mat-icon>
+              <mat-hint>{{ 'ACCOUNT.PROFILE.EMAIL_HINT' | translate }}</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'ACCOUNT.FIELDS.FIRSTNAME' | translate }}</mat-label>
+              <input matInput formControlName="firstname" autocomplete="given-name" />
+              <mat-error><app-fit-field-error [control]="form.controls.firstname" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'ACCOUNT.FIELDS.LASTNAME' | translate }}</mat-label>
+              <input matInput formControlName="lastname" autocomplete="family-name" />
+              <mat-error><app-fit-field-error [control]="form.controls.lastname" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>{{ 'ACCOUNT.FIELDS.ADDRESS' | translate }}</mat-label>
+              <input matInput formControlName="address" autocomplete="street-address" />
+              <mat-hint>{{ 'ACCOUNT.PROFILE.ADDRESS_HINT' | translate }}</mat-hint>
+              <mat-error><app-fit-field-error [control]="form.controls.address" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>{{ 'ACCOUNT.FIELDS.CITY' | translate }}</mat-label>
+              <input matInput formControlName="city" autocomplete="address-level2" />
+              <mat-error><app-fit-field-error [control]="form.controls.city" /></mat-error>
+            </mat-form-field>
+
+            <div class="form-actions full">
+              <button mat-flat-button type="submit" [disabled]="isLoading || form.pristine">
+                @if (isLoading) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else {
+                  <mat-icon>save</mat-icon>
+                }
+                {{ 'COMMON.SAVE' | translate }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- (b) PROMJENA LOZINKE: vlastita forma; #passwordFormDirective za resetForm() poslije uspjeha -->
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="card-icon">lock_reset</mat-icon>
+          <mat-card-title>{{ 'ACCOUNT.CHANGE_PASSWORD.TITLE' | translate }}</mat-card-title>
+          <mat-card-subtitle>{{ 'ACCOUNT.CHANGE_PASSWORD.SUBTITLE' | translate }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          @if (passwordError) {
+            <div class="error-banner" role="alert">
+              <mat-icon>error</mat-icon>
+              <span>{{ passwordError }}</span>
+            </div>
+          }
+
+          <form
+            [formGroup]="passwordForm"
+            #passwordFormDirective="ngForm"
+            (ngSubmit)="changePassword(passwordFormDirective)"
+            class="account-form single-column"
+          >
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'ACCOUNT.FIELDS.CURRENT_PASSWORD' | translate }}</mat-label>
+              <input
+                matInput
+                formControlName="currentPassword"
+                type="password"
+                autocomplete="current-password"
+              />
+              <mat-error><app-fit-field-error [control]="passwordForm.controls.currentPassword" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'ACCOUNT.FIELDS.NEW_PASSWORD' | translate }}</mat-label>
+              <input matInput formControlName="newPassword" type="password" autocomplete="new-password" />
+              <!-- isto pravilo kao na backendu (AppValidators.password) -->
+              <mat-hint>{{ 'ACCOUNT.FIELDS.PASSWORD_HINT' | translate: { min: passwordMinLength } }}</mat-hint>
+              <mat-error><app-fit-field-error [control]="passwordForm.controls.newPassword" /></mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'ACCOUNT.FIELDS.CONFIRM_PASSWORD' | translate }}</mat-label>
+              <input
+                matInput
+                formControlName="confirmPassword"
+                type="password"
+                autocomplete="new-password"
+                [errorStateMatcher]="passwordMatcher"
+              />
+              <mat-error>
+                <!-- greška polja (required) ima prednost; inače greška grupe -->
+                @if (passwordForm.controls.confirmPassword.invalid) {
+                  <app-fit-field-error [control]="passwordForm.controls.confirmPassword" />
+                } @else if (passwordForm.hasError('passwordMismatch')) {
+                  {{ 'VALIDATION.PASSWORD_MATCH' | translate }}
+                }
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button mat-flat-button type="submit" [disabled]="isChangingPassword">
+                @if (isChangingPassword) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else {
+                  <mat-icon>key</mat-icon>
+                }
+                {{ 'ACCOUNT.CHANGE_PASSWORD.BUTTON' | translate }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

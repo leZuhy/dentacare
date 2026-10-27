@@ -1,0 +1,30 @@
+<div class="client-home">
+  <mat-card class="client-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="avatar-icon">account_circle</mat-icon>
+      <mat-card-title>{{ 'CLIENT.HOME.TITLE' | translate }}</mat-card-title>
+      <mat-card-subtitle>
+        {{ 'CLIENT.HOME.LOGGED_IN_AS' | translate: { email: currentUser()?.email } }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>{{ 'CLIENT.HOME.DESCRIPTION' | translate }}</p>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a mat-flat-button routerLink="/client/orders">
+        <mat-icon>receipt_long</mat-icon>
+        {{ 'CLIENT.HOME.MY_ORDERS' | translate }}
+      </a>
+      <a mat-stroked-button routerLink="/search">
+        <mat-icon>search</mat-icon>
+        {{ 'CLIENT.HOME.SEARCH_PRODUCTS' | translate }}
+      </a>
+      <a mat-button routerLink="/auth/logout">
+        <mat-icon>logout</mat-icon>
+        {{ 'CLIENT.HOME.LOGOUT' | translate }}
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>
