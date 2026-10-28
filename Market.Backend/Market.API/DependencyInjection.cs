@@ -2,6 +2,7 @@
 using Market.Application.Abstractions;
 using Market.Infrastructure.Common;
 using Market.Shared.Constants;
+using Market.Domain.Entities.Identity;
 using Market.Shared.Dtos;
 using Market.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -80,6 +81,9 @@ public static class DependencyInjection
         {
             var jwt = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()!;
 
+            // Claim names are read exactly as JwtTokenService writes them (no automatic renaming)
+            o.MapInboundClaims = false;
+
             o.TokenValidationParameters = new()
             {
                 ValidateIssuer = true,
@@ -89,7 +93,9 @@ public static class DependencyInjection
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero,
+                // IsInRole / RequireRole read the role from the "role" claim
+                RoleClaimType = AppClaimTypes.Role
             };
 
             o.Events = new JwtBearerEvents
@@ -107,8 +113,16 @@ public static class DependencyInjection
 
             // [Authorize(Policy = PolicyNames.Admin)] → 401 without a token, 403 for a non-admin user
             o.AddPolicy(PolicyNames.Admin, policy => policy
+            .RequireAuthenticatedUser()
+                .RequireRole(Role.Admin.ToString()));
+
+            o.AddPolicy(PolicyNames.Dentist, policy => policy
                 .RequireAuthenticatedUser()
-                .RequireClaim("is_admin", "true"));
+                .RequireRole(Role.Dentist.ToString()));
+
+            o.AddPolicy(PolicyNames.Patient, policy => policy
+            .RequireAuthenticatedUser()
+                .RequireRole(Role.Patient.ToString()));
         });
 
         // Swagger with Bearer auth

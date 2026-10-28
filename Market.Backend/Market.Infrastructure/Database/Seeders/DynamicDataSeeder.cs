@@ -23,7 +23,7 @@ public static class DynamicDataSeeder
 
     /// <summary>
     /// Kreira demo korisnike ako ih još nema u bazi.
-    /// Uloge i IsEnabled se postavljaju eksplicitno (baza nema default vrijednosti za njih).
+    /// Role and IsEnabled are se explicitly (the db has no default values for them).
     /// </summary>
     private static async Task SeedUsersAsync(DatabaseContext context)
     {
@@ -34,45 +34,39 @@ public static class DynamicDataSeeder
 
         var admin = new MarketUserEntity
         {
-            Firstname = "Admin",
-            Lastname = "Market",
-            Email = "admin@market.local",
+            Firstname ="Avdija",
+            Lastname = "Halak",
+            Email = "admin@dentacare.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
-            Address = "Maršala Tita 1",
+            Address = "Marsala Tita 1",
             City = "Sarajevo",
-            IsAdmin = true,
-            IsManager = false,
-            IsEmployee = false,
+            Role = Role.Admin,
             IsEnabled = true,
             CreatedAtUtc = DateTime.UtcNow
         };
 
-        var manager = new MarketUserEntity
+        var dentist = new MarketUserEntity
         {
-            Firstname = "Manager",
-            Lastname = "Market",
-            Email = "manager@market.local",
-            PasswordHash = hasher.HashPassword(null!, "Manager123!"),
+            Firstname = "Dino",
+            Lastname = "Dentist",
+            Email = "dentist@dentacare.local",
+            PasswordHash = hasher.HashPassword(null!, "Dentist123!"),
             Address = "Ferhadija 12",
             City = "Sarajevo",
-            IsAdmin = false,
-            IsManager = true,
-            IsEmployee = false,
+            Role = Role.Dentist,
             IsEnabled = true,
             CreatedAtUtc = DateTime.UtcNow
         };
 
-        var employee = new MarketUserEntity
+        var patient = new MarketUserEntity
         {
-            Firstname = "Employee",
-            Lastname = "Market",
-            Email = "employee@market.local",
-            PasswordHash = hasher.HashPassword(null!, "Employee123!"),
-            Address = "Kralja Tvrtka 5",
-            City = "Zenica",
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = true,
+            Firstname = "Petar",
+            Lastname = "Patient",
+            Email = "patient@dentacare.local",
+            PasswordHash = hasher.HashPassword(null!, "Patient123!"),
+            Address = "Zenjak 5",
+            City = "Travnik",
+            Role = Role.Patient,
             IsEnabled = true,
             CreatedAtUtc = DateTime.UtcNow
         };
@@ -83,11 +77,7 @@ public static class DynamicDataSeeder
             Lastname = "Demo",
             Email = "string",
             PasswordHash = hasher.HashPassword(null!, "string"),
-            Address = "Zmaja od Bosne 8",
-            City = "Sarajevo",
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = true,
+            Role = Role.Patient,
             IsEnabled = true,
             CreatedAtUtc = DateTime.UtcNow
         };
@@ -98,72 +88,14 @@ public static class DynamicDataSeeder
             Lastname = "User",
             Email = "test",
             PasswordHash = hasher.HashPassword(null!, "test123"),
-            Address = "Titova 3",
-            City = "Tuzla",
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = true,
+            Role = Role.Patient,
             IsEnabled = true,
             CreatedAtUtc = DateTime.UtcNow
         };
 
-        // Demo customers
-        var customer1 = new MarketUserEntity
-        {
-            Firstname = "Nina",
-            Lastname = "Bijedić",
-            Email = "nina.bijedic@email.com",
-            PasswordHash = hasher.HashPassword(null!, "Customer123!"),
-            Address = "Bulevar Meše Selimovića 15",
-            City = "Sarajevo",
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = false,
-            IsEnabled = true,
-            CreatedAtUtc = DateTime.UtcNow.AddDays(-30)
-        };
+        context.Users.AddRange(admin,dentist,patient, dummyForSwagger, dummyForTests);
 
-        var customer2 = new MarketUserEntity
-        {
-            Firstname = "Iris",
-            Lastname = "Memić",
-            Email = "iris.memic@email.com",
-            PasswordHash = hasher.HashPassword(null!, "Customer123!"),
-            Address = "Kneza Domagoja 22",
-            City = "Mostar",
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = false,
-            IsEnabled = true,
-            CreatedAtUtc = DateTime.UtcNow.AddDays(-25)
-        };
-
-        var customer3 = new MarketUserEntity
-        {
-            Firstname = "Azra",
-            Lastname = "Smajić",
-            Email = "azra.smajic@email.com",
-            PasswordHash = hasher.HashPassword(null!, "Customer123!"),
-            Address = "Trg slobode 4",
-            City = "Tuzla",
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = false,
-            IsEnabled = true,
-            CreatedAtUtc = DateTime.UtcNow.AddDays(-20)
-        };
-
-        context.Users.AddRange(
-            admin,
-            manager,
-            employee,
-            dummyForSwagger,
-            dummyForTests,
-            customer1,
-            customer2,
-            customer3
-        );
-
+        await context.Users.AddRangeAsync(admin, dentist, patient);
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: demo users added.");
     }

@@ -1,6 +1,7 @@
 using Market.Application.Modules.Auth.Commands.ChangePassword;
 using Market.Application.Modules.Auth.Commands.Register;
 using Market.Application.Modules.Auth.Queries.GetMe;
+using Market.Domain.Entities.Identity;
 using Market.Shared.Dtos;
 using System.Net;
 using System.Net.Http.Headers;
@@ -66,7 +67,7 @@ public class AccountIntegrationTests
     }
 
     [Fact]
-    public async Task Post_Register_NewCustomer_Returns201WithTokens_AndIsLoggedIn()
+    public async Task Post_Register_NewPatient_Returns201WithTokens_AndIsLoggedIn()
     {
         // Act
         var (email, tokens) = await RegisterAsync();
@@ -79,7 +80,7 @@ public class AccountIntegrationTests
         Assert.Equal(email, me!.Email);
         Assert.Equal("Titova 10", me.Address);
         Assert.Equal("Sarajevo", me.City);
-        Assert.False(me.IsAdmin || me.IsManager || me.IsEmployee); // a new account is a customer
+        Assert.Equal(Role.Patient, me.Role); // the default role for a new account is "Patient"
     }
 
     [Fact]

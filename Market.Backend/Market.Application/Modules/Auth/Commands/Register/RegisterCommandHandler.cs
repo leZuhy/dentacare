@@ -20,9 +20,8 @@ public sealed class RegisterCommandHandler(
             Email = request.Email.Trim().ToLowerInvariant(),
             Address = request.Address.TrimToNull(),
             City = request.City.TrimToNull(),
-            IsAdmin = false,
-            IsManager = false,
-            IsEmployee = false,
+            // The default role is Patient, which is the lowest privilege level.
+            Role = Role.Patient,
             IsEnabled = true
         };
         user.PasswordHash = hasher.HashPassword(user, request.Password);

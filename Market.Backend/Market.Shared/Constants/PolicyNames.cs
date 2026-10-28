@@ -9,5 +9,18 @@ public static class PolicyNames
     /// <summary>
     /// Only users whose access token contains the claim <c>is_admin = "true"</c>.
     /// </summary>
+    /// <summary>
+    /// Only users with the Admin role.
+    /// </summary>
     public const string Admin = "Admin";
+
+    /// <summary>
+    /// Only users with the Dentist role.
+    /// </summary>
+    public const string Dentist = "Dentist";
+
+    /// <summary>
+    /// Only users with the Patient role.
+    /// </summary>
+    public const string Patient = "Patient";
 }

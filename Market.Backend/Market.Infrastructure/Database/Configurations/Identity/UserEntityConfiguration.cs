@@ -36,11 +36,8 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<MarketUse
             .HasMaxLength(MarketUserEntity.Constraints.CityMaxLength);
 
         // Roles
-        b.Property(x => x.IsAdmin)
-            .HasDefaultValue(false);
-
-        b.Property(x => x.IsManager)
-            .HasDefaultValue(false);
+        b.Property(x => x.Role)
+            .IsRequired();
 
         // No HasDefaultValue(true) for IsEmployee/IsEnabled: EF Core does not send a bool that has the
         // CLR default (false) when the column has a database default, so "false" could never be saved -

@@ -20,9 +20,7 @@ public sealed class MarketUserEntity : BaseEntity
     /// </summary>
     public string? City { get; set; }
 
-    public bool IsAdmin { get; set; }
-    public bool IsManager { get; set; }
-    public bool IsEmployee { get; set; }
+    public Role Role { get; set; }
     public int TokenVersion { get; set; } = 0;// For global revocation
     public bool IsEnabled { get; set; } = true; // New accounts are enabled unless explicitly disabled
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();

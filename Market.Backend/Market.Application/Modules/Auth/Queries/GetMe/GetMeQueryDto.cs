@@ -8,7 +8,8 @@ public sealed class GetMeQueryDto
     public required string Lastname { get; init; }
     public required string? Address { get; init; }
     public required string? City { get; init; }
-    public required bool IsAdmin { get; init; }
-    public required bool IsManager { get; init; }
-    public required bool IsEmployee { get; init; }
+
+    // This is used for authorization, so we want to serialize it as a string in JSON, not as an integer.
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public required Role Role { get; init; }
 }
