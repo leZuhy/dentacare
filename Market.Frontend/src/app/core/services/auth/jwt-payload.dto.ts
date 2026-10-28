@@ -1,10 +1,10 @@
 // payload kako dolazi iz JWT-a
+import { Role } from "./role";
+
 export interface JwtPayloadDto {
   sub: string;
   email: string;
-  is_admin: string;
-  is_manager: string;
-  is_employee: string;
+  role: Role;
   ver: string;
   iat: number;
   exp: number;

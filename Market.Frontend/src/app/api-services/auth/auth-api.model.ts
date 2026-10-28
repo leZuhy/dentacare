@@ -1,3 +1,5 @@
+import { Role } from "../../core/services/auth/role";
+
 // === COMMANDS (WRITE) ===
 
 /**
@@ -116,9 +118,7 @@ export interface GetMeQueryDto {
   /** null = korisnik još nije unio adresu */
   address: string | null;
   city: string | null;
-  isAdmin: boolean;
-  isManager: boolean;
-  isEmployee: boolean;
+  role: Role;
 }
 
 /**

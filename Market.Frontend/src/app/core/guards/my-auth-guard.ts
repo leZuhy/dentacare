@@ -1,8 +1,13 @@
 // src/app/core/guards/my-auth-guard.ts
-import { inject } from '@angular/core';
-import { CanActivateFn, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthFacadeService } from '../services/auth/auth-facade.service';
-import { CurrentUserService } from '../services/auth/current-user.service';
+import { inject } from "@angular/core";
+import {
+  CanActivateFn,
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+} from "@angular/router";
+import { AuthFacadeService } from "../services/auth/auth-facade.service";
+import { CurrentUserService } from "../services/auth/current-user.service";
 
 /**
  * Guard za rute koje traže prijavu i/ili ulogu.
@@ -25,21 +30,24 @@ import { CurrentUserService } from '../services/auth/current-user.service';
  */
 export const myAuthGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
+  state: RouterStateSnapshot,
 ) => {
   const auth = inject(AuthFacadeService);
   const currentUser = inject(CurrentUserService);
   const router = inject(Router);
 
   // myAuthData() pakuje pravila pod ključ "auth"
-  const authData = (route.data['auth'] ?? {}) as MyAuthRouteData;
+  const authData = (route.data["auth"] ?? {}) as MyAuthRouteData;
 
   const requireAdmin = authData.requireAdmin === true;
-  const requireManager = authData.requireManager === true;
-  const requireEmployee = authData.requireEmployee === true;
+  const requireDentist = authData.requireDentist === true;
+  const requirePatient = authData.requirePatient === true;
   // traženje bilo koje uloge podrazumijeva i prijavu
   const requireAuth =
-    authData.requireAuth === true || requireAdmin || requireManager || requireEmployee;
+    authData.requireAuth === true ||
+    requireAdmin ||
+    requireDentist ||
+    requirePatient;
 
   // Ako ne traži auth → pusti (javne rute)
   if (!requireAuth) {
@@ -49,14 +57,16 @@ export const myAuthGuard: CanActivateFn = (
   // 1) user nije logiran ili mu je sesija istekla → login, uz adresu na koju se vraća
   const user = currentUser.snapshot;
   if (!user || !auth.hasValidSession()) {
-    return router.createUrlTree(['/auth/login'], { queryParams: { returnUrl: state.url } });
+    return router.createUrlTree(["/auth/login"], {
+      queryParams: { returnUrl: state.url },
+    });
   }
 
   // 2) role check – ako user nema traženu ulogu → njegova početna ruta
   if (
-    (requireAdmin && !user.isAdmin) ||
-    (requireManager && !user.isManager) ||
-    (requireEmployee && !user.isEmployee)
+    (requireAdmin && user.role !== "Admin") ||
+    (requireDentist && user.role !== "Dentist") ||
+    (requirePatient && user.role !== "Patient")
   ) {
     return router.createUrlTree([currentUser.getDefaultRoute()]);
   }
@@ -67,8 +77,8 @@ export const myAuthGuard: CanActivateFn = (
 export interface MyAuthRouteData {
   requireAuth?: boolean;
   requireAdmin?: boolean;
-  requireManager?: boolean;
-  requireEmployee?: boolean;
+  requireDentist?: boolean;
+  requirePatient?: boolean;
 }
 
 export function myAuthData(data: MyAuthRouteData): { auth: MyAuthRouteData } {

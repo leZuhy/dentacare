@@ -1,8 +1,8 @@
+import { Role } from "./role";
+
 export interface CurrentUserDto {
   userId: number;
   email: string;
-  isAdmin: boolean;
-  isManager: boolean;
-  isEmployee: boolean;
+  role: Role;
   tokenVersion: number;
 }

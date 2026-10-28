@@ -12,20 +12,10 @@
           <div class="user-email">{{ auth.currentUser()?.email }}</div>
           <div class="user-role">
             @if (auth.isAdmin()) {
-            <mat-chip class="role-chip admin">
-              <mat-icon>admin_panel_settings</mat-icon>
-              {{ 'ADMIN_PANEL.ROLES.ADMIN' | translate }}
-            </mat-chip>
-            } @else if (auth.isManager()) {
-            <mat-chip class="role-chip manager">
-              <mat-icon>manage_accounts</mat-icon>
-              {{ 'ADMIN_PANEL.ROLES.MANAGER' | translate }}
-            </mat-chip>
-            } @else if (auth.isEmployee()) {
-            <mat-chip class="role-chip employee">
-              <mat-icon>badge</mat-icon>
-              {{ 'ADMIN_PANEL.ROLES.EMPLOYEE' | translate }}
-            </mat-chip>
+              <mat-chip class="role-chip admin">
+                <mat-icon>admin_panel_settings</mat-icon>
+                {{ "ADMIN_PANEL.ROLES.ADMIN" | translate }}
+              </mat-chip>
             }
           </div>
         </div>
@@ -33,7 +23,11 @@
 
       <!-- Language Selector -->
       <div class="language-selector">
-        <button mat-icon-button [matMenuTriggerFor]="langMenu" class="lang-button">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="langMenu"
+          class="lang-button"
+        >
           <span class="flag-icon">{{ getCurrentLanguage()?.flag }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
@@ -47,7 +41,9 @@
           >
             <span class="flag-icon">{{ lang.flag }}</span>
             <span>{{ lang.name }}</span>
-            <mat-icon *ngIf="currentLang === lang.code" class="check-icon">check</mat-icon>
+            <mat-icon *ngIf="currentLang === lang.code" class="check-icon"
+              >check</mat-icon
+            >
           </button>
         </mat-menu>
       </div>
@@ -57,28 +53,45 @@
     <mat-nav-list>
       <!-- SYSTEM SECTION -->
       <div class="nav-section-title">
-        {{ 'ADMIN_PANEL.MENU.SYSTEM' | translate }}
+        {{ "ADMIN_PANEL.MENU.SYSTEM" | translate }}
       </div>
 
-      <a mat-list-item routerLink="/admin/exchange-rates" routerLinkActive="active">
+      <a
+        mat-list-item
+        routerLink="/admin/exchange-rates"
+        routerLinkActive="active"
+      >
         <mat-icon matListItemIcon>currency_exchange</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.EXCHANGE_RATES' | translate }}</span>
+        <span matListItemTitle>{{
+          "ADMIN_PANEL.MENU.EXCHANGE_RATES" | translate
+        }}</span>
       </a>
 
       <a mat-list-item routerLink="/admin/settings" routerLinkActive="active">
         <mat-icon matListItemIcon>settings</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.SETTINGS' | translate }}</span>
+        <span matListItemTitle>{{
+          "ADMIN_PANEL.MENU.SETTINGS" | translate
+        }}</span>
       </a>
 
       <a mat-list-item routerLink="/admin/profile" routerLinkActive="active">
         <mat-icon matListItemIcon>manage_accounts</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.MY_PROFILE' | translate }}</span>
+        <span matListItemTitle>{{
+          "ADMIN_PANEL.MENU.MY_PROFILE" | translate
+        }}</span>
       </a>
 
       <!-- LOGOUT -->
-      <a mat-list-item routerLink="/auth/logout" routerLinkActive="active" class="logout-item">
+      <a
+        mat-list-item
+        routerLink="/auth/logout"
+        routerLinkActive="active"
+        class="logout-item"
+      >
         <mat-icon matListItemIcon>logout</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.LOGOUT' | translate }}</span>
+        <span matListItemTitle>{{
+          "ADMIN_PANEL.MENU.LOGOUT" | translate
+        }}</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
