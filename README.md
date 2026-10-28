@@ -2,10 +2,10 @@
 
 Starter je kompletna aplikacija na kojoj radite seminarski rad:
 
-| Folder | Sadržaj |
-|---|---|
-| [`Market.Backend/`](Market.Backend/) | ASP.NET Core Web API, .NET 10, Clean Architecture, CQRS (MediatR), FluentValidation, EF Core (SQL Server), JWT + refresh tokeni |
-| [`Market.Frontend/`](Market.Frontend/) | Angular 21 (NgModules), Angular Material, ngx-translate (bosanski/engleski) |
+| Folder                                 | Sadržaj                                                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| [`Market.Backend/`](Market.Backend/)   | ASP.NET Core Web API, .NET 10, Clean Architecture, CQRS (MediatR), FluentValidation, EF Core (SQL Server), JWT + refresh tokeni |
+| [`Market.Frontend/`](Market.Frontend/) | Angular 21 (NgModules), Angular Material, ngx-translate (bosanski/engleski)                                                     |
 
 Starter sadrži i gotove primjere (korpa, checkout, narudžbe kupca, promocije, upload slike, konvertor valuta…). Ono što vašoj temi ne treba – obrišite. Kod iz startera se ne boduje; boduje se ono što sami napravite.
 
@@ -53,32 +53,31 @@ Ako HTTPS certifikat ne radi, pokrenite backend s profilom `http` i u `src/envir
 
 ## Korisnici (demo podaci)
 
-| Email | Lozinka | Uloga |
-|---|---|---|
-| `admin@market.local` | `Admin123!` | administrator (`/admin`) |
-| `manager@market.local` | `Manager123!` | menadžer |
-| `employee@market.local` | `Employee123!` | uposlenik |
-| `nina.bijedic@email.com`, `iris.memic@email.com`, `azra.smajic@email.com` | `Customer123!` | kupci |
-| `string` | `string` | za Swagger |
-| `test` | `test123` | za testove |
+| Email                     | Lozinka       | Uloga               |
+| ------------------------- | ------------- | ------------------- |
+| `admin@dentacare.local`   | `Admin123!`   | Admin (`/admin`)    |
+| `dentist@dentacare.local` | `Dentist123!` | Dentist             |
+| `patient@dentacare.local` | `Patient123!` | Patient             |
+| `string`                  | `string`      | Patient, za Swagger |
+| `test`                    | `test123`     | Patient, za testove |
 
-Administrator nakon prijave ide na `/admin`, svi ostali na `/client`. Novi kupac se može registrovati na `/auth/register` (odmah je prijavljen). Lozinka mora imati najmanje 8 znakova, bar jedno slovo i jednu cifru.
+Admin nakon prijave ide na `/admin`, svi ostali na `/client`. Novi pacijent se može registrovati na `/auth/register` (odmah je prijavljen i uvijek dobija ulogu Patient). Lozinka mora imati najmanje 8 znakova, bar jedno slovo i jednu cifru.
 
 ## Okruženja (environments)
 
-| | Development | Testing | Production |
-|---|---|---|---|
-| Namjena | svakodnevni razvoj | lokalno, ponaša se kao produkcija | server |
-| Backend profil | `https` / `http` | `https-testing` | – |
-| Frontend | `npm start` | `npm run start:testing` | `npm run build` |
-| Baza | `Market2026` | `Market2026_Testing` | iz konfiguracije servera |
-| Demo podaci | da | da | ne |
-| Swagger | da | ne | ne |
-| Detalji greške (stack trace) u odgovoru | da | ne | ne |
-| JWT ključ | `DEV_ONLY_…` | `TESTING_ONLY_…` | tajni ključ u `Jwt__Key` |
-| CORS | `http://localhost:4200` | `http://localhost:4200` | iz konfiguracije servera |
-| Email | ispis u log (`[DEV EMAIL]`) | ispis u log | SMTP (`Email__Smtp__Host`…) |
-| `Frontend:BaseUrl` (link u emailu) | `http://localhost:4200` | `http://localhost:4200` | `Frontend__BaseUrl` |
+|                                         | Development                 | Testing                           | Production                  |
+| --------------------------------------- | --------------------------- | --------------------------------- | --------------------------- |
+| Namjena                                 | svakodnevni razvoj          | lokalno, ponaša se kao produkcija | server                      |
+| Backend profil                          | `https` / `http`            | `https-testing`                   | –                           |
+| Frontend                                | `npm start`                 | `npm run start:testing`           | `npm run build`             |
+| Baza                                    | `Market2026`                | `Market2026_Testing`              | iz konfiguracije servera    |
+| Demo podaci                             | da                          | da                                | ne                          |
+| Swagger                                 | da                          | ne                                | ne                          |
+| Detalji greške (stack trace) u odgovoru | da                          | ne                                | ne                          |
+| JWT ključ                               | `DEV_ONLY_…`                | `TESTING_ONLY_…`                  | tajni ključ u `Jwt__Key`    |
+| CORS                                    | `http://localhost:4200`     | `http://localhost:4200`           | iz konfiguracije servera    |
+| Email                                   | ispis u log (`[DEV EMAIL]`) | ispis u log                       | SMTP (`Email__Smtp__Host`…) |
+| `Frontend:BaseUrl` (link u emailu)      | `http://localhost:4200`     | `http://localhost:4200`           | `Frontend__BaseUrl`         |
 
 **Backend** – `appsettings.json` važi za sva okruženja, a `appsettings.Development.json` / `appsettings.Testing.json` ga dopunjavaju. Connection string za Development je namjerno u `appsettings.json`, da `dotnet ef` i Package Manager Console rade bez podešavanja okruženja.
 
@@ -86,11 +85,11 @@ Produkcija se lokalno ne pokreće: bez pravog ključa (varijabla okruženja `Jwt
 
 **Frontend** – uvijek importujte `environments/environment`:
 
-| Fajl | Kada se koristi |
-|---|---|
-| `src/environments/environment.development.ts` | `npm start` / `ng serve` (API `https://localhost:7100`) |
-| `src/environments/environment.testing.ts` | `npm run start:testing` (optimizovan build kao produkcija, API `https://localhost:7100`) |
-| `src/environments/environment.ts` | `npm run build` (produkcija; `apiUrl` postavite prije objave) |
+| Fajl                                          | Kada se koristi                                                                          |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `src/environments/environment.development.ts` | `npm start` / `ng serve` (API `https://localhost:7100`)                                  |
+| `src/environments/environment.testing.ts`     | `npm run start:testing` (optimizovan build kao produkcija, API `https://localhost:7100`) |
+| `src/environments/environment.ts`             | `npm run build` (produkcija; `apiUrl` postavite prije objave)                            |
 
 Access token se šalje samo na `environment.apiUrl`, nikad na druge domene.
 
@@ -121,23 +120,23 @@ Integracijski testovi koriste in-memory bazu (okruženje `IntegrationTests`).
 
 ## Šta starter sadrži
 
-| Dio | Rute | Ko |
-|---|---|---|
-| Landing, konvertor valuta | `/`, `/converter` | svi |
-| Registracija, zaboravljena lozinka, nova lozinka | `/auth/register`, `/auth/forgot-password`, `/auth/reset-password` | svi |
-| Moj profil | `/client`, `/client/profile` | prijavljeni kupac |
-| Kursna lista, moj profil (`/admin/profile`), prazna stranica za postavke aplikacije (`/admin/settings`) | `/admin/...` | administrator |
+| Dio                                                                                                     | Rute                                                              | Ko                |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------- |
+| Landing, konvertor valuta                                                                               | `/`, `/converter`                                                 | svi               |
+| Registracija, zaboravljena lozinka, nova lozinka                                                        | `/auth/register`, `/auth/forgot-password`, `/auth/reset-password` | svi               |
+| Moj profil                                                                                              | `/client`, `/client/profile`                                      | prijavljeni kupac |
+| Kursna lista, moj profil (`/admin/profile`), prazna stranica za postavke aplikacije (`/admin/settings`) | `/admin/...`                                                      | administrator     |
 
 ### Primjeri formi
 
 Svaki obrazac je urađen jednom, na mjestu gdje mu je prirodno (putanje su u `Market.Frontend/src/app/modules/`):
 
-| Obrazac | Gdje |
-|---|---|
-| Cross-field validator za potvrdu lozinke | `auth/register`, `auth/reset-password`, `account/my-profile` |
-| Dvije nezavisne forme na jednoj stranici | `account/my-profile` |
-| Greške s backenda po polju | `core/forms/server-errors.ts`, korišteno u svim formama |
-| Prevedene poruke validacije | `shared` komponenta `fit-field-error`, `core/forms/validation-messages.ts` |
+| Obrazac                                  | Gdje                                                                       |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| Cross-field validator za potvrdu lozinke | `auth/register`, `auth/reset-password`, `account/my-profile`               |
+| Dvije nezavisne forme na jednoj stranici | `account/my-profile`                                                       |
+| Greške s backenda po polju               | `core/forms/server-errors.ts`, korišteno u svim formama                    |
+| Prevedene poruke validacije              | `shared` komponenta `fit-field-error`, `core/forms/validation-messages.ts` |
 
 ### Valute
 
