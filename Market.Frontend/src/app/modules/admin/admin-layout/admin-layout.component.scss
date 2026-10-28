@@ -1,4 +1,4 @@
-@use 'sass:color';
+@use "sass:color";
 
 // Colors
 $primary-color: #4976b5;
@@ -35,31 +35,43 @@ $sidebar-width: 280px;
 
     // Sidebar Header
     .sidebar-header {
-      background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+      background: linear-gradient(
+        135deg,
+        $primary-color 0%,
+        $primary-dark 100%
+      );
       padding: 24px 20px;
       position: relative;
       overflow: hidden;
 
       // Decorative elements
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: -30px;
         right: -30px;
         width: 120px;
         height: 120px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 70%
+        );
         border-radius: 50%;
       }
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -20px;
         left: -20px;
         width: 80px;
         height: 80px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
         border-radius: 50%;
       }
 
@@ -128,18 +140,6 @@ $sidebar-width: 280px;
 
               &.admin {
                 background: rgba(239, 83, 80, 0.2);
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-              }
-
-              &.manager {
-                background: rgba(255, 167, 38, 0.2);
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-              }
-
-              &.employee {
-                background: rgba(102, 187, 106, 0.2);
                 color: #ffffff;
                 border: 1px solid rgba(255, 255, 255, 0.3);
               }
@@ -231,13 +231,17 @@ $sidebar-width: 280px;
         overflow: hidden;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           left: 0;
           top: 0;
           width: 0;
           height: 100%;
-          background: linear-gradient(90deg, $primary-color 0%, transparent 100%);
+          background: linear-gradient(
+            90deg,
+            $primary-color 0%,
+            transparent 100%
+          );
           transition: width 0.3s ease;
         }
 

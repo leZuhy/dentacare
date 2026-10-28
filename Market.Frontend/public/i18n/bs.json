@@ -138,9 +138,7 @@
   "ADMIN_PANEL": {
     "TITLE": "Admin Panel",
     "ROLES": {
-      "ADMIN": "Administrator",
-      "MANAGER": "Menadžer",
-      "EMPLOYEE": "Zaposlenik"
+      "ADMIN": "Administrator"
     },
     "MENU": {
       "SYSTEM": "SISTEM",

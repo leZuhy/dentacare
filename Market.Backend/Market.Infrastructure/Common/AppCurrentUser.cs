@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Market.Application.Abstractions;
+using Market.Domain.Entities.Identity;
 
 namespace Market.Infrastructure.Common;
 
@@ -23,12 +24,12 @@ public sealed class AppCurrentUser(IHttpContextAccessor httpContextAccessor)
     public bool IsAuthenticated =>
         _user?.Identity?.IsAuthenticated ?? false;
 
-    public bool IsAdmin =>
-        _user?.FindFirstValue("is_admin")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+    public bool IsAdmin => HasRole(Role.Admin);
 
-    public bool IsManager =>
-        _user?.FindFirstValue("is_manager")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+    public bool IsDentist => HasRole(Role.Dentist);
 
-    public bool IsEmployee =>
-        _user?.FindFirstValue("is_employee")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+    public bool IsPatient => HasRole(Role.Patient);
+
+    private bool HasRole(Role role) =>
+                _user?.IsInRole(role.ToString()) ?? false;
 }

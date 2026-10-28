@@ -12,10 +12,12 @@ namespace Market.Tests;
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<Program>
 {
     // Seeded accounts (see DynamicDataSeeder)
-    public const string AdminEmail = "admin@market.local";
+    public const string AdminEmail = "admin@dentacare.local";
     public const string AdminPassword = "Admin123!";
-    public const string EmployeeEmail = "employee@market.local";
-    public const string EmployeePassword = "Employee123!";
+    public const string DentistEmail = "dentist@dentacare.local";
+    public const string DentistPassword = "Dentist123!";
+    public const string PatientEmail = "patient@dentacare.local";
+    public const string PatientPassword = "Patient123!";
 
     /// <summary>
     /// JWT signing key used only by integration tests. appsettings.json has an empty key on purpose

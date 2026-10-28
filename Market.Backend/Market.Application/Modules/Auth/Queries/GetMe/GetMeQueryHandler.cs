@@ -19,9 +19,7 @@ public sealed class GetMeQueryHandler(IAppDbContext ctx, IAppCurrentUser current
                 Lastname = x.Lastname,
                 Address = x.Address,
                 City = x.City,
-                IsAdmin = x.IsAdmin,
-                IsManager = x.IsManager,
-                IsEmployee = x.IsEmployee
+                Role = x.Role
             })
             .FirstOrDefaultAsync(ct);
 
