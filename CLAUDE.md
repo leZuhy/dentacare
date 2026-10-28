@@ -41,7 +41,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Nikad se ne radi direktno na `main` (osim ovog fajla).
 - Commit poruka sadrži broj issuea, npr. "Potvrda termina (#12)". Pull request u opisu ima `Closes #<broj>`, opis šta je urađeno i kako je testirano.
 - Ne praviš commit ni push sam. To radim ja.
-- U commit ne ulazi `package-lock.json` ni fajlovi koji ne pripadaju issueu.
+- U commit ne ulaze fajlovi koji ne pripadaju issueu. Fajlove dodajem pojedinačno (`git add <fajl>`), ne `git add .`.
+- `package-lock.json` ulazi u commit samo kad je izmjena namjerna: popravka lock fajla (#3) ili dodavanje, uklanjanje ili nadogradnja paketa. Inače ga vraćam sa `git restore Market.Frontend/package-lock.json`.
 - Prije izmjene koda predloži plan i sačekaj potvrdu.
 
 ## Dijagrami
