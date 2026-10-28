@@ -7,9 +7,6 @@
 public static class PolicyNames
 {
     /// <summary>
-    /// Only users whose access token contains the claim <c>is_admin = "true"</c>.
-    /// </summary>
-    /// <summary>
     /// Only users with the Admin role.
     /// </summary>
     public const string Admin = "Admin";
