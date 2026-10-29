@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Entities.Finance;
+using Market.Domain.Entities.Catalog;
 
 namespace Market.Infrastructure.Database.Seeders;
 
@@ -15,6 +16,7 @@ public static class StaticDataSeeder
     public static void Seed(ModelBuilder modelBuilder)
     {
         SeedCurrencies(modelBuilder);
+        SeedSpecializations(modelBuilder);
     }
 
     /// <summary>
@@ -43,5 +45,19 @@ public static class StaticDataSeeder
                 Source = "CBBiH (fiksni kurs)",
                 CreatedAtUtc = SeedDateUtc
             });
+    }
+
+    //Basic dentist specializations, admin can later add, edit or delete them
+
+    public static void SeedSpecializations(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SpecializationEntity>().HasData(
+            new SpecializationEntity { Id = 1, Name = "Opća stomatologija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 2, Name = "Ortodoncija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 3, Name = "Parodontologija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 4, Name = "Endodoncija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 5, Name = "Protetika", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 6, Name = "Oralna hirurgija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 7, Name = "Pedodoncija", CreatedAtUtc = SeedDateUtc });
     }
 }
