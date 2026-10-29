@@ -1,0 +1,52 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>medical_services</mat-icon></div>
+      <div>
+        <h1>{{ (isEditMode ? 'SPECIALIZATIONS.EDIT_TITLE' : 'SPECIALIZATIONS.ADD_TITLE') | translate }}</h1>
+        @if (model) {
+          <p class="subtitle">{{ model.name }}</p>
+        }
+      </div>
+    </div>
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'COMMON.BACK' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <section class="section-card">
+    @if (errorMessage) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="upsert-form">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'SPECIALIZATIONS.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" />
+        <mat-hint align="end">{{ form.controls.name.value.length }} / {{ nameMaxLength }}</mat-hint>
+        <mat-error><app-fit-field-error [control]="form.controls.name" /></mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="goBack()">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving || isLoading">
+          @if (isSaving) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+          }
+          {{ 'COMMON.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
