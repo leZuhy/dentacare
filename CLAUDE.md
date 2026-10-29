@@ -34,6 +34,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Konfiguracija ide u `appsettings*.json` i `environment*.ts`, ništa hardkodirano.
 - Tajne (lozinke, API ključevi) nikad ne idu u repozitorij, jer je javan. Koristiti user-secrets ili environment varijable.
 - Najmanje 2 unit testa nad mojom logikom. Angular komponente, moduli i lazy loading.
+- Imena claimova u tokenu su kratka, iz AppClaimTypes (Market.Shared/Constants). JwtBearer ima
+  MapInboundClaims = false i RoleClaimType = AppClaimTypes.Role. Frontend čita ista imena.
 
 ## Način rada (git)
 
