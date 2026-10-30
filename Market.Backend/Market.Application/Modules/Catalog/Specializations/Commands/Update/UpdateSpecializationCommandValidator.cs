@@ -13,6 +13,7 @@ namespace Market.Application.Modules.Catalog.Specializations.Commands.Update
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Naziv je obavezan")
                 .MaximumLength(SpecializationEntity.Constraints.NameMaxLength)
+                .WithMessage($"Naziv ne smije biti duži od {SpecializationEntity.Constraints.NameMaxLength} karaktera.")
                 .MustAsync(async(command, name, ct) =>
                 {
                     var normalized = name.Trim().ToLower();

@@ -49,7 +49,7 @@ public static class StaticDataSeeder
 
     //Basic dentist specializations, admin can later add, edit or delete them
 
-    public static void SeedSpecializations(ModelBuilder modelBuilder)
+    private static void SeedSpecializations(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<SpecializationEntity>().HasData(
             new SpecializationEntity { Id = 1, Name = "Opća stomatologija", CreatedAtUtc = SeedDateUtc },
