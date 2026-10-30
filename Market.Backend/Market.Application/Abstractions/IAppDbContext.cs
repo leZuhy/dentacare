@@ -14,6 +14,7 @@ public interface IAppDbContext
     DbSet<ExchangeRateEntity> ExchangeRates { get; }
 
     DbSet<SpecializationEntity> Specializations { get; }
+    DbSet<ServiceCategoryEntity> ServiceCategories { get; }
 
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

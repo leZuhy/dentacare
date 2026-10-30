@@ -11,9 +11,9 @@ namespace Market.Application.Modules.Catalog.Specializations.Commands.Update
         {
             RuleFor(x => x.Name)
                 .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Naziv je obavezan")
+                .NotEmpty().WithMessage("Naziv specijalizacije je obavezan.")
                 .MaximumLength(SpecializationEntity.Constraints.NameMaxLength)
-                .WithMessage($"Naziv ne smije biti duži od {SpecializationEntity.Constraints.NameMaxLength} karaktera.")
+                .WithMessage($"Naziv specijalizacije ne smije imati više od {SpecializationEntity.Constraints.NameMaxLength} karaktera.")
                 .MustAsync(async(command, name, ct) =>
                 {
                     var normalized = name.Trim().ToLower();

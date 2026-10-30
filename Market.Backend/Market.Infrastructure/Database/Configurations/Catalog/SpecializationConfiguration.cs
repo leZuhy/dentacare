@@ -19,7 +19,7 @@ namespace Market.Infrastructure.Database.Configurations.Catalog
                     .IsRequired()
                     .HasMaxLength(SpecializationEntity.Constraints.NameMaxLength);
 
-            //Unique only amond non deleted rows, deleted names can be reused
+            //Unique only among non deleted rows, deleted names can be reused
             builder
                     .HasIndex(x => x.Name)
                     .IsUnique()

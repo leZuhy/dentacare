@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Market.Domain.Entities.Catalog
 {
-    //<summary>
+    /// <summary>
     /// Represents a specialization entity in the catalog.
     ///</summary>
     public class SpecializationEntity : BaseEntity

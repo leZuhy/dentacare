@@ -17,6 +17,7 @@ public static class StaticDataSeeder
     {
         SeedCurrencies(modelBuilder);
         SeedSpecializations(modelBuilder);
+        SeedServiceCategories(modelBuilder);
     }
 
     /// <summary>
@@ -59,5 +60,18 @@ public static class StaticDataSeeder
             new SpecializationEntity { Id = 5, Name = "Protetika", CreatedAtUtc = SeedDateUtc },
             new SpecializationEntity { Id = 6, Name = "Oralna hirurgija", CreatedAtUtc = SeedDateUtc },
             new SpecializationEntity { Id = 7, Name = "Pedodoncija", CreatedAtUtc = SeedDateUtc });
+    }
+
+    // Basic dental service categories, admin can later add, edit or delete them
+    private static void SeedServiceCategories(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ServiceCategoryEntity>().HasData(
+            new ServiceCategoryEntity { Id = 1, Name = "Preventiva", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 2, Name = "Restaurativa", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 3, Name = "Endodontski tretmani", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 4, Name = "Hirurgija", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 5, Name = "Protetika", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 6, Name = "Ortodoncija", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 7, Name = "Estetika", CreatedAtUtc = SeedDateUtc });
     }
 }
