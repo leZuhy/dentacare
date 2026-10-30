@@ -1,0 +1,29 @@
+@use '../../../admin-page';
+
+.container {
+  @include admin-page.container(720px);
+}
+
+.header-card {
+  @include admin-page.header-card;
+}
+
+.section-card {
+  @include admin-page.section-card;
+}
+
+.error-banner {
+  @include admin-page.error-banner;
+}
+
+.upsert-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

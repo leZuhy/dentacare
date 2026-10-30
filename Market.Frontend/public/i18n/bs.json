@@ -147,7 +147,8 @@
       "LOGOUT": "Odjava",
       "EXCHANGE_RATES": "Kursna lista",
       "CATALOG": "KATALOG",
-      "SPECIALIZATIONS": "Specijalizacije"
+      "SPECIALIZATIONS": "Specijalizacije",
+      "SERVICE_CATEGORIES": "Kategorije usluga"
     }
   },
   "ADMIN_SETTINGS": {
@@ -187,6 +188,20 @@
     "DELETED": "Specijalizacija je obrisana.",
     "DELETE_TITLE": "Brisanje specijalizacije",
     "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati specijalizaciju „{{name}}”?"
+  },
+  "SERVICE_CATEGORIES": {
+    "TITLE": "Kategorije usluga",
+    "SUBTITLE": "Kategorije stomatoloških usluga (npr. preventiva, protetika).",
+    "NAME": "Naziv",
+    "FILTER_NAME": "Pretraga po nazivu",
+    "NO_DATA": "Nema kategorija za prikaz",
+    "ADD_TITLE": "Nova kategorija",
+    "EDIT_TITLE": "Izmjena kategorije",
+    "SAVED": "Kategorija je dodana.",
+    "UPDATED": "Kategorija je izmijenjena.",
+    "DELETED": "Kategorija je obrisana.",
+    "DELETE_TITLE": "Brisanje kategorije",
+    "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati kategoriju „{{name}}”?"
   },
   "COMMON": {
     "YES": "Da",

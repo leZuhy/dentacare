@@ -7,6 +7,8 @@ import {AdminSettingsComponent} from './admin-settings/admin-settings.component'
 import {ExchangeRatesComponent} from './finance/exchange-rates/exchange-rates.component';
 import {SpecializationsListComponent} from './catalog/specializations/specializations-list/specializations-list.component';
 import {SpecializationUpsertComponent} from './catalog/specializations/specialization-upsert/specialization-upsert.component';
+import {ServiceCategoriesListComponent} from './catalog/service-categories/service-categories-list/service-categories-list.component';
+import {ServiceCategoryUpsertComponent} from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
 
 const routes: Routes = [
   {
@@ -25,6 +27,18 @@ const routes: Routes = [
       {
         path: 'catalog/specializations/:id/edit',
         component: SpecializationUpsertComponent,
+      },
+      {
+        path: 'catalog/service-categories',
+        component: ServiceCategoriesListComponent,
+      },
+      {
+        path: 'catalog/service-categories/new',
+        component: ServiceCategoryUpsertComponent,
+      },
+      {
+        path: 'catalog/service-categories/:id/edit',
+        component: ServiceCategoryUpsertComponent,
       },
 
       // FINANCE

@@ -1,18 +1,19 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { SpecializationsApiService } from '../../../../../api-services/specializations/specializations-api.service';
+import { Component, DestroyRef, inject, OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { SpecializationsApiService } from "../../../../../api-services/specializations/specializations-api.service";
 import {
   GetSpecializationByIdQueryDto,
-  UpsertSpecializationCommand
-} from '../../../../../api-services/specializations/specializations-api.model';
-import { BaseFormComponent } from '../../../../../core/components/base-classes/base-form-component';
-import { applyServerErrors } from '../../../../../core/forms/server-errors';
-import { getErrorMessage } from '../../../../../core/interceptors/error-logging-interceptor.service';
-import { ToasterService } from '../../../../../core/services/toaster.service';
+  UpsertSpecializationCommand,
+} from "../../../../../api-services/specializations/specializations-api.model";
+import { BaseFormComponent } from "../../../../../core/components/base-classes/base-form-component";
+import { applyServerErrors } from "../../../../../core/forms/server-errors";
+import { getErrorMessage } from "../../../../../core/interceptors/error-logging-interceptor.service";
+import { ToasterService } from "../../../../../core/services/toaster.service";
 
 /** same limit as SpecializationEntity.Constraints.NameMaxLength on the backend */
 const NAME_MAX_LENGTH = 100;
@@ -26,13 +27,16 @@ interface SpecializationForm {
  * of a specialization. Edit mode is when the route has an id.
  */
 @Component({
-  selector: 'app-specialization-upsert',
+  selector: "app-specialization-upsert",
   standalone: false,
-  templateUrl: './specialization-upsert.component.html',
-  styleUrl: './specialization-upsert.component.scss'
+  templateUrl: "./specialization-upsert.component.html",
+  styleUrl: "./specialization-upsert.component.scss",
 })
 export class SpecializationUpsertComponent
-  extends BaseFormComponent<GetSpecializationByIdQueryDto, FormGroup<SpecializationForm>>
+  extends BaseFormComponent<
+    GetSpecializationByIdQueryDto,
+    FormGroup<SpecializationForm>
+  >
   implements OnInit
 {
   private api = inject(SpecializationsApiService);
@@ -51,13 +55,16 @@ export class SpecializationUpsertComponent
 
   ngOnInit(): void {
     this.form = new FormGroup<SpecializationForm>({
-      name: new FormControl('', {
+      name: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.required, Validators.maxLength(NAME_MAX_LENGTH)]
-      })
+        validators: [
+          Validators.required,
+          Validators.maxLength(NAME_MAX_LENGTH),
+        ],
+      }),
     });
 
-    const idParam = this.route.snapshot.paramMap.get('id');
+    const idParam = this.route.snapshot.paramMap.get("id");
     this.id = idParam ? Number(idParam) : null;
 
     this.initForm(this.id !== null);
@@ -75,7 +82,17 @@ export class SpecializationUpsertComponent
           this.form.patchValue({ name: specialization.name });
           this.stopLoading();
         },
-        error: (err) => this.stopLoading(getErrorMessage(err))
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 404) {
+            // deleted in the meantime (e.g. browser Back after delete): no form for a missing record
+            this.toaster.error(getErrorMessage(err));
+            this.router.navigate(["/admin/catalog/specializations"], {
+              replaceUrl: true,
+            });
+            return;
+          }
+          this.stopLoading(getErrorMessage(err));
+        },
       });
   }
 
@@ -85,7 +102,7 @@ export class SpecializationUpsertComponent
     }
 
     const command: UpsertSpecializationCommand = {
-      name: this.form.controls.name.value.trim()
+      name: this.form.controls.name.value.trim(),
     };
 
     // create returns { id } and update returns nothing; we don't need either result here
@@ -99,7 +116,9 @@ export class SpecializationUpsertComponent
     request$.subscribe({
       next: () => {
         this.isSaving = false;
-        const messageKey = this.isEditMode ? 'SPECIALIZATIONS.UPDATED' : 'SPECIALIZATIONS.SAVED';
+        const messageKey = this.isEditMode
+          ? "SPECIALIZATIONS.UPDATED"
+          : "SPECIALIZATIONS.SAVED";
         this.toaster.success(this.translate.instant(messageKey));
         this.goBack();
       },
@@ -107,11 +126,11 @@ export class SpecializationUpsertComponent
         this.isSaving = false;
         // e.g. duplicate name -> error under the "name" field
         this.errorMessage = applyServerErrors(this.form, err);
-      }
+      },
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/catalog/specializations']);
+    this.router.navigate(["/admin/catalog/specializations"]);
   }
 }

@@ -147,7 +147,8 @@
       "LOGOUT": "Logout",
       "EXCHANGE_RATES": "Exchange rates",
       "CATALOG": "CATALOG",
-      "SPECIALIZATIONS": "Specializations"
+      "SPECIALIZATIONS": "Specializations",
+      "SERVICE_CATEGORIES": "Service categories"
     }
   },
   "ADMIN_SETTINGS": {
@@ -187,6 +188,20 @@
     "DELETED": "The specialization was deleted.",
     "DELETE_TITLE": "Delete specialization",
     "DELETE_MESSAGE": "Are you sure you want to delete the specialization \"{{name}}\"?"
+  },
+  "SERVICE_CATEGORIES": {
+    "TITLE": "Service categories",
+    "SUBTITLE": "Categories of dental services (e.g. prevention, prosthetics).",
+    "NAME": "Name",
+    "FILTER_NAME": "Search by name",
+    "NO_DATA": "No categories to display",
+    "ADD_TITLE": "New category",
+    "EDIT_TITLE": "Edit category",
+    "SAVED": "The category was added.",
+    "UPDATED": "The category was updated.",
+    "DELETED": "The category was deleted.",
+    "DELETE_TITLE": "Delete category",
+    "DELETE_MESSAGE": "Are you sure you want to delete the category \"{{name}}\"?"
   },
   "COMMON": {
     "YES": "Yes",
