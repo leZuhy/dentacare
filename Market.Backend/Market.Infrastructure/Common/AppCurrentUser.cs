@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Market.Application.Abstractions;
 using Market.Domain.Entities.Identity;
+using Market.Shared.Constants;
 
 namespace Market.Infrastructure.Common;
 
@@ -19,7 +20,7 @@ public sealed class AppCurrentUser(IHttpContextAccessor httpContextAccessor)
             : null;
 
     public string? Email =>
-        _user?.FindFirstValue(ClaimTypes.Email);
+        _user?.FindFirstValue(AppClaimTypes.Email);
 
     public bool IsAuthenticated =>
         _user?.Identity?.IsAuthenticated ?? false;

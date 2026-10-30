@@ -9,9 +9,11 @@ using Market.Application.Modules.Auth.Commands.Refresh;
 using Market.Application.Modules.Auth.Commands.ResetPassword;
 using Market.Domain.Entities.Identity;
 using Market.Infrastructure.Common;
+using Market.Shared.Constants;
 using Market.Shared.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Time.Testing;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Market.Tests.AuthTests.UnitTests;
 
@@ -120,6 +122,29 @@ public class AccountUnitTests
         Assert.Equal(tokenVersionAfterChange, user.TokenVersion);
         var refreshed = await refresh.Handle(new RefreshTokenCommand { RefreshToken = newTokens.RefreshToken }, CancellationToken.None);
         Assert.False(string.IsNullOrEmpty(refreshed.AccessToken));
+    }
+
+    [Fact]
+    public void IssueTokens_AccessToken_HasShortEmailAndRoleClaims()
+    {
+        // Arrange
+        var service = CreateJwtTokenService();
+        var user = new MarketUserEntity
+        {
+            Id = 7,
+            Email = "pacijent@test.local",
+            Firstname = "Test",
+            Lastname = "Pacijent",
+            Role = Role.Patient
+        };
+
+        // Act
+        var tokens = service.IssueTokens(user);
+        var jwt = new JwtSecurityTokenHandler().ReadJwtToken(tokens.AccessToken);
+
+        // Assert: the frontend reads exactly these names (payload.email, payload.role)
+        Assert.Equal("pacijent@test.local", jwt.Claims.Single(c => c.Type == AppClaimTypes.Email).Value);
+        Assert.Equal("Patient", jwt.Claims.Single(c => c.Type == AppClaimTypes.Role).Value);
     }
 
     private sealed class FakeCurrentUser(int userId) : IAppCurrentUser

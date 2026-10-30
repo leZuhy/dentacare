@@ -34,7 +34,7 @@ public sealed class JwtTokenService : IJwtTokenService
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimTypes.NameIdentifier,   user.Id.ToString()),
-            new(ClaimTypes.Email,            user.Email),
+            new(AppClaimTypes.Email,            user.Email),
             new(AppClaimTypes.Role,             user.Role.ToString()),
             new("ver",         user.TokenVersion.ToString()),
             new(JwtRegisteredClaimNames.Iat, ToUnixTimeSeconds(nowInstant).ToString(), ClaimValueTypes.Integer64),
