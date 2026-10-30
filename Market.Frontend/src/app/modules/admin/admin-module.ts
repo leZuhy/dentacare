@@ -6,6 +6,10 @@ import {SharedModule} from '../shared/shared-module';
 import {AccountModule} from '../account/account-module';
 import { ExchangeRatesComponent } from './finance/exchange-rates/exchange-rates.component';
 import { AdminSettingsComponent } from './admin-settings/admin-settings.component';
+import { SpecializationsListComponent } from './catalog/specializations/specializations-list/specializations-list.component';
+import { SpecializationUpsertComponent } from './catalog/specializations/specialization-upsert/specialization-upsert.component';
+import { ServiceCategoriesListComponent } from './catalog/service-categories/service-categories-list/service-categories-list.component';
+import { ServiceCategoryUpsertComponent } from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
 
 
 @NgModule({
@@ -13,6 +17,10 @@ import { AdminSettingsComponent } from './admin-settings/admin-settings.componen
     AdminLayoutComponent,
     ExchangeRatesComponent,
     AdminSettingsComponent,
+    SpecializationsListComponent,
+    SpecializationUpsertComponent,
+    ServiceCategoriesListComponent,
+    ServiceCategoryUpsertComponent,
   ],
   imports: [
     AdminRoutingModule,

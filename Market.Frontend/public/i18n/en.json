@@ -145,7 +145,10 @@
       "SETTINGS": "Settings",
       "MY_PROFILE": "My profile",
       "LOGOUT": "Logout",
-      "EXCHANGE_RATES": "Exchange rates"
+      "EXCHANGE_RATES": "Exchange rates",
+      "CATALOG": "CATALOG",
+      "SPECIALIZATIONS": "Specializations",
+      "SERVICE_CATEGORIES": "Service categories"
     }
   },
   "ADMIN_SETTINGS": {
@@ -171,6 +174,34 @@
     "DELETED": "The rate was deleted.",
     "DELETE_TITLE": "Delete rate",
     "DELETE_MESSAGE": "Are you sure you want to delete this {{code}} rate? Conversions for that period will use the previous rate."
+  },
+  "SPECIALIZATIONS": {
+    "TITLE": "Specializations",
+    "SUBTITLE": "Dentist specializations (e.g. orthodontics, oral surgery).",
+    "NAME": "Name",
+    "FILTER_NAME": "Search by name",
+    "NO_DATA": "No specializations to display",
+    "ADD_TITLE": "New specialization",
+    "EDIT_TITLE": "Edit specialization",
+    "SAVED": "The specialization was added.",
+    "UPDATED": "The specialization was updated.",
+    "DELETED": "The specialization was deleted.",
+    "DELETE_TITLE": "Delete specialization",
+    "DELETE_MESSAGE": "Are you sure you want to delete the specialization \"{{name}}\"?"
+  },
+  "SERVICE_CATEGORIES": {
+    "TITLE": "Service categories",
+    "SUBTITLE": "Categories of dental services (e.g. prevention, prosthetics).",
+    "NAME": "Name",
+    "FILTER_NAME": "Search by name",
+    "NO_DATA": "No categories to display",
+    "ADD_TITLE": "New category",
+    "EDIT_TITLE": "Edit category",
+    "SAVED": "The category was added.",
+    "UPDATED": "The category was updated.",
+    "DELETED": "The category was deleted.",
+    "DELETE_TITLE": "Delete category",
+    "DELETE_MESSAGE": "Are you sure you want to delete the category \"{{name}}\"?"
   },
   "COMMON": {
     "YES": "Yes",

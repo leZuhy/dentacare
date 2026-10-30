@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Entities.Finance;
+using Market.Domain.Entities.Catalog;
 
 namespace Market.Infrastructure.Database.Seeders;
 
@@ -15,6 +16,8 @@ public static class StaticDataSeeder
     public static void Seed(ModelBuilder modelBuilder)
     {
         SeedCurrencies(modelBuilder);
+        SeedSpecializations(modelBuilder);
+        SeedServiceCategories(modelBuilder);
     }
 
     /// <summary>
@@ -43,5 +46,32 @@ public static class StaticDataSeeder
                 Source = "CBBiH (fiksni kurs)",
                 CreatedAtUtc = SeedDateUtc
             });
+    }
+
+    //Basic dentist specializations, admin can later add, edit or delete them
+
+    private static void SeedSpecializations(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<SpecializationEntity>().HasData(
+            new SpecializationEntity { Id = 1, Name = "Opća stomatologija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 2, Name = "Ortodoncija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 3, Name = "Parodontologija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 4, Name = "Endodoncija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 5, Name = "Protetika", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 6, Name = "Oralna hirurgija", CreatedAtUtc = SeedDateUtc },
+            new SpecializationEntity { Id = 7, Name = "Pedodoncija", CreatedAtUtc = SeedDateUtc });
+    }
+
+    // Basic dental service categories, admin can later add, edit or delete them
+    private static void SeedServiceCategories(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ServiceCategoryEntity>().HasData(
+            new ServiceCategoryEntity { Id = 1, Name = "Preventiva", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 2, Name = "Restaurativa", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 3, Name = "Endodontski tretmani", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 4, Name = "Hirurgija", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 5, Name = "Protetika", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 6, Name = "Ortodoncija", CreatedAtUtc = SeedDateUtc },
+            new ServiceCategoryEntity { Id = 7, Name = "Estetika", CreatedAtUtc = SeedDateUtc });
     }
 }
