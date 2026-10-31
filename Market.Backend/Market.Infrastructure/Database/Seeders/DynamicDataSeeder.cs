@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Market.Domain.Entities.Clinic;
 using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Identity;
+using Market.Infrastructure.Migrations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Database.Seeders;
 
@@ -18,6 +20,7 @@ public static class DynamicDataSeeder
         // (SQL Server) ili EnsureCreated (InMemory baza u testovima).
 
         await SeedUsersAsync(context);
+        await SeedDentistProfileAsync(context);
         await SeedExchangeRatesAsync(context);
     }
 
@@ -98,6 +101,39 @@ public static class DynamicDataSeeder
         await context.Users.AddRangeAsync(admin, dentist, patient);
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: demo users added.");
+    }
+
+    /// <summary>
+    /// Dentist profile for the seeded dentist account, so the demo dentist appears in the list
+    /// and can later have working hours and appointments.
+    /// Separate from SeedUsersAsync, because that one is skipped once any user exists.
+    /// </summary>
+    private static async Task SeedDentistProfileAsync(DatabaseContext context)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Email == "dentist@dentacare.local");
+        if (user is null)
+            return;
+
+        if (await context.Dentists.AnyAsync(d => d.UserId == user.Id))
+            return;
+
+        // First specialization that is not deleted(seeded ones may have been deleted while testing).
+        var specializationId = await context.Specializations
+            .OrderBy(s => s.Id)
+            .Select(s => s.Id)
+            .FirstOrDefaultAsync();
+        if (specializationId == 0)
+            return;
+
+        context.Dentists.Add(new DentistEntity
+        {
+            UserId = user.Id,
+            SpecializationId = specializationId,
+            Bio = "Demo stomatolog."
+        });
+
+        await context.SaveChangesAsync();
+        Console.WriteLine("✅ Dynamic seed: dentist profile added.");
     }
 
     /// <summary>

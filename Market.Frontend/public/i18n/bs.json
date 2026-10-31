@@ -148,7 +148,9 @@
       "EXCHANGE_RATES": "Kursna lista",
       "CATALOG": "KATALOG",
       "SPECIALIZATIONS": "Specijalizacije",
-      "SERVICE_CATEGORIES": "Kategorije usluga"
+      "SERVICE_CATEGORIES": "Kategorije usluga",
+      "CLINIC": "KLINIKA",
+      "DENTISTS": "Stomatolozi"
     }
   },
   "ADMIN_SETTINGS": {
@@ -202,6 +204,27 @@
     "DELETED": "Kategorija je obrisana.",
     "DELETE_TITLE": "Brisanje kategorije",
     "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati kategoriju „{{name}}”?"
+  },
+  "DENTISTS": {
+    "TITLE": "Stomatolozi",
+    "SUBTITLE": "Stomatolozi ordinacije i njihove specijalizacije.",
+    "FULL_NAME": "Ime i prezime",
+    "FIRSTNAME": "Ime",
+    "LASTNAME": "Prezime",
+    "EMAIL": "Email",
+    "EMAIL_READONLY_HINT": "Email se ne može mijenjati",
+    "PASSWORD": "Lozinka",
+    "SPECIALIZATION": "Specijalizacija",
+    "BIO": "Biografija",
+    "FILTER_SEARCH": "Ime, prezime ili email",
+    "NO_DATA": "Nema stomatologa za prikaz",
+    "ADD_TITLE": "Novi stomatolog",
+    "EDIT_TITLE": "Izmjena stomatologa",
+    "SAVED": "Stomatolog je dodan.",
+    "UPDATED": "Stomatolog je izmijenjen.",
+    "DELETED": "Stomatolog je obrisan.",
+    "DELETE_TITLE": "Brisanje stomatologa",
+    "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati stomatologa „{{name}}”?"
   },
   "COMMON": {
     "YES": "Da",

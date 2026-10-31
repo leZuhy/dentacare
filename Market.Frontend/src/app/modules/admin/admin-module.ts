@@ -10,6 +10,8 @@ import { SpecializationsListComponent } from './catalog/specializations/speciali
 import { SpecializationUpsertComponent } from './catalog/specializations/specialization-upsert/specialization-upsert.component';
 import { ServiceCategoriesListComponent } from './catalog/service-categories/service-categories-list/service-categories-list.component';
 import { ServiceCategoryUpsertComponent } from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
+import { DentistsListComponent } from './dentists/dentists-list/dentists-list.component';
+import { DentistUpsertComponent } from './dentists/dentist-upsert/dentist-upsert.component';
 
 
 @NgModule({
@@ -21,6 +23,8 @@ import { ServiceCategoryUpsertComponent } from './catalog/service-categories/ser
     SpecializationUpsertComponent,
     ServiceCategoriesListComponent,
     ServiceCategoryUpsertComponent,
+    DentistsListComponent,
+    DentistUpsertComponent,
   ],
   imports: [
     AdminRoutingModule,

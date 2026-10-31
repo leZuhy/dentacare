@@ -186,6 +186,44 @@ namespace Market.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Clinic.DentistEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("Dentists", (string)null);
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Finance.CurrencyEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -518,6 +556,25 @@ namespace Market.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("RefreshTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Clinic.DentistEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.Catalog.SpecializationEntity", "Specialization")
+                        .WithMany()
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Market.Domain.Entities.Identity.MarketUserEntity", "User")
+                        .WithOne()
+                        .HasForeignKey("Market.Domain.Entities.Clinic.DentistEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Specialization");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Finance.ExchangeRateEntity", b =>

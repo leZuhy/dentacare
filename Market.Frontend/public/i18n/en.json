@@ -148,7 +148,9 @@
       "EXCHANGE_RATES": "Exchange rates",
       "CATALOG": "CATALOG",
       "SPECIALIZATIONS": "Specializations",
-      "SERVICE_CATEGORIES": "Service categories"
+      "SERVICE_CATEGORIES": "Service categories",
+      "CLINIC": "CLINIC",
+      "DENTISTS": "Dentists"
     }
   },
   "ADMIN_SETTINGS": {
@@ -202,6 +204,27 @@
     "DELETED": "The category was deleted.",
     "DELETE_TITLE": "Delete category",
     "DELETE_MESSAGE": "Are you sure you want to delete the category \"{{name}}\"?"
+  },
+  "DENTISTS": {
+    "TITLE": "Dentists",
+    "SUBTITLE": "The clinic's dentists and their specializations.",
+    "FULL_NAME": "Full name",
+    "FIRSTNAME": "First name",
+    "LASTNAME": "Last name",
+    "EMAIL": "Email",
+    "EMAIL_READONLY_HINT": "Email cannot be changed",
+    "PASSWORD": "Password",
+    "SPECIALIZATION": "Specialization",
+    "BIO": "Biography",
+    "FILTER_SEARCH": "Name, surname or email",
+    "NO_DATA": "No dentists to display",
+    "ADD_TITLE": "New dentist",
+    "EDIT_TITLE": "Edit dentist",
+    "SAVED": "The dentist was added.",
+    "UPDATED": "The dentist was updated.",
+    "DELETED": "The dentist was deleted.",
+    "DELETE_TITLE": "Delete dentist",
+    "DELETE_MESSAGE": "Are you sure you want to delete the dentist \"{{name}}\"?"
   },
   "COMMON": {
     "YES": "Yes",
