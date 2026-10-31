@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "@angular/material" as mat;
 
 // Colors
 $primary-color: #4976b5;
@@ -139,9 +140,15 @@ $sidebar-width: 280px;
               }
 
               &.admin {
-                background: rgba(239, 83, 80, 0.2);
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                // mat-chip ignores "color" and "background": its colors are set through Material tokens
+                @include mat.chips-overrides(
+                  (
+                    elevated-container-color: $background-card,
+                    label-text-color: $primary-dark,
+                    with-icon-icon-color: $primary-dark,
+                    outline-color: transparent,
+                  )
+                );
               }
             }
           }
