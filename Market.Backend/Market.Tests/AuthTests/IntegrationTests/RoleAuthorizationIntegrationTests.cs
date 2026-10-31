@@ -4,7 +4,7 @@ namespace Market.Tests.AuthTests.IntegrationTests;
 
 /// <summary>
 /// Checks that the role from the access token reaches the authorization policies
-/// (JwtTokenService writes ClaimTypes.Role, PolicyNames.Admin requires the Admin role).
+/// (JwtTokenService writes AppClaimTypes.Role, PolicyNames.Admin requires the Admin role).
 /// </summary>
 [Collection(IntegrationTestCollection.Name)]
 public class RoleAuthorizationIntegrationTests

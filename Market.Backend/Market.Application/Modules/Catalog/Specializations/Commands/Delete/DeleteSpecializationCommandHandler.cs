@@ -14,10 +14,12 @@ namespace Market.Application.Modules.Catalog.Specializations.Commands.Delete
             if(specialization is null)
                 throw new MarketNotFoundException($"Specijalizacija sa Id-em {request.Id} ne postoji.");
 
-            // TODO: when DentistEntity exists, reject deleting a specialization that dentists still use (409).
+            var isInUse = await ctx.Dentists.AnyAsync(x => x.SpecializationId == request.Id,ct);
+
+            if(isInUse)
+                throw new MarketConflictException($"Specijalizacija sa Id-em {request.Id} se koristi od strane nekih zubara i ne može biti obrisana.");
 
             // Soft delete: DatabaseContext sets IsDeleted = true instead of removing the row.
-
             ctx.Specializations.Remove(specialization);
             await ctx.SaveChangesAsync(ct);
 

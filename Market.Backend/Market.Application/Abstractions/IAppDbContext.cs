@@ -1,5 +1,6 @@
 ﻿using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Catalog;
+using Market.Domain.Entities.Clinic;
 
 namespace Market.Application.Abstractions;
 
@@ -16,5 +17,6 @@ public interface IAppDbContext
     DbSet<SpecializationEntity> Specializations { get; }
     DbSet<ServiceCategoryEntity> ServiceCategories { get; }
 
+    DbSet<DentistEntity> Dentists { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }
