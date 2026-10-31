@@ -1,0 +1,55 @@
+@use '../../admin-page';
+
+.container {
+  @include admin-page.container;
+}
+
+.header-card {
+  @include admin-page.header-card;
+}
+
+.table-card {
+  @include admin-page.table-card;
+}
+
+.state {
+  @include admin-page.state;
+}
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+}
+
+.filter-field {
+  width: 280px;
+  // on a narrow screen a field is never wider than the toolbar
+  max-width: 100%;
+}
+
+// search text is longer than a specialization name, so the search field gets more width
+.search-field {
+  width: 400px;
+}
+
+table {
+  transition: opacity 0.2s ease;
+
+  &.loading {
+    opacity: 0.5;
+  }
+}
+
+.actions-cell {
+  width: 120px;
+  text-align: right;
+}
+
+.no-data {
+  padding: 32px;
+  text-align: center;
+  color: admin-page.$text-secondary;
+}

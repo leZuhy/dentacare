@@ -1,0 +1,46 @@
+@use '../../admin-page';
+
+.container {
+  @include admin-page.container(720px);
+}
+
+.header-card {
+  @include admin-page.header-card;
+}
+
+.section-card {
+  @include admin-page.section-card;
+}
+
+.error-banner {
+  @include admin-page.error-banner;
+}
+
+.upsert-form {
+  display: flex;
+  flex-direction: column;
+}
+
+// first name and last name side by side; one under the other on a narrow screen
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  mat-form-field {
+    flex: 1 1 240px;
+  }
+}
+
+// a hint fills the space under the field, so it needs extra room before the next field's label
+// (16px, same as the gap between first name and last name)
+.field-with-hint {
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

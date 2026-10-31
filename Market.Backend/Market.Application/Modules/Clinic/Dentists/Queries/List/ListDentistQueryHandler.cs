@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Market.Application.Modules.Clinic.Dentists.Queries.List
 {
-    public sealed class ListDentistsQueryHandler(IAppDbContext ctx) : IRequestHandler<ListDentistsQuery, PageResult<ListDentistsQueryDto>>
+    public sealed class ListDentistQueryHandler(IAppDbContext ctx) : IRequestHandler<ListDentistQuery, PageResult<ListDentistQueryDto>>
     {
-        public async Task<PageResult<ListDentistsQueryDto>> Handle(ListDentistsQuery request, CancellationToken ct)
+        public async Task<PageResult<ListDentistQueryDto>> Handle(ListDentistQuery request, CancellationToken ct)
         {
             var q = ctx.Dentists.AsNoTracking();
 
@@ -26,7 +26,7 @@ namespace Market.Application.Modules.Clinic.Dentists.Queries.List
                 .OrderBy(x => x.User.Lastname)
                 .ThenBy(x => x.User.Firstname)
                 .ThenBy(x => x.Id)
-                .Select(x => new ListDentistsQueryDto
+                .Select(x => new ListDentistQueryDto
                 {
                     Id = x.Id,
                     Firstname = x.User.Firstname,
@@ -35,7 +35,7 @@ namespace Market.Application.Modules.Clinic.Dentists.Queries.List
                     SpecializationName = x.Specialization.Name
                 });
 
-            return await PageResult<ListDentistsQueryDto>.FromQueryableAsync(projectedQuery, request.Paging, ct);
+            return await PageResult<ListDentistQueryDto>.FromQueryableAsync(projectedQuery, request.Paging, ct);
         }
     }
 }

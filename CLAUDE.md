@@ -56,7 +56,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - tipovi prate backend DTO-e i imena (`ListSpecializationQuery` → `ListSpecializationRequest`);
   - lista nasljeđuje `BaseListPagedComponent`, forma `BaseFormComponent` (ista komponenta za dodavanje i izmjenu, rute `/new` i `/:id/edit`);
   - greške sa servera kroz `applyServerErrors`, potvrda brisanja kroz `DialogHelperService.confirm`;
-  - sav tekst za korisnika kroz prevode u `bs.json` i `en.json`.
+  - sav tekst za korisnika kroz prevode u `bs.json` i `en.json`;
+  - admin meni: KATALOG (šifarnici), KLINIKA (stomatolozi, kasnije termini), SISTEM.
 
 ## Način rada (git)
 

@@ -16,14 +16,14 @@ namespace Market.API.Controllers
     public sealed class DentistsController(ISender sender) : ControllerBase
     {
         [HttpGet]
-        public async Task<PageResult<ListDentistsQueryDto>> List([FromQuery] ListDentistsQuery query,
+        public async Task<PageResult<ListDentistQueryDto>> List([FromQuery] ListDentistQuery query,
             CancellationToken ct)
         {
             return await sender.Send(query, ct);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<GetDentistByQueryDto> GetById(int id, CancellationToken ct)
+        public async Task<GetDentistByIdQueryDto> GetById(int id, CancellationToken ct)
         {
             return await sender.Send(new GetDentistByIdQuery { Id = id }, ct);
         }

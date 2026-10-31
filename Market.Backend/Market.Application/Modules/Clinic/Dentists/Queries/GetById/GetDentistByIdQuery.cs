@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Market.Application.Modules.Clinic.Dentists.Queries.GetById
 {
-    public sealed class GetDentistByIdQuery : IRequest<GetDentistByQueryDto>
+    public sealed class GetDentistByIdQuery : IRequest<GetDentistByIdQueryDto>
     {
         public required int Id { get; init; }
     }

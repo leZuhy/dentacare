@@ -1,0 +1,98 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>medical_services</mat-icon></div>
+      <div>
+        <h1>{{ 'DENTISTS.TITLE' | translate }}</h1>
+        <p class="subtitle">{{ 'DENTISTS.SUBTITLE' | translate }}</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a mat-raised-button color="primary" routerLink="new">
+        <mat-icon>add</mat-icon>
+        {{ 'COMMON.ADD' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <section class="table-card">
+    <div class="table-toolbar">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-field search-field">
+        <mat-label>{{ 'DENTISTS.FILTER_SEARCH' | translate }}</mat-label>
+        <input matInput [formControl]="searchFilter" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="filter-field">
+        <mat-label>{{ 'DENTISTS.SPECIALIZATION' | translate }}</mat-label>
+        <mat-select [formControl]="specializationFilter">
+          <mat-option [value]="null">{{ 'COMMON.ALL' | translate }}</mat-option>
+          @for (s of specializations; track s.id) {
+            <mat-option [value]="s.id">{{ s.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (errorMessage) {
+      <div class="state">
+        <p>{{ errorMessage }}</p>
+        <button mat-stroked-button color="primary" type="button" (click)="loadPagedData()">
+          <mat-icon>refresh</mat-icon>
+          {{ 'COMMON.RETRY' | translate }}
+        </button>
+      </div>
+    } @else {
+      <table mat-table [dataSource]="items" [class.loading]="isLoading">
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef>{{ 'DENTISTS.FULL_NAME' | translate }}</th>
+          <td mat-cell *matCellDef="let dentist">{{ dentist.firstname }} {{ dentist.lastname }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>{{ 'DENTISTS.EMAIL' | translate }}</th>
+          <td mat-cell *matCellDef="let dentist">{{ dentist.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="specializationName">
+          <th mat-header-cell *matHeaderCellDef>{{ 'DENTISTS.SPECIALIZATION' | translate }}</th>
+          <td mat-cell *matCellDef="let dentist">{{ dentist.specializationName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-cell">{{ 'COMMON.ACTIONS' | translate }}</th>
+          <td mat-cell *matCellDef="let dentist" class="actions-cell">
+            <a
+              mat-icon-button
+              [routerLink]="[dentist.id, 'edit']"
+              [matTooltip]="'COMMON.EDIT' | translate"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="onDelete(dentist)"
+              [matTooltip]="'COMMON.DELETE' | translate"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+            {{ (isLoading ? 'COMMON.LOADING' : 'DENTISTS.NO_DATA') | translate }}
+          </td>
+        </tr>
+      </table>
+
+      <app-fit-paginator-bar [vm]="this" />
+    }
+  </section>
+</div>

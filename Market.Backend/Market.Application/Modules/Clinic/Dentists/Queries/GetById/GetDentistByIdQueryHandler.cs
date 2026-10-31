@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Market.Application.Modules.Clinic.Dentists.Queries.GetById
 {
-    public sealed class GetDentistByIdQueryHandler(IAppDbContext ctx) : IRequestHandler<GetDentistByIdQuery, GetDentistByQueryDto>
+    public sealed class GetDentistByIdQueryHandler(IAppDbContext ctx) : IRequestHandler<GetDentistByIdQuery, GetDentistByIdQueryDto>
     {
-        public async Task<GetDentistByQueryDto> Handle(GetDentistByIdQuery request, CancellationToken ct)
+        public async Task<GetDentistByIdQueryDto> Handle(GetDentistByIdQuery request, CancellationToken ct)
         {
             var dto = await ctx.Dentists
                 .AsNoTracking()
                 .Where(x => x.Id == request.Id)
-                .Select(x => new GetDentistByQueryDto
+                .Select(x => new GetDentistByIdQueryDto
                 {
                     Id = x.Id,
                     Firstname = x.User.Firstname,

@@ -1,0 +1,96 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>medical_services</mat-icon></div>
+      <div>
+        <h1>{{ (isEditMode ? 'DENTISTS.EDIT_TITLE' : 'DENTISTS.ADD_TITLE') | translate }}</h1>
+        @if (model) {
+          <p class="subtitle">{{ model.firstname }} {{ model.lastname }}</p>
+        }
+      </div>
+    </div>
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'COMMON.BACK' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <section class="section-card">
+    @if (errorMessage) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="upsert-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'DENTISTS.FIRSTNAME' | translate }}</mat-label>
+          <input matInput formControlName="firstname" />
+          <mat-error><app-fit-field-error [control]="form.controls.firstname" /></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'DENTISTS.LASTNAME' | translate }}</mat-label>
+          <input matInput formControlName="lastname" />
+          <mat-error><app-fit-field-error [control]="form.controls.lastname" /></mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- in edit mode the control is disabled: shown, but cannot be changed -->
+      <mat-form-field appearance="outline" class="field-with-hint">
+        <mat-label>{{ 'DENTISTS.EMAIL' | translate }}</mat-label>
+        <input matInput formControlName="email" type="email" autocomplete="off" />
+        @if (isEditMode) {
+          <mat-hint>{{ 'DENTISTS.EMAIL_READONLY_HINT' | translate }}</mat-hint>
+        }
+        <mat-error><app-fit-field-error [control]="form.controls.email" /></mat-error>
+      </mat-form-field>
+
+      @if (!isEditMode) {
+        <mat-form-field appearance="outline" class="field-with-hint">
+          <mat-label>{{ 'DENTISTS.PASSWORD' | translate }}</mat-label>
+          <input matInput formControlName="password" type="password" autocomplete="new-password" />
+          <!-- same rule as on the backend (AppValidators.password) -->
+          <mat-hint>{{ 'ACCOUNT.FIELDS.PASSWORD_HINT' | translate: { min: passwordMinLength } }}</mat-hint>
+          <mat-error><app-fit-field-error [control]="form.controls.password" /></mat-error>
+        </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'DENTISTS.SPECIALIZATION' | translate }}</mat-label>
+        <mat-select formControlName="specializationId">
+          @for (s of specializations; track s.id) {
+            <mat-option [value]="s.id">{{ s.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-error><app-fit-field-error [control]="form.controls.specializationId" /></mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'DENTISTS.BIO' | translate }}</mat-label>
+        <textarea matInput formControlName="bio" rows="5"></textarea>
+        <mat-hint align="end">{{ form.controls.bio.value.length }} / {{ bioMaxLength }}</mat-hint>
+        <mat-error><app-fit-field-error [control]="form.controls.bio" /></mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="goBack()">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving || isLoading">
+          @if (isSaving) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+          }
+          {{ 'COMMON.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
