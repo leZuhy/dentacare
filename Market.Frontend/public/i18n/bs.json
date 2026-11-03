@@ -150,7 +150,8 @@
       "SPECIALIZATIONS": "Specijalizacije",
       "SERVICE_CATEGORIES": "Kategorije usluga",
       "CLINIC": "KLINIKA",
-      "DENTISTS": "Stomatolozi"
+      "DENTISTS": "Stomatolozi",
+      "WORKING_HOURS": "Radno vrijeme"
     }
   },
   "ADMIN_SETTINGS": {
@@ -225,6 +226,32 @@
     "DELETED": "Stomatolog je obrisan.",
     "DELETE_TITLE": "Brisanje stomatologa",
     "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati stomatologa „{{name}}”?"
+  },
+  "WORKING_HOURS": {
+    "TITLE": "Radno vrijeme",
+    "SUBTITLE": "Radno vrijeme stomatologa po danima u sedmici.",
+    "DENTIST": "Stomatolog",
+    "DENTIST_READONLY_HINT": "Stomatolog se ne može mijenjati",
+    "DAY": "Dan",
+    "START_TIME": "Od",
+    "END_TIME": "Do",
+    "NO_DATA": "Nema radnog vremena za prikaz",
+    "ADD_TITLE": "Novo radno vrijeme",
+    "EDIT_TITLE": "Izmjena radnog vremena",
+    "SAVED": "Radno vrijeme je dodano.",
+    "UPDATED": "Radno vrijeme je izmijenjeno.",
+    "DELETED": "Radno vrijeme je obrisano.",
+    "DELETE_TITLE": "Brisanje radnog vremena",
+    "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati radno vrijeme „{{name}}”?",
+    "DAYS": {
+      "0": "Nedjelja",
+      "1": "Ponedjeljak",
+      "2": "Utorak",
+      "3": "Srijeda",
+      "4": "Četvrtak",
+      "5": "Petak",
+      "6": "Subota"
+    }
   },
   "COMMON": {
     "YES": "Da",
@@ -376,7 +403,8 @@
     "CUSTOM": "Greška pri validaciji",
     "URL_OR_PATH": "Unesite https:// adresu ili rutu aplikacije koja počinje sa \"/\"",
     "MAX_DECIMALS": "Najviše {{max}} decimala",
-    "DATE_RANGE": "Kraj mora biti nakon početka"
+    "DATE_RANGE": "Kraj mora biti nakon početka",
+    "TIME_RANGE": "Kraj mora biti poslije početka"
   },
   "ERRORS": {
     "GENERIC": "Došlo je do greške. Pokušajte ponovo.",

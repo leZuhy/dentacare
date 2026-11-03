@@ -21,6 +21,7 @@ public static class DynamicDataSeeder
 
         await SeedUsersAsync(context);
         await SeedDentistProfileAsync(context);
+        await SeedWorkingHoursAsync(context);
         await SeedExchangeRatesAsync(context);
     }
 
@@ -134,6 +135,47 @@ public static class DynamicDataSeeder
 
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: dentist profile added.");
+    }
+
+    /// <summary>
+    /// Demo working hours for the seeded dentist: Monday to Friday, 08:00-16:00,
+    /// so free appointment slots can be shown right after startup.
+    /// Skipped if the dentist already has any working hours (e.g. entered by hand while testing).
+    /// </summary>
+    private static async Task SeedWorkingHoursAsync(DatabaseContext context)
+    {
+        var dentistId = await context.Dentists
+            .Where(d => d.User.Email == "dentist@dentacare.local")
+            .Select(d => (int?)d.Id)
+            .FirstOrDefaultAsync();
+        if (dentistId is null)
+            return;
+
+        if (await context.WorkingHours.AnyAsync(w => w.DentistId == dentistId))
+            return;
+
+        DayOfWeek[] workDays =
+        [
+            DayOfWeek.Monday,
+        DayOfWeek.Tuesday,
+        DayOfWeek.Wednesday,
+        DayOfWeek.Thursday,
+        DayOfWeek.Friday
+        ];
+
+        foreach (var day in workDays)
+        {
+            context.WorkingHours.Add(new WorkingHoursEntity
+            {
+                DentistId = dentistId.Value,
+                DayOfWeek = day,
+                StartTime = new TimeOnly(8, 0),
+                EndTime = new TimeOnly(16, 0)
+            });
+        }
+
+        await context.SaveChangesAsync();
+        Console.WriteLine("✅ Dynamic seed: demo working hours added.");
     }
 
     /// <summary>

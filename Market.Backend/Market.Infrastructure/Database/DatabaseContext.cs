@@ -16,6 +16,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<SpecializationEntity> Specializations => Set<SpecializationEntity>();
     public DbSet<ServiceCategoryEntity> ServiceCategories => Set<ServiceCategoryEntity>();
     public DbSet<DentistEntity> Dentists => Set<DentistEntity>();
+    public DbSet<WorkingHoursEntity> WorkingHours => Set<WorkingHoursEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)

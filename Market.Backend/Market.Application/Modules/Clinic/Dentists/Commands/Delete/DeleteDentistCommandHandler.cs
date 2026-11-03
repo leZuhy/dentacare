@@ -10,6 +10,7 @@ namespace Market.Application.Modules.Clinic.Dentists.Commands.Delete
         {
             var dentist = await ctx.Dentists
                 .Include(x => x.User)
+                .Include(x => x.WorkingHours)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
 
             if (dentist is null)
@@ -17,6 +18,7 @@ namespace Market.Application.Modules.Clinic.Dentists.Commands.Delete
 
             // TODO: when AppointmentEntity exists, reject deleting a dentist with future appointments (409).
 
+            ctx.WorkingHours.RemoveRange(dentist.WorkingHours);
             ctx.Dentists.Remove(dentist);
             ctx.Users.Remove(dentist.User);
 

@@ -224,6 +224,43 @@ namespace Market.Infrastructure.Migrations
                     b.ToTable("Dentists", (string)null);
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Clinic.WorkingHoursEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DentistId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DentistId", "DayOfWeek")
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("WorkingHours", (string)null);
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Finance.CurrencyEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -577,6 +614,17 @@ namespace Market.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Clinic.WorkingHoursEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.Clinic.DentistEntity", "Dentist")
+                        .WithMany("WorkingHours")
+                        .HasForeignKey("DentistId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dentist");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Finance.ExchangeRateEntity", b =>
                 {
                     b.HasOne("Market.Domain.Entities.Finance.CurrencyEntity", "Currency")
@@ -608,6 +656,11 @@ namespace Market.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Clinic.DentistEntity", b =>
+                {
+                    b.Navigation("WorkingHours");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Finance.CurrencyEntity", b =>

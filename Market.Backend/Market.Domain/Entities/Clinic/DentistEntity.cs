@@ -17,6 +17,7 @@ namespace Market.Domain.Entities.Clinic
         public SpecializationEntity Specialization { get; set; } = null!;
 
         public string? Bio { get; set; }
+        public ICollection<WorkingHoursEntity> WorkingHours { get; set; } = new List<WorkingHoursEntity>();
 
         public static class Constraints
         {

@@ -18,5 +18,6 @@ public interface IAppDbContext
     DbSet<ServiceCategoryEntity> ServiceCategories { get; }
 
     DbSet<DentistEntity> Dentists { get; }
+    DbSet<WorkingHoursEntity> WorkingHours { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

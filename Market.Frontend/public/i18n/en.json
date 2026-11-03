@@ -150,7 +150,8 @@
       "SPECIALIZATIONS": "Specializations",
       "SERVICE_CATEGORIES": "Service categories",
       "CLINIC": "CLINIC",
-      "DENTISTS": "Dentists"
+      "DENTISTS": "Dentists",
+      "WORKING_HOURS": "Working hours"
     }
   },
   "ADMIN_SETTINGS": {
@@ -225,6 +226,32 @@
     "DELETED": "The dentist was deleted.",
     "DELETE_TITLE": "Delete dentist",
     "DELETE_MESSAGE": "Are you sure you want to delete the dentist \"{{name}}\"?"
+  },
+  "WORKING_HOURS": {
+    "TITLE": "Working hours",
+    "SUBTITLE": "Dentists' working hours by day of the week.",
+    "DENTIST": "Dentist",
+    "DENTIST_READONLY_HINT": "The dentist cannot be changed",
+    "DAY": "Day",
+    "START_TIME": "From",
+    "END_TIME": "To",
+    "NO_DATA": "No working hours to display",
+    "ADD_TITLE": "New working hours",
+    "EDIT_TITLE": "Edit working hours",
+    "SAVED": "The working hours were added.",
+    "UPDATED": "The working hours were updated.",
+    "DELETED": "The working hours were deleted.",
+    "DELETE_TITLE": "Delete working hours",
+    "DELETE_MESSAGE": "Are you sure you want to delete the working hours \"{{name}}\"?",
+    "DAYS": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    }
   },
   "COMMON": {
     "YES": "Yes",
@@ -376,7 +403,8 @@
     "CUSTOM": "Validation error",
     "URL_OR_PATH": "Enter an https:// address or an app route starting with \"/\"",
     "MAX_DECIMALS": "At most {{max}} decimals",
-    "DATE_RANGE": "The end must be after the start"
+    "DATE_RANGE": "The end must be after the start",
+    "TIME_RANGE": "The end time must be after the start time"
   },
   "ERRORS": {
     "GENERIC": "An error occurred. Please try again.",
