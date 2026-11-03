@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Market.Application.Modules.Clinic.WorkingHours.Commands.Delete;
 
-namespace Market.Application.Modules.Clinic.WorkingHours.Commands.Delete
+public sealed class DeleteWorkingHoursCommand : IRequest<Unit>
 {
-    public sealed class DeleteWorkingHoursCommand : IRequest<Unit>
-    {
-        public required int Id { get; init; }
-    }
+    public required int Id { get; init; }
 }
