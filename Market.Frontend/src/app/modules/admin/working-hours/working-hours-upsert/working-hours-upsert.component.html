@@ -1,0 +1,96 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>schedule</mat-icon></div>
+      <div>
+        <h1>{{ (isEditMode ? 'WORKING_HOURS.EDIT_TITLE' : 'WORKING_HOURS.ADD_TITLE') | translate }}</h1>
+        @if (model) {
+          <p class="subtitle">{{ model.dentistFullName }}</p>
+        }
+      </div>
+    </div>
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'COMMON.BACK' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <section class="section-card">
+    @if (errorMessage) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="upsert-form">
+      <!-- in edit mode the control is disabled: shown, but cannot be changed -->
+      <mat-form-field appearance="outline" class="field-with-hint">
+        <mat-label>{{ 'WORKING_HOURS.DENTIST' | translate }}</mat-label>
+        <mat-select formControlName="dentistId">
+          @for (d of dentists; track d.id) {
+            <mat-option [value]="d.id">{{ d.firstname }} {{ d.lastname }}</mat-option>
+          }
+        </mat-select>
+        @if (isEditMode) {
+          <mat-hint>{{ 'WORKING_HOURS.DENTIST_READONLY_HINT' | translate }}</mat-hint>
+        }
+        <mat-error><app-fit-field-error [control]="form.controls.dentistId" /></mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'WORKING_HOURS.DAY' | translate }}</mat-label>
+        <mat-select formControlName="dayOfWeek">
+          @for (day of days; track day) {
+            <mat-option [value]="day">{{ 'WORKING_HOURS.DAYS.' + day | translate }}</mat-option>
+          }
+        </mat-select>
+        <mat-error><app-fit-field-error [control]="form.controls.dayOfWeek" /></mat-error>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'WORKING_HOURS.START_TIME' | translate }}</mat-label>
+          <input matInput type="time" formControlName="startTime" />
+          <!-- also shows the server error about overlapping intervals -->
+          <mat-error><app-fit-field-error [control]="form.controls.startTime" /></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'WORKING_HOURS.END_TIME' | translate }}</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="endTime"
+            [errorStateMatcher]="timeRangeMatcher"
+          />
+          <mat-error>
+            <!-- the field's own error (required, server) comes first; otherwise the group error -->
+            @if (form.controls.endTime.invalid) {
+              <app-fit-field-error [control]="form.controls.endTime" />
+            } @else {
+              <app-fit-field-error [control]="form" />
+            }
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="goBack()">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving || isLoading">
+          @if (isSaving) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+          }
+          {{ 'COMMON.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

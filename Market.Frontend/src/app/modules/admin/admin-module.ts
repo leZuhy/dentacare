@@ -12,6 +12,8 @@ import { ServiceCategoriesListComponent } from './catalog/service-categories/ser
 import { ServiceCategoryUpsertComponent } from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
 import { DentistsListComponent } from './dentists/dentists-list/dentists-list.component';
 import { DentistUpsertComponent } from './dentists/dentist-upsert/dentist-upsert.component';
+import { WorkingHoursListComponent } from './working-hours/working-hours-list/working-hours-list.component';
+import { WorkingHoursUpsertComponent } from './working-hours/working-hours-upsert/working-hours-upsert.component';
 
 
 @NgModule({
@@ -25,6 +27,8 @@ import { DentistUpsertComponent } from './dentists/dentist-upsert/dentist-upsert
     ServiceCategoryUpsertComponent,
     DentistsListComponent,
     DentistUpsertComponent,
+    WorkingHoursListComponent,
+    WorkingHoursUpsertComponent,
   ],
   imports: [
     AdminRoutingModule,

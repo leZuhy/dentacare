@@ -31,6 +31,7 @@ const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
   urlOrPath: () => ({ key: 'VALIDATION.URL_OR_PATH' }),
   maxDecimals: (e) => ({ key: 'VALIDATION.MAX_DECIMALS', params: { max: e.max } }),
   dateRange: () => ({ key: 'VALIDATION.DATE_RANGE' }),
+  timeRange: () => ({ key: 'VALIDATION.TIME_RANGE' }),
   password: (e) => ({ key: 'VALIDATION.PASSWORD', params: { min: e.minLength } }),
   passwordMismatch: () => ({ key: 'VALIDATION.PASSWORD_MATCH' }),
   // mat-datepicker: tekst u polju nije datum

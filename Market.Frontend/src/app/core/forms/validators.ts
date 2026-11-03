@@ -87,6 +87,28 @@ export class AppValidators {
   }
 
   /**
+   * CROSS-FIELD validator (on the group, like dateRange) for times from input type="time":
+   * the end (endKey) must be AFTER the start (startKey). Values are "HH:mm" strings, and two
+   * strings of that format compare the same way as the times do ("08:00" < "12:00").
+   * If one field is empty → valid (required catches that). Error on the group: { timeRange: true };
+   * shown under the end field with CrossFieldErrorStateMatcher('timeRange').
+   *
+   * Example:
+   *   new FormGroup({ startTime: ..., endTime: ... },
+   *     { validators: AppValidators.timeRange('startTime', 'endTime') });
+   */
+  static timeRange(startKey: string, endKey: string): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const start = group.get(startKey)?.value as string | null | undefined;
+      const end = group.get(endKey)?.value as string | null | undefined;
+      if (!start || !end) {
+        return null;
+      }
+      return end > start ? null : { timeRange: true };
+    };
+  }
+
+  /**
    * Lozinka po pravilu backenda: najmanje PASSWORD_MIN_LENGTH znakova, bar jedno slovo i bar
    * jedna cifra (\p{L} = bilo koje slovo, i č, ć, š...). Server provjerava isto pravilo –
    * ovdje je samo da korisnik grešku vidi odmah. Greška: { password: { minLength } }

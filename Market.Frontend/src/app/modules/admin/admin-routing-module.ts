@@ -11,6 +11,8 @@ import {ServiceCategoriesListComponent} from './catalog/service-categories/servi
 import {ServiceCategoryUpsertComponent} from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
 import {DentistsListComponent} from './dentists/dentists-list/dentists-list.component';
 import {DentistUpsertComponent} from './dentists/dentist-upsert/dentist-upsert.component';
+import {WorkingHoursListComponent} from './working-hours/working-hours-list/working-hours-list.component';
+import {WorkingHoursUpsertComponent} from './working-hours/working-hours-upsert/working-hours-upsert.component';
 
 const routes: Routes = [
   {
@@ -55,6 +57,18 @@ const routes: Routes = [
       {
         path: 'dentists/:id/edit',
         component: DentistUpsertComponent,
+      },
+      {
+        path: 'working-hours',
+        component: WorkingHoursListComponent,
+      },
+      {
+        path: 'working-hours/new',
+        component: WorkingHoursUpsertComponent,
+      },
+      {
+        path: 'working-hours/:id/edit',
+        component: WorkingHoursUpsertComponent,
       },
 
       // FINANCE
