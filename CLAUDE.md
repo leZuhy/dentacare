@@ -25,6 +25,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Svi entiteti nasljeđuju `BaseEntity` (`Id`, `IsDeleted` za soft delete, `CreatedAtUtc`, `ModifiedAtUtc`). `DentalService.IsActive` znači "trenutno se ne nudi", a `IsDeleted` znači obrisano.
 - Šifarnik koji koristi drugi entitet (npr. Specialization kod Dentist) ne smije se obrisati dok je u upotrebi (409).
 - Podsjetnici su samo unutar aplikacije (upit, bez pozadinskog servisa i bez emaila).
+- Radno vrijeme (WorkingHours) unosi samo admin. Početak mora biti prije kraja. Intervali istog stomatologa u istom danu se ne preklapaju, a dodirivanje (08–12 i 12–16) je dozvoljeno. Brisanje stomatologa briše i njegova radna vremena.
 
 ## Tehnička pravila (iz uputa predmeta)
 
@@ -49,6 +50,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - jedinstveni indeks uvijek s `HasFilter("[IsDeleted] = 0")`; validator za Update isključuje vlastiti red (`x.Id != command.Id`);
   - `AsNoTracking()` samo kod čitanja, nikad u Update i Delete handleru; brisanje je soft delete kroz `Remove`;
   - Id za Update dolazi iz rute (`[JsonIgnore]` na `Id` u komandi);
+  - kod brisanja povezanih entiteta s `Restrict` prvo se brišu djeca, pa roditelj;
   - ruta kontrolera `api/<ime-u-mnozini>` malim slovima s crticom (npr. `api/service-categories`); `[Authorize(Policy = ...)]` na klasi kad sve akcije imaju istu ulogu;
   - referentni podaci idu u `StaticDataSeeder` (`HasData`, fiksni Id, `SeedDateUtc`), demo podaci u `DynamicDataSeeder`.
 - Frontend:
