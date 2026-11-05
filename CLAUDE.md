@@ -23,9 +23,10 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Cijena usluge se kopira u `AppointmentService` (`PriceAtTime`), da kasnija promjena cjenovnika ne mijenja stare račune.
 - Ocjena stomatologa: jedna po terminu, samo za završen termin. Ocjena se može izmijeniti, ali se ne briše.
 - Svi entiteti nasljeđuju `BaseEntity` (`Id`, `IsDeleted` za soft delete, `CreatedAtUtc`, `ModifiedAtUtc`). `DentalService.IsActive` znači "trenutno se ne nudi", a `IsDeleted` znači obrisano.
-- Šifarnik koji koristi drugi entitet (npr. Specialization kod Dentist) ne smije se obrisati dok je u upotrebi (409).
+- Šifarnik koji koristi drugi entitet (npr. Specialization kod Dentist, ServiceCategory kod DentalService) ne smije se obrisati dok je u upotrebi (409). Neaktivna usluga se računa kao upotreba.
 - Podsjetnici su samo unutar aplikacije (upit, bez pozadinskog servisa i bez emaila).
 - Radno vrijeme (WorkingHours) unosi samo admin. Početak mora biti prije kraja. Intervali istog stomatologa u istom danu se ne preklapaju, a dodirivanje (08–12 i 12–16) je dozvoljeno. Brisanje stomatologa briše i njegova radna vremena.
+- Usluga (DentalService) se ne briše, nego isključuje (`IsActive = false`). Nema Delete endpointa, jer bi obrisana usluga nestala iz starih termina i računa. Naziv usluge je jedinstven u cijeloj ordinaciji. Cijena je veća od 0 KM, najviše 2 decimale, do 10 000 KM. Trajanje je od 15 do 480 minuta, u koracima od 15 (zbog slobodnih termina).
 
 ## Tehnička pravila (iz uputa predmeta)
 
@@ -60,6 +61,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - greške sa servera kroz `applyServerErrors`, potvrda brisanja kroz `DialogHelperService.confirm`;
   - sav tekst za korisnika kroz prevode u `bs.json` i `en.json`;
   - admin meni: KATALOG (šifarnici), KLINIKA (stomatolozi, kasnije termini), SISTEM.
+    - granice validacije (dužina, min, max, korak) postoje i u `Entity.Constraints` na backendu i u formi na frontendu, pa se mijenjaju na oba mjesta;
+  - novi validator ide u `AppValidators` (`core/forms/validators.ts`), uz red u `validation-messages.ts` i ključ u `bs.json` i `en.json`.
 
 ## Način rada (git)
 
