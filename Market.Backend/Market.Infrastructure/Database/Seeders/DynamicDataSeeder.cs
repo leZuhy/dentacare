@@ -1,4 +1,5 @@
-﻿using Market.Domain.Entities.Clinic;
+﻿using Market.Domain.Entities.Catalog;
+using Market.Domain.Entities.Clinic;
 using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Identity;
 using Market.Infrastructure.Migrations;
@@ -22,6 +23,7 @@ public static class DynamicDataSeeder
         await SeedUsersAsync(context);
         await SeedDentistProfileAsync(context);
         await SeedWorkingHoursAsync(context);
+        await SeedDentalServicesAsync(context);
         await SeedExchangeRatesAsync(context);
     }
 
@@ -176,6 +178,41 @@ public static class DynamicDataSeeder
 
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: demo working hours added.");
+    }
+
+    private static async Task SeedDentalServicesAsync(DatabaseContext context)
+    {
+        if (await context.DentalServices.AnyAsync())
+            return;
+
+        var categoryIds = await context.ServiceCategories
+            .ToDictionaryAsync(c => c.Name, c => c.Id);
+
+        (string Category, string Name, decimal Price, int Duration, bool IsActive)[] services =
+        [
+            ("Preventiva", "Pregled", 30m, 30, true),
+        ("Preventiva", "Čišćenje kamenca", 60m, 30, true),
+        ("Preventiva", "Fluorizacija", 40m, 15, false),
+        ("Konzervativa", "Plomba", 80m, 45, true),
+        ("Oralna hirurgija", "Vađenje zuba", 70m, 30, true),
+    ];
+
+        foreach (var s in services)
+        {
+            if (!categoryIds.TryGetValue(s.Category, out var categoryId))
+                continue;
+
+            context.DentalServices.Add(new DentalServiceEntity
+            {
+                CategoryId = categoryId,
+                Name = s.Name,
+                PriceBam = s.Price,
+                DurationMinutes = s.Duration,
+                IsActive = s.IsActive
+            });
+        }
+
+        await context.SaveChangesAsync();
     }
 
     /// <summary>
