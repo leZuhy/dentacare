@@ -9,6 +9,8 @@ import {SpecializationsListComponent} from './catalog/specializations/specializa
 import {SpecializationUpsertComponent} from './catalog/specializations/specialization-upsert/specialization-upsert.component';
 import {ServiceCategoriesListComponent} from './catalog/service-categories/service-categories-list/service-categories-list.component';
 import {ServiceCategoryUpsertComponent} from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
+import {DentalServicesListComponent} from './catalog/dental-services/dental-services-list/dental-services-list.component';
+import {DentalServiceUpsertComponent} from './catalog/dental-services/dental-service-upsert/dental-service-upsert.component';
 import {DentistsListComponent} from './dentists/dentists-list/dentists-list.component';
 import {DentistUpsertComponent} from './dentists/dentist-upsert/dentist-upsert.component';
 import {WorkingHoursListComponent} from './working-hours/working-hours-list/working-hours-list.component';
@@ -43,6 +45,18 @@ const routes: Routes = [
       {
         path: 'catalog/service-categories/:id/edit',
         component: ServiceCategoryUpsertComponent,
+      },
+      {
+        path: 'catalog/dental-services',
+        component: DentalServicesListComponent,
+      },
+      {
+        path: 'catalog/dental-services/new',
+        component: DentalServiceUpsertComponent,
+      },
+      {
+        path: 'catalog/dental-services/:id/edit',
+        component: DentalServiceUpsertComponent,
       },
 
       // CLINIC

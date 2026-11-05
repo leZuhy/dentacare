@@ -1,0 +1,92 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>healing</mat-icon></div>
+      <div>
+        <h1>{{ (isEditMode ? 'DENTAL_SERVICES.EDIT_TITLE' : 'DENTAL_SERVICES.ADD_TITLE') | translate }}</h1>
+        @if (model) {
+          <p class="subtitle">{{ model.name }}</p>
+        }
+      </div>
+    </div>
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'COMMON.BACK' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <section class="section-card">
+    @if (errorMessage) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="upsert-form">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'DENTAL_SERVICES.CATEGORY' | translate }}</mat-label>
+        <mat-select formControlName="categoryId">
+          @for (c of categories; track c.id) {
+            <mat-option [value]="c.id">{{ c.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-error><app-fit-field-error [control]="form.controls.categoryId" /></mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'DENTAL_SERVICES.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" />
+        <mat-hint align="end">{{ form.controls.name.value.length }} / {{ nameMaxLength }}</mat-hint>
+        <mat-error><app-fit-field-error [control]="form.controls.name" /></mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'DENTAL_SERVICES.DESCRIPTION' | translate }}</mat-label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+        <mat-hint align="end">{{ form.controls.description.value.length }} / {{ descriptionMaxLength }}</mat-hint>
+        <mat-error><app-fit-field-error [control]="form.controls.description" /></mat-error>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'DENTAL_SERVICES.PRICE' | translate }}</mat-label>
+          <input matInput type="number" step="0.01" formControlName="priceBam" />
+          <span matTextSuffix>&nbsp;KM</span>
+          <mat-error><app-fit-field-error [control]="form.controls.priceBam" /></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'DENTAL_SERVICES.DURATION' | translate }}</mat-label>
+          <input matInput type="number" step="15" formControlName="durationMinutes" />
+          <span matTextSuffix>&nbsp;min</span>
+          <mat-error><app-fit-field-error [control]="form.controls.durationMinutes" /></mat-error>
+        </mat-form-field>
+      </div>
+
+      @if (isEditMode) {
+        <div class="active-field">
+          <mat-checkbox formControlName="isActive">{{ 'DENTAL_SERVICES.ACTIVE' | translate }}</mat-checkbox>
+          <p class="active-hint">{{ 'DENTAL_SERVICES.ACTIVE_HINT' | translate }}</p>
+        </div>
+      }
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="goBack()">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving || isLoading">
+          @if (isSaving) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+          }
+          {{ 'COMMON.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

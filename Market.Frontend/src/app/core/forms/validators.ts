@@ -66,6 +66,20 @@ export class AppValidators {
   }
 
   /**
+   * The value must be a multiple of `step` (e.g. duration in steps of 15 minutes).
+   * Error: { multipleOf: { step } }
+   */
+  static multipleOf(step: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (isEmpty(value) || Number.isNaN(Number(value))) {
+        return null;
+      }
+      return Number(value) % step === 0 ? null : { multipleOf: { step } };
+    };
+  }
+
+  /**
    * CROSS-FIELD validator – ide na FormGroup, ne na jedno polje, jer poredi DVA polja:
    * kraj (endKey) mora biti NAKON početka (startKey). Ako jedno polje nije popunjeno → ispravno.
    * Greška je na grupi: { dateRange: true }. Da se prikaže ispod polja "kraj", polje koristi

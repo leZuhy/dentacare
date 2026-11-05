@@ -30,6 +30,7 @@ const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
   url: () => ({ key: 'VALIDATION.URL' }),
   urlOrPath: () => ({ key: 'VALIDATION.URL_OR_PATH' }),
   maxDecimals: (e) => ({ key: 'VALIDATION.MAX_DECIMALS', params: { max: e.max } }),
+  multipleOf: (e) => ({ key: 'VALIDATION.MULTIPLE_OF', params: { step: e.step } }),
   dateRange: () => ({ key: 'VALIDATION.DATE_RANGE' }),
   timeRange: () => ({ key: 'VALIDATION.TIME_RANGE' }),
   password: (e) => ({ key: 'VALIDATION.PASSWORD', params: { min: e.minLength } }),

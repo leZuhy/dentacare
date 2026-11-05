@@ -10,10 +10,14 @@ public sealed class DeleteServiceCategoryCommandHandler(IAppDbContext ctx)
         if (category is null)
             throw new MarketNotFoundException($"Kategorija sa Id-em {request.Id} ne postoji.");
 
-        // TODO: when DentalServiceEntity exists, reject deleting a category that services still use (409).
+        var isInUse = await ctx.DentalServices
+            .AnyAsync(x => x.CategoryId == request.Id, ct);
 
-        // Soft delete: DatabaseContext sets IsDeleted = true instead of removing the row.
+        if (isInUse)
+            throw new MarketConflictException("Kategorija se koristi kod usluga i ne može biti obrisana.");
         ctx.ServiceCategories.Remove(category);
+
+
         await ctx.SaveChangesAsync(ct);
 
         return Unit.Value;
