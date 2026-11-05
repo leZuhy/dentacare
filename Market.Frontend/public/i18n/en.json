@@ -149,6 +149,7 @@
       "CATALOG": "CATALOG",
       "SPECIALIZATIONS": "Specializations",
       "SERVICE_CATEGORIES": "Service categories",
+      "DENTAL_SERVICES": "Services",
       "CLINIC": "CLINIC",
       "DENTISTS": "Dentists",
       "WORKING_HOURS": "Working hours"
@@ -205,6 +206,27 @@
     "DELETED": "The category was deleted.",
     "DELETE_TITLE": "Delete category",
     "DELETE_MESSAGE": "Are you sure you want to delete the category \"{{name}}\"?"
+  },
+  "DENTAL_SERVICES": {
+    "TITLE": "Services",
+    "SUBTITLE": "Dental services with a price in KM and a duration in minutes.",
+    "NAME": "Name",
+    "CATEGORY": "Category",
+    "DESCRIPTION": "Description",
+    "PRICE": "Price",
+    "DURATION": "Duration",
+    "STATUS": "Status",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "ACTIVE_HINT": "An inactive service is currently not offered.",
+    "FILTER_NAME": "Search by name",
+    "FILTER_ACTIVE": "Active",
+    "FILTER_INACTIVE": "Inactive",
+    "NO_DATA": "No services to display",
+    "ADD_TITLE": "New service",
+    "EDIT_TITLE": "Edit service",
+    "SAVED": "The service was added.",
+    "UPDATED": "The service was updated."
   },
   "DENTISTS": {
     "TITLE": "Dentists",
@@ -403,6 +425,7 @@
     "CUSTOM": "Validation error",
     "URL_OR_PATH": "Enter an https:// address or an app route starting with \"/\"",
     "MAX_DECIMALS": "At most {{max}} decimals",
+    "MULTIPLE_OF": "The value must be a multiple of {{step}}",
     "DATE_RANGE": "The end must be after the start",
     "TIME_RANGE": "The end time must be after the start time"
   },

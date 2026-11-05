@@ -149,6 +149,7 @@
       "CATALOG": "KATALOG",
       "SPECIALIZATIONS": "Specijalizacije",
       "SERVICE_CATEGORIES": "Kategorije usluga",
+      "DENTAL_SERVICES": "Usluge",
       "CLINIC": "KLINIKA",
       "DENTISTS": "Stomatolozi",
       "WORKING_HOURS": "Radno vrijeme"
@@ -205,6 +206,27 @@
     "DELETED": "Kategorija je obrisana.",
     "DELETE_TITLE": "Brisanje kategorije",
     "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati kategoriju „{{name}}”?"
+  },
+  "DENTAL_SERVICES": {
+    "TITLE": "Usluge",
+    "SUBTITLE": "Stomatološke usluge s cijenom u KM i trajanjem u minutama.",
+    "NAME": "Naziv",
+    "CATEGORY": "Kategorija",
+    "DESCRIPTION": "Opis",
+    "PRICE": "Cijena",
+    "DURATION": "Trajanje",
+    "STATUS": "Status",
+    "ACTIVE": "Aktivna",
+    "INACTIVE": "Neaktivna",
+    "ACTIVE_HINT": "Neaktivna usluga se trenutno ne nudi.",
+    "FILTER_NAME": "Pretraga po nazivu",
+    "FILTER_ACTIVE": "Aktivne",
+    "FILTER_INACTIVE": "Neaktivne",
+    "NO_DATA": "Nema usluga za prikaz",
+    "ADD_TITLE": "Nova usluga",
+    "EDIT_TITLE": "Izmjena usluge",
+    "SAVED": "Usluga je dodana.",
+    "UPDATED": "Usluga je izmijenjena."
   },
   "DENTISTS": {
     "TITLE": "Stomatolozi",
@@ -403,6 +425,7 @@
     "CUSTOM": "Greška pri validaciji",
     "URL_OR_PATH": "Unesite https:// adresu ili rutu aplikacije koja počinje sa \"/\"",
     "MAX_DECIMALS": "Najviše {{max}} decimala",
+    "MULTIPLE_OF": "Vrijednost mora biti višekratnik od {{step}}",
     "DATE_RANGE": "Kraj mora biti nakon početka",
     "TIME_RANGE": "Kraj mora biti poslije početka"
   },
