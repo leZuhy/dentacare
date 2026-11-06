@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Market.Application.Modules.Loyalty.LoyaltyTiers.Commands.Create;
+﻿namespace Market.Application.Modules.Loyalty.LoyaltyTiers.Commands.Create;
 
 public sealed class CreateLoyaltyTierCommand : IRequest<int>
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Market.Application.Modules.Loyalty.LoyaltyTiers.Queries.List;
+﻿namespace Market.Application.Modules.Loyalty.LoyaltyTiers.Queries.List;
 
 public sealed class ListLoyaltyTierQueryHandler(IAppDbContext ctx) : IRequestHandler<ListLoyaltyTierQuery, PageResult<ListLoyaltyTierQueryDto>>
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Market.Application.Modules.Loyalty.LoyaltyTiers.Commands.Update;
+﻿namespace Market.Application.Modules.Loyalty.LoyaltyTiers.Commands.Update;
 
 public sealed class UpdateLoyaltyTierCommand : IRequest<Unit>
 {

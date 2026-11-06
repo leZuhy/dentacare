@@ -1,7 +1,4 @@
 ﻿using Market.Domain.Entities.Loyalty;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Market.Infrastructure.Database.Configurations.Loyalty;
 
