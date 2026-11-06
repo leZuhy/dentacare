@@ -27,6 +27,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Podsjetnici su samo unutar aplikacije (upit, bez pozadinskog servisa i bez emaila).
 - Radno vrijeme (WorkingHours) unosi samo admin. Početak mora biti prije kraja. Intervali istog stomatologa u istom danu se ne preklapaju, a dodirivanje (08–12 i 12–16) je dozvoljeno. Brisanje stomatologa briše i njegova radna vremena.
 - Usluga (DentalService) se ne briše, nego isključuje (`IsActive = false`). Nema Delete endpointa, jer bi obrisana usluga nestala iz starih termina i računa. Naziv usluge je jedinstven u cijeloj ordinaciji. Cijena je veća od 0 KM, najviše 2 decimale, do 10 000 KM. Trajanje je od 15 do 480 minuta, u koracima od 15 (zbog slobodnih termina).
+- Loyalty nivoi (LoyaltyTier): naziv i prag bodova (MinPoints) su jedinstveni. Viši nivo mora imati strogo veći popust (0–40 %, najviše 2 decimale). Početni nivo (0 bodova) se ne briše (409) i prag mu ostaje 0; prepoznaje se po bodovima, ne po nazivu. Seed: Bronze 0/0 %, Silver 500/5 %, Gold 1500/10 % (StaticDataSeeder).
 
 ## Tehnička pravila (iz uputa predmeta)
 
@@ -54,6 +55,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - kod brisanja povezanih entiteta s `Restrict` prvo se brišu djeca, pa roditelj;
   - ruta kontrolera `api/<ime-u-mnozini>` malim slovima s crticom (npr. `api/service-categories`); `[Authorize(Policy = ...)]` na klasi kad sve akcije imaju istu ulogu;
   - referentni podaci idu u `StaticDataSeeder` (`HasData`, fiksni Id, `SeedDateUtc`), demo podaci u `DynamicDataSeeder`.
+    - svaki kontroler ima `[Authorize(Policy = ...)]`; integracijski test `List_AsNonAdmin_Returns403` je obavezan za svaki novi admin kontroler.
 - Frontend:
   - fajlovi `ime.vrsta.ts` (`.service.ts`, `.model.ts`, `.component.ts`);
   - tipovi prate backend DTO-e i imena (`ListSpecializationQuery` → `ListSpecializationRequest`);
