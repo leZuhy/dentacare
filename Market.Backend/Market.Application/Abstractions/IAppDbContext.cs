@@ -1,6 +1,7 @@
 ﻿using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Entities.Clinic;
+using Market.Domain.Entities.Loyalty;
 
 namespace Market.Application.Abstractions;
 
@@ -20,5 +21,6 @@ public interface IAppDbContext
     DbSet<DentistEntity> Dentists { get; }
     DbSet<WorkingHoursEntity> WorkingHours { get; }
     DbSet<DentalServiceEntity> DentalServices { get; }
+    DbSet<LoyaltyTierEntity> LoyaltyTiers { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }
