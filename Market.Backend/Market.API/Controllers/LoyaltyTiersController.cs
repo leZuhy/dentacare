@@ -2,19 +2,20 @@
 using Market.Application.Modules.Loyalty.LoyaltyTiers.Queries.GetById;
 using Market.Application.Modules.Loyalty.LoyaltyTiers.Queries.List;
 using Market.Application.Modules.Loyalty.LoyaltyTiers.Commands.Update;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Market.Application.Modules.Loyalty.LoyaltyTiers.Commands.Delete;
+using Market.Shared.Constants;
 
 namespace Market.API.Controllers;
 
 [Route("api/loyalty-tiers")]
 [ApiController]
+[Authorize(Policy = PolicyNames.Admin)]
 public sealed class LoyaltyTiersController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PageResult<ListLoyaltyTierQueryDto>>> List([FromQuery] ListLoyaltyTierQuery command, CancellationToken ct)
+    public async Task<ActionResult<PageResult<ListLoyaltyTierQueryDto>>> List([FromQuery] ListLoyaltyTierQuery query, CancellationToken ct)
     {
-        return await sender.Send(command, ct);
+        return await sender.Send(query, ct);
     }
 
     [HttpGet("{id:int}")]
@@ -35,5 +36,11 @@ public sealed class LoyaltyTiersController(ISender sender) : ControllerBase
     {
         command.Id = id;
         await sender.Send(command, ct);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task Delete(int id, CancellationToken ct)
+    {
+        await sender.Send(new DeleteLoyaltyTierCommand { Id = id }, ct);
     }
 }
