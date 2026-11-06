@@ -152,7 +152,9 @@
       "DENTAL_SERVICES": "Usluge",
       "CLINIC": "KLINIKA",
       "DENTISTS": "Stomatolozi",
-      "WORKING_HOURS": "Radno vrijeme"
+      "WORKING_HOURS": "Radno vrijeme",
+      "LOYALTY": "LOJALNOST",
+      "LOYALTY_TIERS": "Nivoi"
     }
   },
   "ADMIN_SETTINGS": {
@@ -227,6 +229,24 @@
     "EDIT_TITLE": "Izmjena usluge",
     "SAVED": "Usluga je dodana.",
     "UPDATED": "Usluga je izmijenjena."
+  },
+  "LOYALTY_TIERS": {
+    "TITLE": "Loyalty nivoi",
+    "SUBTITLE": "Nivoi programa lojalnosti: od koliko bodova vrijede i koliki popust daju.",
+    "NAME": "Naziv",
+    "MIN_POINTS": "Bodovi od",
+    "DISCOUNT": "Popust",
+    "FILTER_NAME": "Pretraga po nazivu",
+    "NO_DATA": "Nema nivoa za prikaz",
+    "ADD_TITLE": "Novi nivo",
+    "EDIT_TITLE": "Izmjena nivoa",
+    "MIN_POINTS_HINT": "Pacijent ulazi u nivo kad skupi ovoliko bodova (1 bod = 1 plaćena KM).",
+    "SAVED": "Nivo je dodan.",
+    "UPDATED": "Nivo je izmijenjen.",
+    "DELETED": "Nivo je obrisan.",
+    "DELETE_TITLE": "Brisanje nivoa",
+    "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati nivo „{{name}}”?",
+    "BASE_TIER_HINT": "Početni nivo uvijek počinje od 0 bodova: dobija ga svaki novi pacijent."
   },
   "DENTISTS": {
     "TITLE": "Stomatolozi",

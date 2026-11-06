@@ -1,0 +1,98 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card">
+    <div class="title-section">
+      <div class="title-icon"><mat-icon>workspace_premium</mat-icon></div>
+      <div>
+        <h1>
+          {{
+            (isEditMode
+              ? "LOYALTY_TIERS.EDIT_TITLE"
+              : "LOYALTY_TIERS.ADD_TITLE"
+            ) | translate
+          }}
+        </h1>
+        @if (model) {
+          <p class="subtitle">{{ model.name }}</p>
+        }
+      </div>
+    </div>
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        {{ "COMMON.BACK" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <section class="section-card">
+    @if (errorMessage) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="upsert-form">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "LOYALTY_TIERS.NAME" | translate }}</mat-label>
+        <input matInput formControlName="name" />
+        <mat-hint align="end"
+          >{{ form.controls.name.value.length }} / {{ nameMaxLength }}</mat-hint
+        >
+        <mat-error
+          ><app-fit-field-error [control]="form.controls.name"
+        /></mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "LOYALTY_TIERS.MIN_POINTS" | translate }}</mat-label>
+        <input matInput type="number" step="1" formControlName="minPoints" />
+        <mat-hint>
+          {{
+            (isBaseTier
+              ? "LOYALTY_TIERS.BASE_TIER_HINT"
+              : "LOYALTY_TIERS.MIN_POINTS_HINT"
+            ) | translate
+          }}
+        </mat-hint>
+        <mat-error
+          ><app-fit-field-error [control]="form.controls.minPoints"
+        /></mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "LOYALTY_TIERS.DISCOUNT" | translate }}</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.5"
+          formControlName="discountPercent"
+        />
+        <span matTextSuffix>&nbsp;%</span>
+        <mat-error
+          ><app-fit-field-error [control]="form.controls.discountPercent"
+        /></mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="goBack()">
+          {{ "COMMON.CANCEL" | translate }}
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="isSaving || isLoading"
+        >
+          @if (isSaving) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+          }
+          {{ "COMMON.SAVE" | translate }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

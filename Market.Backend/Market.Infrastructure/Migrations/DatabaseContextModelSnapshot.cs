@@ -645,6 +645,77 @@ namespace Market.Infrastructure.Migrations
                     b.ToTable("RefreshTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Loyalty.LoyaltyTierEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MinPoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MinPoints")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("LoyaltyTiers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAtUtc = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DiscountPercent = 0m,
+                            IsDeleted = false,
+                            MinPoints = 0,
+                            Name = "Bronze"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAtUtc = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DiscountPercent = 5m,
+                            IsDeleted = false,
+                            MinPoints = 500,
+                            Name = "Silver"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAtUtc = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DiscountPercent = 10m,
+                            IsDeleted = false,
+                            MinPoints = 1500,
+                            Name = "Gold"
+                        });
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Catalog.DentalServiceEntity", b =>
                 {
                     b.HasOne("Market.Domain.Entities.Catalog.ServiceCategoryEntity", "Category")

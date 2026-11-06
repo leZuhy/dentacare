@@ -1,5 +1,6 @@
-﻿using Market.Domain.Entities.Finance;
-using Market.Domain.Entities.Catalog;
+﻿using Market.Domain.Entities.Catalog;
+using Market.Domain.Entities.Finance;
+using Market.Domain.Entities.Loyalty;
 
 namespace Market.Infrastructure.Database.Seeders;
 
@@ -18,6 +19,7 @@ public static class StaticDataSeeder
         SeedCurrencies(modelBuilder);
         SeedSpecializations(modelBuilder);
         SeedServiceCategories(modelBuilder);
+        SeedLoyaltyTiers(modelBuilder);
     }
 
     /// <summary>
@@ -73,5 +75,14 @@ public static class StaticDataSeeder
             new ServiceCategoryEntity { Id = 5, Name = "Protetika", CreatedAtUtc = SeedDateUtc },
             new ServiceCategoryEntity { Id = 6, Name = "Ortodoncija", CreatedAtUtc = SeedDateUtc },
             new ServiceCategoryEntity { Id = 7, Name = "Estetika", CreatedAtUtc = SeedDateUtc });
+    }
+
+    // Bronze is the base tier (0 points): every new patient starts there
+    private static void SeedLoyaltyTiers(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<LoyaltyTierEntity>().HasData(
+            new LoyaltyTierEntity { Id = 1, Name = "Bronze", MinPoints = 0, DiscountPercent = 0m, CreatedAtUtc = SeedDateUtc },
+            new LoyaltyTierEntity { Id = 2, Name = "Silver", MinPoints = 500, DiscountPercent = 5m, CreatedAtUtc = SeedDateUtc },
+            new LoyaltyTierEntity { Id = 3, Name = "Gold", MinPoints = 1500, DiscountPercent = 10m, CreatedAtUtc = SeedDateUtc });
     }
 }
