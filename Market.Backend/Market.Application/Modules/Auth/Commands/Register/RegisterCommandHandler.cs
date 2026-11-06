@@ -1,4 +1,6 @@
 using Market.Application.Modules.Auth.Common;
+using Market.Domain.Entities.Loyalty;
+using Market.Domain.Entities.Patients;
 
 namespace Market.Application.Modules.Auth.Commands.Register;
 
@@ -12,7 +14,13 @@ public sealed class RegisterCommandHandler(
     {
         // Required fields, lengths, password rule and the unique email are checked by RegisterCommandValidator.
 
-        // A new account is always a customer: roles cannot be chosen during registration.
+        // The base tier is found by MinPoints, not by name (an admin may rename "Bronze").
+        // It always exists: DeleteLoyaltyTier and UpdateLoyaltyTier protect it.
+        var baseTier = await ctx.LoyaltyTiers
+            .FirstOrDefaultAsync(t => t.MinPoints == LoyaltyTierEntity.Constraints.BaseTierMinPoints, ct)
+            ?? throw new InvalidOperationException("Početni loyalty nivo (0 bodova) ne postoji.");
+
+        // A new account is always a patient: roles cannot be chosen during registration.
         var user = new MarketUserEntity
         {
             Firstname = request.Firstname.Trim(),
@@ -20,15 +28,31 @@ public sealed class RegisterCommandHandler(
             Email = request.Email.Trim().ToLowerInvariant(),
             Address = request.Address.TrimToNull(),
             City = request.City.TrimToNull(),
-            // The default role is Patient, which is the lowest privilege level.
             Role = Role.Patient,
             IsEnabled = true
         };
         user.PasswordHash = hasher.HashPassword(user, request.Password);
 
-        ctx.Users.Add(user);
+        // Phone and date of birth are entered later, in the patient profile (#9).
+        var patient = new PatientEntity
+        {
+            User = user
+        };
 
-        // Saved first: the access token contains the user's Id, which the database assigns.
+        var loyaltyAccount = new LoyaltyAccountEntity
+        {
+            Patient = patient,
+            TierId = baseTier.Id,
+            PointsBalance = 0,
+            LifetimePoints = 0
+        };
+
+        ctx.Users.Add(user);
+        ctx.Patients.Add(patient);
+        ctx.LoyaltyAccounts.Add(loyaltyAccount);
+
+        // One SaveChangesAsync = one database transaction: user, patient and loyalty account are saved
+        // together or not at all. It is also needed before the token, because the token contains user.Id.
         await ctx.SaveChangesAsync(ct);
 
         // The user is logged in right away, like after login

@@ -1,7 +1,8 @@
 namespace Market.Application.Modules.Auth.Commands.Register;
 
 /// <summary>
-/// Registration of a new customer account. The new user is logged in immediately (the response contains tokens).
+/// Registration of a new patient account, together with its patient profile and loyalty account (base tier).
+/// The new user is logged in immediately (the response contains tokens).
 /// </summary>
 public sealed class RegisterCommand : IRequest<RegisterCommandDto>
 {

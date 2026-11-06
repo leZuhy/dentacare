@@ -67,7 +67,7 @@ export interface LogoutCommand {
 /**
  * Command for POST /api/auth/register (anonimno)
  * Corresponds to: RegisterCommand.cs
- * Novi korisnik je kupac (bez uloga). Greške po polju: email ("Email je već registrovan."), password, ...
+ * Novi korisnik je pacijent (uloga Patient, profil i loyalty račun na početnom nivou). Greške po polju: email ("Email je već registrovan."), password, ...
  */
 export interface RegisterCommand {
   firstname: string;
