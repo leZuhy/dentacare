@@ -1,22 +1,23 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from "@angular/core";
 
-import {AdminRoutingModule} from './admin-routing-module';
-import {AdminLayoutComponent} from './admin-layout/admin-layout.component';
-import {SharedModule} from '../shared/shared-module';
-import {AccountModule} from '../account/account-module';
-import { ExchangeRatesComponent } from './finance/exchange-rates/exchange-rates.component';
-import { AdminSettingsComponent } from './admin-settings/admin-settings.component';
-import { SpecializationsListComponent } from './catalog/specializations/specializations-list/specializations-list.component';
-import { SpecializationUpsertComponent } from './catalog/specializations/specialization-upsert/specialization-upsert.component';
-import { ServiceCategoriesListComponent } from './catalog/service-categories/service-categories-list/service-categories-list.component';
-import { ServiceCategoryUpsertComponent } from './catalog/service-categories/service-category-upsert/service-category-upsert.component';
-import { DentalServicesListComponent } from './catalog/dental-services/dental-services-list/dental-services-list.component';
-import { DentalServiceUpsertComponent } from './catalog/dental-services/dental-service-upsert/dental-service-upsert.component';
-import { DentistsListComponent } from './dentists/dentists-list/dentists-list.component';
-import { DentistUpsertComponent } from './dentists/dentist-upsert/dentist-upsert.component';
-import { WorkingHoursListComponent } from './working-hours/working-hours-list/working-hours-list.component';
-import { WorkingHoursUpsertComponent } from './working-hours/working-hours-upsert/working-hours-upsert.component';
-
+import { AdminRoutingModule } from "./admin-routing-module";
+import { AdminLayoutComponent } from "./admin-layout/admin-layout.component";
+import { SharedModule } from "../shared/shared-module";
+import { AccountModule } from "../account/account-module";
+import { ExchangeRatesComponent } from "./finance/exchange-rates/exchange-rates.component";
+import { AdminSettingsComponent } from "./admin-settings/admin-settings.component";
+import { SpecializationsListComponent } from "./catalog/specializations/specializations-list/specializations-list.component";
+import { SpecializationUpsertComponent } from "./catalog/specializations/specialization-upsert/specialization-upsert.component";
+import { ServiceCategoriesListComponent } from "./catalog/service-categories/service-categories-list/service-categories-list.component";
+import { ServiceCategoryUpsertComponent } from "./catalog/service-categories/service-category-upsert/service-category-upsert.component";
+import { DentalServicesListComponent } from "./catalog/dental-services/dental-services-list/dental-services-list.component";
+import { DentalServiceUpsertComponent } from "./catalog/dental-services/dental-service-upsert/dental-service-upsert.component";
+import { DentistsListComponent } from "./dentists/dentists-list/dentists-list.component";
+import { DentistUpsertComponent } from "./dentists/dentist-upsert/dentist-upsert.component";
+import { WorkingHoursListComponent } from "./working-hours/working-hours-list/working-hours-list.component";
+import { WorkingHoursUpsertComponent } from "./working-hours/working-hours-upsert/working-hours-upsert.component";
+import { LoyaltyTiersListComponent } from "./loyalty/loyalty-tiers/loyalty-tiers-list/loyalty-tiers-list.component";
+import { LoyaltyTierUpsertComponent } from "./loyalty/loyalty-tiers/loyalty-tier-upsert/loyalty-tier-upsert.component";
 
 @NgModule({
   declarations: [
@@ -33,12 +34,14 @@ import { WorkingHoursUpsertComponent } from './working-hours/working-hours-upser
     DentistUpsertComponent,
     WorkingHoursListComponent,
     WorkingHoursUpsertComponent,
+    LoyaltyTiersListComponent,
+    LoyaltyTierUpsertComponent,
   ],
   imports: [
     AdminRoutingModule,
     SharedModule,
     // "Moj profil" (/admin/profile) – ista stranica kao /client/profile
     AccountModule,
-  ]
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

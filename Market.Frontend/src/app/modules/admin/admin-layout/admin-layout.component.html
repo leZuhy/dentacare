@@ -51,6 +51,22 @@
 
     <!-- NAVIGATION MENU -->
     <mat-nav-list>
+      <!-- LOYALTY SECTION -->
+      <div class="nav-section-title">
+        {{ "ADMIN_PANEL.MENU.LOYALTY" | translate }}
+      </div>
+
+      <a
+        mat-list-item
+        routerLink="/admin/loyalty/loyalty-tiers"
+        routerLinkActive="active"
+      >
+        <mat-icon matListItemIcon>workspace_premium</mat-icon>
+        <span matListItemTitle>{{
+          "ADMIN_PANEL.MENU.LOYALTY_TIERS" | translate
+        }}</span>
+      </a>
+
       <!-- CATALOG SECTION -->
       <div class="nav-section-title">
         {{ "ADMIN_PANEL.MENU.CATALOG" | translate }}
@@ -101,7 +117,11 @@
         }}</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/working-hours" routerLinkActive="active">
+      <a
+        mat-list-item
+        routerLink="/admin/working-hours"
+        routerLinkActive="active"
+      >
         <mat-icon matListItemIcon>schedule</mat-icon>
         <span matListItemTitle>{{
           "ADMIN_PANEL.MENU.WORKING_HOURS" | translate

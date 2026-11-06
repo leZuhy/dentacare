@@ -152,7 +152,9 @@
       "DENTAL_SERVICES": "Services",
       "CLINIC": "CLINIC",
       "DENTISTS": "Dentists",
-      "WORKING_HOURS": "Working hours"
+      "WORKING_HOURS": "Working hours",
+      "LOYALTY": "LOYALTY",
+      "LOYALTY_TIERS": "Tiers"
     }
   },
   "ADMIN_SETTINGS": {
@@ -227,6 +229,24 @@
     "EDIT_TITLE": "Edit service",
     "SAVED": "The service was added.",
     "UPDATED": "The service was updated."
+  },
+  "LOYALTY_TIERS": {
+    "TITLE": "Loyalty tiers",
+    "SUBTITLE": "Loyalty program tiers: from how many points they apply and what discount they give.",
+    "NAME": "Name",
+    "MIN_POINTS": "Points from",
+    "DISCOUNT": "Discount",
+    "FILTER_NAME": "Search by name",
+    "NO_DATA": "No tiers to display",
+    "ADD_TITLE": "New tier",
+    "EDIT_TITLE": "Edit tier",
+    "MIN_POINTS_HINT": "A patient enters the tier after collecting this many points (1 point = 1 KM paid).",
+    "SAVED": "The tier was added.",
+    "UPDATED": "The tier was updated.",
+    "DELETED": "The tier was deleted.",
+    "DELETE_TITLE": "Delete tier",
+    "DELETE_MESSAGE": "Are you sure you want to delete the tier \"{{name}}\"?",
+    "BASE_TIER_HINT": "The base tier always starts at 0 points: every new patient gets it."
   },
   "DENTISTS": {
     "TITLE": "Dentists",
