@@ -3,6 +3,7 @@ using Market.Application.Modules.Auth.Commands.Register;
 using Market.Application.Modules.Auth.Queries.GetMe;
 using Market.Domain.Entities.Identity;
 using Market.Shared.Dtos;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -39,7 +40,7 @@ public class AccountIntegrationTests
     }
 
     /// <summary>
-    /// Registers a new customer with <see cref="Password"/> and returns its email and tokens.
+    /// Registers a new patient with <see cref="Password"/> and returns its email and tokens.
     /// </summary>
     private async Task<(string Email, RegisterCommandDto Tokens)> RegisterAsync()
     {
@@ -81,6 +82,50 @@ public class AccountIntegrationTests
         Assert.Equal("Titova 10", me.Address);
         Assert.Equal("Sarajevo", me.City);
         Assert.Equal(Role.Patient, me.Role); // the default role for a new account is "Patient"
+    }
+
+    [Fact]
+    public async Task Post_Register_CreatesPatientAndLoyaltyAccountOnBaseTier()
+    {
+        // Act
+        var (email, _) = await RegisterAsync();
+
+        // Assert: read straight from the database
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+        var account = await db.LoyaltyAccounts
+            .Where(a => a.Patient.User.Email == email)
+            .Select(a => new
+            {
+                a.PointsBalance,
+                a.LifetimePoints,
+                TierMinPoints = a.Tier.MinPoints,
+                a.Patient.Phone,
+                a.Patient.DateOfBirth
+            })
+            .SingleAsync();
+
+        Assert.Equal(0, account.TierMinPoints); // the base tier, recognized by MinPoints, not by name
+        Assert.Equal(0, account.PointsBalance);
+        Assert.Equal(0, account.LifetimePoints);
+        Assert.Null(account.Phone);             // entered later, in the patient profile (#9)
+        Assert.Null(account.DateOfBirth);
+    }
+
+    [Fact]
+    public async Task Seed_DemoPatient_HasPatientProfileAndLoyaltyAccount()
+    {
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+        // Act
+        var hasAccount = await db.LoyaltyAccounts
+            .AnyAsync(a => a.Patient.User.Email == CustomWebApplicationFactory<Program>.PatientEmail);
+
+        // Assert: SeedPatientProfilesAsync created it at startup
+        Assert.True(hasAccount);
     }
 
     [Fact]

@@ -645,6 +645,46 @@ namespace Market.Infrastructure.Migrations
                     b.ToTable("RefreshTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Loyalty.LoyaltyAccountEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LifetimePoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PointsBalance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TierId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.HasIndex("TierId");
+
+                    b.ToTable("LoyaltyAccounts", (string)null);
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Loyalty.LoyaltyTierEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -714,6 +754,42 @@ namespace Market.Infrastructure.Migrations
                             MinPoints = 1500,
                             Name = "Gold"
                         });
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Patients.PatientEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Catalog.DentalServiceEntity", b =>
@@ -790,6 +866,36 @@ namespace Market.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Loyalty.LoyaltyAccountEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.Patients.PatientEntity", "Patient")
+                        .WithOne("LoyaltyAccount")
+                        .HasForeignKey("Market.Domain.Entities.Loyalty.LoyaltyAccountEntity", "PatientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Market.Domain.Entities.Loyalty.LoyaltyTierEntity", "Tier")
+                        .WithMany()
+                        .HasForeignKey("TierId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Tier");
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Patients.PatientEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.Identity.MarketUserEntity", "User")
+                        .WithOne()
+                        .HasForeignKey("Market.Domain.Entities.Patients.PatientEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Catalog.ServiceCategoryEntity", b =>
                 {
                     b.Navigation("DentalServices");
@@ -808,6 +914,12 @@ namespace Market.Infrastructure.Migrations
             modelBuilder.Entity("Market.Domain.Entities.Identity.MarketUserEntity", b =>
                 {
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Patients.PatientEntity", b =>
+                {
+                    b.Navigation("LoyaltyAccount")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

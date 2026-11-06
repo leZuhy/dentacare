@@ -27,7 +27,7 @@ interface RegisterForm {
 }
 
 /**
- * Registracija kupca (/auth/register).
+ * Registracija pacijenta (/auth/register).
  *
  * - pravilo lozinke kao na backendu (AppValidators.password) + hint ispod polja
  * - CROSS-FIELD validator "lozinke se ne podudaraju" (AppValidators.passwordsMatch na grupi),

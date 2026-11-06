@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace Market.Tests.LoyaltyTests.IntegrationTests;
@@ -90,6 +91,42 @@ public class LoyaltyTiersIntegrationTests
         deleteResponse.EnsureSuccessStatusCode();
         var getResponse = await client.GetAsync($"api/loyalty-tiers/{tier.Id}");
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task Delete_TierUsedByLoyaltyAccount_Returns409()
+    {
+        // Arrange: our own tier, so the seeded ones stay untouched
+        var client = await _factory.GetAuthenticatedClientAsync();
+        var createResponse = await PostTierAsync(client, 400_000, 35m);
+        createResponse.EnsureSuccessStatusCode();
+        var tier = await createResponse.Content.ReadFromJsonAsync<CreatedResponse>();
+
+        // a new patient (starts on the base tier)...
+        var email = $"loyalty-{Guid.NewGuid():N}@test.local";
+        var registerResponse = await _factory.CreateClient().PostAsJsonAsync("api/auth/register", new
+        {
+            Firstname = "Lejla",
+            Lastname = "Kovač",
+            Email = email,
+            Password = "Lozinka123"
+        });
+        registerResponse.EnsureSuccessStatusCode();
+
+        // ...moved onto our tier directly in the database (earning points comes in a later issue)
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            var account = await db.LoyaltyAccounts.SingleAsync(a => a.Patient.User.Email == email);
+            account.TierId = tier!.Id;
+            await db.SaveChangesAsync();
+        }
+
+        // Act
+        var response = await client.DeleteAsync($"api/loyalty-tiers/{tier.Id}");
+
+        // Assert: a loyalty account uses the tier
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
     [Theory]

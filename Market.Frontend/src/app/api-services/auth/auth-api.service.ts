@@ -54,7 +54,7 @@ export class AuthApiService {
   }
 
   /**
-   * POST /api/auth/register → 201 + tokeni (novi kupac je odmah prijavljen).
+   * POST /api/auth/register → 201 + tokeni (novi pacijent je odmah prijavljen).
    */
   register(payload: RegisterCommand): Observable<RegisterCommandDto> {
     return this.http.post<RegisterCommandDto>(`${this.baseUrl}/register`, payload);

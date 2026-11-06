@@ -55,7 +55,7 @@ public sealed class AuthController(IMediator mediator) : ControllerBase
     }
 
     /// <summary>
-    /// Registers a new customer account and logs it in (201 + tokens, same shape as login).
+    /// Registers a new patient account and logs it in (201 + tokens, same shape as login).
     /// An email that is already registered returns 400 with a field error on "email".
     /// </summary>
     [HttpPost("register")]

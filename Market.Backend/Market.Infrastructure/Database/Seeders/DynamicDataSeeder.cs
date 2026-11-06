@@ -5,6 +5,8 @@ using Market.Domain.Entities.Identity;
 using Market.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Market.Domain.Entities.Loyalty;
+using Market.Domain.Entities.Patients;
 
 namespace Market.Infrastructure.Database.Seeders;
 
@@ -21,6 +23,7 @@ public static class DynamicDataSeeder
         // (SQL Server) ili EnsureCreated (InMemory baza u testovima).
 
         await SeedUsersAsync(context);
+        await SeedPatientProfilesAsync(context);
         await SeedDentistProfileAsync(context);
         await SeedWorkingHoursAsync(context);
         await SeedDentalServicesAsync(context);
@@ -104,6 +107,44 @@ public static class DynamicDataSeeder
         await context.Users.AddRangeAsync(admin, dentist, patient);
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: demo users added.");
+    }
+
+    /// <summary>
+    /// Patient profile and loyalty account (on the base tier) for every patient user that has none:
+    /// the seeded demo patients and accounts registered before issue #8.
+    /// Separate from SeedUsersAsync, because that one is skipped once any user exists.
+    /// </summary>
+    private static async Task SeedPatientProfilesAsync(DatabaseContext context)
+    {
+        var baseTierId = await context.LoyaltyTiers
+            .Where(t => t.MinPoints == LoyaltyTierEntity.Constraints.BaseTierMinPoints)
+            .Select(t => (int?)t.Id)
+            .FirstOrDefaultAsync();
+        if (baseTierId is null)
+            return;
+
+        var usersWithoutProfile = await context.Users
+            .Where(u => u.Role == Role.Patient && !context.Patients.Any(p => p.UserId == u.Id))
+            .ToListAsync();
+        if (usersWithoutProfile.Count == 0)
+            return;
+
+        foreach (var user in usersWithoutProfile)
+        {
+            var patient = new PatientEntity { User = user };
+
+            context.Patients.Add(patient);
+            context.LoyaltyAccounts.Add(new LoyaltyAccountEntity
+            {
+                Patient = patient,
+                TierId = baseTierId.Value,
+                PointsBalance = 0,
+                LifetimePoints = 0
+            });
+        }
+
+        await context.SaveChangesAsync();
+        Console.WriteLine($"✅ Dynamic seed: {usersWithoutProfile.Count} patient profiles added.");
     }
 
     /// <summary>

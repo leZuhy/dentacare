@@ -82,7 +82,7 @@ export class AuthFacadeService {
   }
 
   /**
-   * Registracija novog kupca. Backend vraća tokene (kao login), pa je korisnik odmah prijavljen.
+   * Registracija novog pacijenta. Backend vraća tokene (kao login), pa je korisnik odmah prijavljen.
    */
   register(payload: RegisterCommand): Observable<void> {
     return this.api.register(payload).pipe(

@@ -3,6 +3,7 @@ using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Entities.Clinic;
 using Market.Domain.Entities.Loyalty;
+using Market.Domain.Entities.Patients;
 
 namespace Market.Infrastructure.Database;
 
@@ -20,6 +21,8 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<WorkingHoursEntity> WorkingHours => Set<WorkingHoursEntity>();
     public DbSet<DentalServiceEntity> DentalServices => Set<DentalServiceEntity>();
     public DbSet<LoyaltyTierEntity> LoyaltyTiers => Set<LoyaltyTierEntity>();
+    public DbSet<LoyaltyAccountEntity> LoyaltyAccounts => Set<LoyaltyAccountEntity>();
+    public DbSet<PatientEntity> Patients => Set<PatientEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
