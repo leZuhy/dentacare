@@ -11,7 +11,15 @@
         <h2 class="hero-title">{{ 'LANDING.HERO_TITLE' | translate }}</h2>
         <p class="hero-description">{{ 'LANDING.HERO_DESCRIPTION' | translate }}</p>
         <div class="hero-actions">
-          <a mat-raised-button color="primary" class="cta-button" routerLink="/converter">
+          <a mat-raised-button color="primary" class="cta-button" routerLink="/services">
+            <mat-icon>medical_services</mat-icon>
+            {{ 'PUBLIC.NAV.SERVICES' | translate }}
+          </a>
+          <a mat-stroked-button class="secondary-button" routerLink="/dentists">
+            <mat-icon>groups</mat-icon>
+            {{ 'PUBLIC.NAV.DENTISTS' | translate }}
+          </a>
+          <a mat-stroked-button class="secondary-button" routerLink="/converter">
             <mat-icon>currency_exchange</mat-icon>
             {{ 'PUBLIC.NAV.CONVERTER' | translate }}
           </a>

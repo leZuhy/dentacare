@@ -110,7 +110,41 @@
       "CONVERTER": "Currency converter",
       "MY_PROFILE": "My profile",
       "ADMIN_PANEL": "Admin panel",
-      "LOGOUT": "Log out"
+      "LOGOUT": "Log out",
+      "SERVICES": "Services",
+      "DENTISTS": "Dentists"
+    },
+    "CATALOG": {
+      "CLEAR_FILTERS": "Clear filters",
+      "LOADING": "Loading...",
+      "EMPTY_TEXT": "Try different filters.",
+      "ERROR_TITLE": "The data could not be loaded",
+      "RETRY": "Try again"
+    },
+    "SERVICES": {
+      "TITLE": "Services",
+      "INTRO": "Services offered by the clinic, with price and duration.",
+      "SEARCH": "Search",
+      "SEARCH_PLACEHOLDER": "Service name",
+      "CATEGORY": "Category",
+      "ALL_CATEGORIES": "All",
+      "MAX_PRICE": "Maximum price",
+      "MAX_PRICE_HINT": "Amount in KM",
+      "SORT": "Sort by",
+      "SORT_NAME": "Name (A–Z)",
+      "SORT_PRICE_ASC": "Price: lowest first",
+      "SORT_PRICE_DESC": "Price: highest first",
+      "DURATION": "{{minutes}} min",
+      "EMPTY_TITLE": "No services match the selected filters"
+    },
+    "DENTISTS": {
+      "TITLE": "Dentists",
+      "INTRO": "Meet our team of dentists.",
+      "SEARCH": "Search",
+      "SEARCH_PLACEHOLDER": "First and last name",
+      "SPECIALIZATION": "Specialization",
+      "ALL_SPECIALIZATIONS": "All",
+      "EMPTY_TITLE": "No dentists match the selected filters"
     }
   },
   "LANDING": {

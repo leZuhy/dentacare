@@ -1,0 +1,16 @@
+@use '../catalog-page';
+@use '../shop-page';
+
+@include catalog-page.layout;
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: shop-page.$light-blue;
+  color: shop-page.$primary-blue;
+}
+
+.catalog-card mat-card-content {
+  padding-bottom: 16px;
+}

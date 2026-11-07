@@ -160,6 +160,7 @@ $white: #ffffff;
 
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
 
   @media (max-width: 968px) {

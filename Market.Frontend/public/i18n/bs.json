@@ -110,7 +110,41 @@
       "CONVERTER": "Konvertor valuta",
       "MY_PROFILE": "Moj profil",
       "ADMIN_PANEL": "Admin panel",
-      "LOGOUT": "Odjava"
+      "LOGOUT": "Odjava",
+      "SERVICES": "Usluge",
+      "DENTISTS": "Stomatolozi"
+    },
+    "CATALOG": {
+      "CLEAR_FILTERS": "Očisti filtere",
+      "LOADING": "Učitavanje...",
+      "EMPTY_TEXT": "Pokušajte s drugim filterima.",
+      "ERROR_TITLE": "Podaci se nisu mogli učitati",
+      "RETRY": "Pokušaj ponovo"
+    },
+    "SERVICES": {
+      "TITLE": "Usluge",
+      "INTRO": "Pregled usluga koje ordinacija nudi, s cijenom i trajanjem.",
+      "SEARCH": "Pretraga",
+      "SEARCH_PLACEHOLDER": "Naziv usluge",
+      "CATEGORY": "Kategorija",
+      "ALL_CATEGORIES": "Sve",
+      "MAX_PRICE": "Najviša cijena",
+      "MAX_PRICE_HINT": "Iznos u KM",
+      "SORT": "Sortiranje",
+      "SORT_NAME": "Naziv (A–Z)",
+      "SORT_PRICE_ASC": "Cijena: od najniže",
+      "SORT_PRICE_DESC": "Cijena: od najviše",
+      "DURATION": "{{minutes}} min",
+      "EMPTY_TITLE": "Nema usluga za odabrane filtere"
+    },
+    "DENTISTS": {
+      "TITLE": "Stomatolozi",
+      "INTRO": "Upoznajte naš tim stomatologa.",
+      "SEARCH": "Pretraga",
+      "SEARCH_PLACEHOLDER": "Ime i prezime",
+      "SPECIALIZATION": "Specijalizacija",
+      "ALL_SPECIALIZATIONS": "Sve",
+      "EMPTY_TITLE": "Nema stomatologa za odabrane filtere"
     }
   },
   "LANDING": {

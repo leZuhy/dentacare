@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { PublicLayoutComponent } from './public-layout/public-layout.component';
 import { LandingComponent } from './landing/landing.component';
 import { ConverterComponent } from './converter/converter.component';
+import { PublicServicesComponent } from './services/public-services.component';
+import { PublicDentistsComponent } from './dentists/public-dentists.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,14 @@ const routes: Routes = [
       {
         path: 'converter',
         component: ConverterComponent
+      },
+      {
+        path: 'services',
+        component: PublicServicesComponent
+      },
+      {
+        path: 'dentists',
+        component: PublicDentistsComponent
       },
       // kasnije može i ovako:
       // { path: 'about', component: AboutComponent },
