@@ -55,8 +55,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - Id za Update dolazi iz rute (`[JsonIgnore]` na `Id` u komandi);
   - kod brisanja povezanih entiteta s `Restrict` prvo se brišu djeca, pa roditelj;
   - ruta kontrolera `api/<ime-u-mnozini>` malim slovima s crticom (npr. `api/service-categories`); `[Authorize(Policy = ...)]` na klasi kad sve akcije imaju istu ulogu;
-  - referentni podaci idu u `StaticDataSeeder` (`HasData`, fiksni Id, `SeedDateUtc`), demo podaci u `DynamicDataSeeder`.
-    - svaki kontroler ima `[Authorize(Policy = ...)]`; integracijski test `List_AsNonAdmin_Returns403` je obavezan za svaki novi admin kontroler.
+  - referentni podaci idu u `StaticDataSeeder` (`HasData`, fiksni Id, `SeedDateUtc`), demo podaci u `DynamicDataSeeder`. - svaki kontroler ima `[Authorize(Policy = ...)]`, osim `PublicCatalogController` (`[AllowAnonymous]`, ruta `api/public`): javni podaci se vraćaju kroz posebne upite i DTO-e (samo aktivne usluge, stomatolozi s aktivnim nalogom, bez emaila), a admin endpointi ostaju admin-only; integracijski test `List_AsNonAdmin_Returns403` je obavezan za svaki novi admin kontroler.
   - zapisi koji moraju nastati zajedno (npr. korisnik, pacijent i loyalty račun) povezuju se navigacijama i snimaju jednim `SaveChangesAsync`, bez `BeginTransaction`, jer InMemory baza u testovima ne podržava transakcije.
   - soft delete je UPDATE, pa FK `Restrict` ne štiti od brisanja: provjera "u upotrebi" (409) uvijek ide u Delete handler.
 - Frontend:
