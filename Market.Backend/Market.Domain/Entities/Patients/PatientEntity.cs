@@ -1,12 +1,8 @@
 ﻿using Market.Domain.Common;
 using Market.Domain.Entities.Identity;
 using Market.Domain.Entities.Loyalty;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Market.Domain.Entities.Patients;
-
 
 /// <summary>
 /// Patient profile, 1:1 with a user account (MarketUser with Role.Patient).
@@ -25,5 +21,8 @@ public sealed class PatientEntity : BaseEntity
     public static class Constraints
     {
         public const int PhoneMaxLength = 20;
+        public const int PhoneMinDigits = 8;
+        public const int PhoneMaxDigits = 15;
+        public const int MaxAgeYears = 120;
     }
 }
