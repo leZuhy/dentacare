@@ -56,7 +56,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - kod brisanja povezanih entiteta s `Restrict` prvo se brišu djeca, pa roditelj;
   - ruta kontrolera `api/<ime-u-mnozini>` malim slovima s crticom (npr. `api/service-categories`); `[Authorize(Policy = ...)]` na klasi kad sve akcije imaju istu ulogu;
   - referentni podaci idu u `StaticDataSeeder` (`HasData`, fiksni Id, `SeedDateUtc`), demo podaci u `DynamicDataSeeder`.
-    - svaki kontroler ima `[Authorize(Policy = ...)]`; integracijski test `List_AsNonAdmin_Returns403` je obavezan za svaki novi admin kontroler.
+  - svaki kontroler ima `[Authorize(Policy = ...)]`, osim `PublicCatalogController` (`[AllowAnonymous]`, ruta `api/public`): javni podaci se vraćaju kroz posebne upite i DTO-e (samo aktivne usluge, stomatolozi s aktivnim nalogom, bez emaila), a admin endpointi ostaju admin-only; integracijski test `List_AsNonAdmin_Returns403` je obavezan za svaki novi admin kontroler.
   - zapisi koji moraju nastati zajedno (npr. korisnik, pacijent i loyalty račun) povezuju se navigacijama i snimaju jednim `SaveChangesAsync`, bez `BeginTransaction`, jer InMemory baza u testovima ne podržava transakcije.
   - soft delete je UPDATE, pa FK `Restrict` ne štiti od brisanja: provjera "u upotrebi" (409) uvijek ide u Delete handler.
 - Frontend:
@@ -67,7 +67,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - sav tekst za korisnika kroz prevode u `bs.json` i `en.json`;
   - admin meni: KATALOG (šifarnici), KLINIKA (stomatolozi, kasnije termini), SISTEM.
     - granice validacije (dužina, min, max, korak) postoje i u `Entity.Constraints` na backendu i u formi na frontendu, pa se mijenjaju na oba mjesta;
-  - novi validator ide u `AppValidators` (`core/forms/validators.ts`), uz red u `validation-messages.ts` i ključ u `bs.json` i `en.json`.
+  - novi validator ide u `AppValidators` (`core/forms/validators.ts`), uz red u `validation-messages.ts` i ključ u `bs.json` i `en.json`;
+  - javne liste (npr. `/services`, `/dentists`) čuvaju filtere i stranicu u URL-u: `queryParamMap` je jedini izvor istine, promjena filtera ide kroz `router.navigate` (`queryParamsHandling: 'merge'`, stranica se vraća na 1, default vrijednost se briše iz URL-a), a `goToPage`/`changePageSize` mijenjaju URL umjesto direktnog učitavanja. Vrijednosti iz URL-a se provjeravaju (`public-catalog-query-params.ts`) i neispravne se zamijene defaultom prije slanja serveru.
 
 ## Način rada (git)
 

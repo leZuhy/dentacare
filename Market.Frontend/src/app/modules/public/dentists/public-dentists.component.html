@@ -1,0 +1,89 @@
+<div class="catalog-page">
+  <h1 class="page-title">
+    <mat-icon>groups</mat-icon>
+    {{ 'PUBLIC.DENTISTS.TITLE' | translate }}
+  </h1>
+  <p class="intro">{{ 'PUBLIC.DENTISTS.INTRO' | translate }}</p>
+
+  <!-- Filters: every change goes to the URL (see the component) -->
+  <form class="filters" [formGroup]="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'PUBLIC.DENTISTS.SEARCH' | translate }}</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        formControlName="search"
+        [maxlength]="limits.searchMaxLength"
+        [placeholder]="'PUBLIC.DENTISTS.SEARCH_PLACEHOLDER' | translate"
+      />
+      <mat-error><app-fit-field-error [control]="filters.controls.search" /></mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'PUBLIC.DENTISTS.SPECIALIZATION' | translate }}</mat-label>
+      <mat-select formControlName="specializationId">
+        <mat-option [value]="null">{{ 'PUBLIC.DENTISTS.ALL_SPECIALIZATIONS' | translate }}</mat-option>
+        @for (specialization of specializations; track specialization.id) {
+          <mat-option [value]="specialization.id">{{ specialization.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button type="button" class="clear-button" (click)="clearFilters()" [disabled]="!hasActiveFilters">
+      <mat-icon>filter_alt_off</mat-icon>
+      {{ 'PUBLIC.CATALOG.CLEAR_FILTERS' | translate }}
+    </button>
+  </form>
+
+  <!-- States: error → first load → empty → cards -->
+  @if (errorMessage) {
+    <mat-card appearance="outlined" class="state-card">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h2>{{ 'PUBLIC.CATALOG.ERROR_TITLE' | translate }}</h2>
+      <p>{{ errorMessage }}</p>
+      <button mat-flat-button type="button" (click)="loadPagedData()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'PUBLIC.CATALOG.RETRY' | translate }}
+      </button>
+    </mat-card>
+  } @else if (isLoading && items.length === 0) {
+    <div class="loading" aria-live="polite">
+      <mat-spinner diameter="48"></mat-spinner>
+      <span>{{ 'PUBLIC.CATALOG.LOADING' | translate }}</span>
+    </div>
+  } @else if (items.length === 0) {
+    <mat-card appearance="outlined" class="state-card">
+      <mat-icon>search_off</mat-icon>
+      <h2>{{ 'PUBLIC.DENTISTS.EMPTY_TITLE' | translate }}</h2>
+      <p>{{ 'PUBLIC.CATALOG.EMPTY_TEXT' | translate }}</p>
+      @if (hasActiveFilters) {
+        <button mat-stroked-button type="button" (click)="clearFilters()">
+          <mat-icon>filter_alt_off</mat-icon>
+          {{ 'PUBLIC.CATALOG.CLEAR_FILTERS' | translate }}
+        </button>
+      }
+    </mat-card>
+  } @else {
+    @if (isLoading) {
+      <mat-progress-bar mode="indeterminate" class="reload-bar"></mat-progress-bar>
+    }
+    <div class="card-grid" [class.reloading]="isLoading">
+      @for (dentist of items; track dentist.id) {
+        <mat-card appearance="outlined" class="catalog-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="avatar">person</mat-icon>
+            <mat-card-title>{{ dentist.firstname }} {{ dentist.lastname }}</mat-card-title>
+            <mat-card-subtitle>{{ dentist.specializationName }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            @if (dentist.bio) {
+              <p class="description">{{ dentist.bio }}</p>
+            }
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <app-fit-paginator-bar [vm]="this" />
+  }
+</div>

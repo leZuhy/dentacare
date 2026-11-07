@@ -1,0 +1,120 @@
+<div class="catalog-page">
+  <h1 class="page-title">
+    <mat-icon>medical_services</mat-icon>
+    {{ 'PUBLIC.SERVICES.TITLE' | translate }}
+  </h1>
+  <p class="intro">{{ 'PUBLIC.SERVICES.INTRO' | translate }}</p>
+
+  <!-- Filters: every change goes to the URL (see the component) -->
+  <form class="filters" [formGroup]="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'PUBLIC.SERVICES.SEARCH' | translate }}</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        formControlName="search"
+        [maxlength]="limits.searchMaxLength"
+        [placeholder]="'PUBLIC.SERVICES.SEARCH_PLACEHOLDER' | translate"
+      />
+      <mat-error><app-fit-field-error [control]="filters.controls.search" /></mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'PUBLIC.SERVICES.CATEGORY' | translate }}</mat-label>
+      <mat-select formControlName="categoryId">
+        <mat-option [value]="null">{{ 'PUBLIC.SERVICES.ALL_CATEGORIES' | translate }}</mat-option>
+        @for (category of categories; track category.id) {
+          <mat-option [value]="category.id">{{ category.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'PUBLIC.SERVICES.MAX_PRICE' | translate }}</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="maxPriceBam"
+        [min]="limits.maxPriceMin"
+        [max]="limits.maxPriceMax"
+        step="0.01"
+      />
+      <span matTextSuffix>KM</span>
+      <mat-hint>{{ 'PUBLIC.SERVICES.MAX_PRICE_HINT' | translate }}</mat-hint>
+      <mat-error><app-fit-field-error [control]="filters.controls.maxPriceBam" /></mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'PUBLIC.SERVICES.SORT' | translate }}</mat-label>
+      <mat-select formControlName="sort">
+        @for (option of sortOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button type="button" class="clear-button" (click)="clearFilters()" [disabled]="!hasActiveFilters">
+      <mat-icon>filter_alt_off</mat-icon>
+      {{ 'PUBLIC.CATALOG.CLEAR_FILTERS' | translate }}
+    </button>
+  </form>
+
+  <!-- States: error → first load → empty → cards -->
+  @if (errorMessage) {
+    <mat-card appearance="outlined" class="state-card">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h2>{{ 'PUBLIC.CATALOG.ERROR_TITLE' | translate }}</h2>
+      <p>{{ errorMessage }}</p>
+      <button mat-flat-button type="button" (click)="loadPagedData()">
+        <mat-icon>refresh</mat-icon>
+        {{ 'PUBLIC.CATALOG.RETRY' | translate }}
+      </button>
+    </mat-card>
+  } @else if (isLoading && items.length === 0) {
+    <div class="loading" aria-live="polite">
+      <mat-spinner diameter="48"></mat-spinner>
+      <span>{{ 'PUBLIC.CATALOG.LOADING' | translate }}</span>
+    </div>
+  } @else if (items.length === 0) {
+    <mat-card appearance="outlined" class="state-card">
+      <mat-icon>search_off</mat-icon>
+      <h2>{{ 'PUBLIC.SERVICES.EMPTY_TITLE' | translate }}</h2>
+      <p>{{ 'PUBLIC.CATALOG.EMPTY_TEXT' | translate }}</p>
+      @if (hasActiveFilters) {
+        <button mat-stroked-button type="button" (click)="clearFilters()">
+          <mat-icon>filter_alt_off</mat-icon>
+          {{ 'PUBLIC.CATALOG.CLEAR_FILTERS' | translate }}
+        </button>
+      }
+    </mat-card>
+  } @else {
+    <!-- while the next page loads, the old cards stay visible (no flicker), only faded -->
+    @if (isLoading) {
+      <mat-progress-bar mode="indeterminate" class="reload-bar"></mat-progress-bar>
+    }
+    <div class="card-grid" [class.reloading]="isLoading">
+      @for (service of items; track service.id) {
+        <mat-card appearance="outlined" class="catalog-card">
+          <mat-card-header>
+            <mat-card-title>{{ service.name }}</mat-card-title>
+            <mat-card-subtitle>{{ service.categoryName }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            @if (service.description) {
+              <p class="description">{{ service.description }}</p>
+            }
+          </mat-card-content>
+          <div class="card-footer">
+            <span class="price">{{ service.priceBam | money }}</span>
+            <span class="duration">
+              <mat-icon>schedule</mat-icon>
+              {{ 'PUBLIC.SERVICES.DURATION' | translate: { minutes: service.durationMinutes } }}
+            </span>
+          </div>
+        </mat-card>
+      }
+    </div>
+
+    <app-fit-paginator-bar [vm]="this" />
+  }
+</div>

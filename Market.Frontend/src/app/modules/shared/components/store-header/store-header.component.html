@@ -5,6 +5,18 @@
   </a>
 
   <nav class="store-nav">
+    <a mat-button class="nav-button" routerLink="/services" routerLinkActive="active"
+       [attr.aria-label]="'PUBLIC.NAV.SERVICES' | translate">
+      <mat-icon>medical_services</mat-icon>
+      <span class="nav-label">{{ 'PUBLIC.NAV.SERVICES' | translate }}</span>
+    </a>
+
+    <a mat-button class="nav-button" routerLink="/dentists" routerLinkActive="active"
+       [attr.aria-label]="'PUBLIC.NAV.DENTISTS' | translate">
+      <mat-icon>groups</mat-icon>
+      <span class="nav-label">{{ 'PUBLIC.NAV.DENTISTS' | translate }}</span>
+    </a>
+
     <a mat-button class="nav-button" routerLink="/converter" routerLinkActive="active">
       <mat-icon>currency_exchange</mat-icon>
       <span class="nav-label">{{ 'PUBLIC.NAV.CONVERTER' | translate }}</span>

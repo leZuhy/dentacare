@@ -1,0 +1,109 @@
+// Shared styles of the public catalog pages (/services, /dentists).
+// Used as: @use '../catalog-page';  then  .catalog-page { @include catalog-page.layout; }
+// Built on top of the shop-page mixins.
+@use 'shop-page';
+
+@mixin layout {
+  .catalog-page {
+    @include shop-page.page;
+  }
+
+  .page-title {
+    @include shop-page.page-title;
+    margin-bottom: 8px;
+  }
+
+  .intro {
+    margin: 0 0 24px;
+    color: shop-page.$text-light;
+  }
+
+  // filters next to each other, on a phone one below the other
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0 12px;
+    margin-bottom: 8px;
+
+    mat-form-field {
+      flex: 1 1 180px;
+    }
+
+    .search-field {
+      flex: 2 1 260px;
+    }
+
+    .clear-button {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: stretch;
+
+      mat-form-field,
+      .search-field {
+        flex: none;
+        width: 100%;
+      }
+
+      .clear-button {
+        margin: 0 0 16px;
+      }
+    }
+  }
+
+  // cards: as many columns as fit, one column on a phone
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+    transition: opacity 0.2s;
+
+    &.reloading {
+      opacity: 0.5;
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .catalog-card {
+    display: flex;
+    flex-direction: column;
+
+    mat-card-content {
+      flex: 1;
+    }
+
+    .description {
+      margin: 8px 0 0;
+      color: shop-page.$text-light;
+      white-space: pre-line;
+    }
+  }
+
+  .reload-bar {
+    margin-bottom: 8px;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 48px 0;
+    color: shop-page.$text-light;
+  }
+
+  .state-card {
+    @include shop-page.empty-card;
+
+    .error-icon {
+      color: #c62828;
+    }
+  }
+}
