@@ -1,5 +1,11 @@
-import { AbstractControl, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import {
+  AbstractControl,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+  ValidatorFn,
+} from "@angular/forms";
+import { ErrorStateMatcher } from "@angular/material/core";
 
 /** Najmanja dužina lozinke – isto pravilo kao na backendu (registracija, nova lozinka). */
 export const PASSWORD_MIN_LENGTH = 8;
@@ -44,7 +50,8 @@ export class AppValidators {
       return null;
     }
     const text = String(value).trim();
-    const isAppPath = text.startsWith('/') && !text.startsWith('//') && !text.includes('\\');
+    const isAppPath =
+      text.startsWith("/") && !text.startsWith("//") && !text.includes("\\");
     return isAppPath || isAbsoluteHttpUrl(text) ? null : { urlOrPath: true };
   }
 
@@ -60,7 +67,9 @@ export class AppValidators {
       if (/e/i.test(text)) {
         return { maxDecimals: { max } };
       }
-      const decimals = text.includes('.') ? text.split('.')[1].replace(/0+$/, '').length : 0;
+      const decimals = text.includes(".")
+        ? text.split(".")[1].replace(/0+$/, "").length
+        : 0;
       return decimals <= max ? null : { maxDecimals: { max } };
     };
   }
@@ -130,12 +139,40 @@ export class AppValidators {
   static password(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     // bez trim-a: razmaci su dio lozinke
-    if (value === null || value === undefined || value === '') {
+    if (value === null || value === undefined || value === "") {
       return null;
     }
     const text = String(value);
-    const valid = text.length >= PASSWORD_MIN_LENGTH && /\p{L}/u.test(text) && /\d/.test(text);
+    const valid =
+      text.length >= PASSWORD_MIN_LENGTH &&
+      /\p{L}/u.test(text) &&
+      /\d/.test(text);
     return valid ? null : { password: { minLength: PASSWORD_MIN_LENGTH } };
+  }
+
+  /**
+   * Phone by the backend rule: only digits, spaces and + ( ) / -, + only at the start,
+   * between minDigits and maxDigits digits (spaces and signs don't count).
+   * Error: { phone: { minDigits, maxDigits } }
+   *
+   * Example:
+   *   phone: new FormControl('', { nonNullable: true,
+   *     validators: [Validators.maxLength(20), AppValidators.phone(8, 15)] })
+   */
+  static phone(minDigits: number, maxDigits: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (isEmpty(value)) {
+        return null;
+      }
+      const text = String(value).trim();
+      const digits = (text.match(/[0-9]/g) ?? []).length;
+      const valid =
+        /^\+?[0-9 ()/-]+$/.test(text) &&
+        digits >= minDigits &&
+        digits <= maxDigits;
+      return valid ? null : { phone: { minDigits, maxDigits } };
+    };
   }
 
   /**
@@ -172,7 +209,10 @@ export class AppValidators {
 export class CrossFieldErrorStateMatcher implements ErrorStateMatcher {
   constructor(private readonly groupErrorKey: string) {}
 
-  isErrorState(control: AbstractControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: AbstractControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
     if (!control) {
       return false;
     }
@@ -183,13 +223,17 @@ export class CrossFieldErrorStateMatcher implements ErrorStateMatcher {
 }
 
 function isEmpty(value: unknown): boolean {
-  return value === null || value === undefined || (typeof value === 'string' && value.trim() === '');
+  return (
+    value === null ||
+    value === undefined ||
+    (typeof value === "string" && value.trim() === "")
+  );
 }
 
 function isAbsoluteHttpUrl(text: string): boolean {
   try {
     const url = new URL(text.trim());
-    return url.protocol === 'http:' || url.protocol === 'https:';
+    return url.protocol === "http:" || url.protocol === "https:";
   } catch {
     return false;
   }

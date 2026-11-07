@@ -1,20 +1,32 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { AuthApiService } from '../../../api-services/auth/auth-api.service';
-import { GetMeQueryDto, UpdateMeCommand } from '../../../api-services/auth/auth-api.model';
-import { BaseFormComponent } from '../../../core/components/base-classes/base-form-component';
-import { applyServerErrors } from '../../../core/forms/server-errors';
+import { Component, DestroyRef, inject, OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  Validators,
+} from "@angular/forms";
+import { TranslateService } from "@ngx-translate/core";
+import { AuthApiService } from "../../../api-services/auth/auth-api.service";
+import {
+  GetMeQueryDto,
+  UpdateMeCommand,
+} from "../../../api-services/auth/auth-api.model";
+import { BaseFormComponent } from "../../../core/components/base-classes/base-form-component";
+import { applyServerErrors } from "../../../core/forms/server-errors";
 import {
   AppValidators,
   CrossFieldErrorStateMatcher,
-  PASSWORD_MIN_LENGTH
-} from '../../../core/forms/validators';
-import { getErrorMessage } from '../../../core/interceptors/error-logging-interceptor.service';
-import { AuthFacadeService } from '../../../core/services/auth/auth-facade.service';
-import { ToasterService } from '../../../core/services/toaster.service';
-import { USER_CONSTRAINTS } from '../user-constraints';
+  PASSWORD_MIN_LENGTH,
+} from "../../../core/forms/validators";
+import { getErrorMessage } from "../../../core/interceptors/error-logging-interceptor.service";
+import { AuthFacadeService } from "../../../core/services/auth/auth-facade.service";
+import { ToasterService } from "../../../core/services/toaster.service";
+import { USER_CONSTRAINTS } from "../user-constraints";
+import { UpdateMyPatientProfileCommand } from "../../../api-services/patients/patients-api.model";
+import { PatientsApiService } from "../../../api-services/patients/patients-api.service";
+import { fromDateOnly, toDateOnly } from "../../../core/forms/date-only";
+import { PATIENT_CONSTRAINTS } from "../patient-constraints";
 
 /** Forma (a): lični podaci. Imena kontrola = imena polja API-ja (PUT /api/auth/me). */
 interface ProfileForm {
@@ -32,6 +44,13 @@ interface ChangePasswordForm {
   confirmPassword: FormControl<string>;
 }
 
+/** Forma (c): podaci pacijenta (PUT /api/patients/me) – samo za ulogu Patient. */
+interface PatientForm {
+  phone: FormControl<string>;
+  /** mat-datepicker radi sa JS Date; u "yyyy-MM-dd" se pretvara tek pri slanju */
+  dateOfBirth: FormControl<Date | null>;
+}
+
 /**
  * "Moj profil" – ista stranica za admina (/admin/profile) i kupca (/client/profile).
  * Deklarisana je u AccountModule (vidi account-module.ts).
@@ -44,10 +63,10 @@ interface ChangePasswordForm {
  *     (kao kod refresh-a), pa ovaj korisnik ostaje prijavljen.
  */
 @Component({
-  selector: 'app-my-profile',
+  selector: "app-my-profile",
   standalone: false,
-  templateUrl: './my-profile.component.html',
-  styleUrl: './my-profile.component.scss'
+  templateUrl: "./my-profile.component.html",
+  styleUrl: "./my-profile.component.scss",
 })
 export class MyProfileComponent
   extends BaseFormComponent<GetMeQueryDto, FormGroup<ProfileForm>>
@@ -58,11 +77,14 @@ export class MyProfileComponent
   private toaster = inject(ToasterService);
   private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private patientsApi = inject(PatientsApiService);
 
   private readonly limits = USER_CONSTRAINTS;
   protected readonly passwordMinLength = PASSWORD_MIN_LENGTH;
   /** polje "Ponovite lozinku" je u grešci i kad je greška 'passwordMismatch' na grupi */
-  protected readonly passwordMatcher = new CrossFieldErrorStateMatcher('passwordMismatch');
+  protected readonly passwordMatcher = new CrossFieldErrorStateMatcher(
+    "passwordMismatch",
+  );
 
   // === (b) promjena lozinke ===
   isChangingPassword = false;
@@ -70,26 +92,63 @@ export class MyProfileComponent
 
   readonly passwordForm = new FormGroup<ChangePasswordForm>(
     {
-      currentPassword: new FormControl('', {
+      currentPassword: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.required]
+        validators: [Validators.required],
       }),
-      newPassword: new FormControl('', {
+      newPassword: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.required, AppValidators.password]
+        validators: [Validators.required, AppValidators.password],
       }),
-      confirmPassword: new FormControl('', {
+      confirmPassword: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.required]
-      })
+        validators: [Validators.required],
+      }),
     },
-    { validators: AppValidators.passwordsMatch('newPassword', 'confirmPassword') }
+    {
+      validators: AppValidators.passwordsMatch(
+        "newPassword",
+        "confirmPassword",
+      ),
+    },
   );
 
   ngOnInit(): void {
     this.form = this.createProfileForm();
     this.initForm(true); // profil uvijek postoji → "edit" → loadData()
   }
+
+  // === (c) podaci pacijenta ===
+  protected readonly patientLimits = PATIENT_CONSTRAINTS;
+  isPatient = false;
+  isLoadingPatient = false;
+  isSavingPatient = false;
+  /** true kad je GET /api/patients/me uspio – tek tada se forma prikazuje */
+  patientLoaded = false;
+  patientError: string | null = null;
+
+  /** granice za mat-datepicker: ne u budućnosti, ne starije od maxAgeYears (isto kao backend) */
+  private readonly today = new Date();
+  readonly maxBirthDate = this.today;
+  readonly minBirthDate = new Date(
+    this.today.getFullYear() - PATIENT_CONSTRAINTS.maxAgeYears,
+    this.today.getMonth(),
+    this.today.getDate(),
+  );
+
+  readonly patientForm = new FormGroup<PatientForm>({
+    phone: new FormControl("", {
+      nonNullable: true,
+      validators: [
+        Validators.maxLength(PATIENT_CONSTRAINTS.phoneMaxLength),
+        AppValidators.phone(
+          PATIENT_CONSTRAINTS.phoneMinDigits,
+          PATIENT_CONSTRAINTS.phoneMaxDigits,
+        ),
+      ],
+    }),
+    dateOfBirth: new FormControl<Date | null>(null),
+  });
 
   // === (a) profil ===
 
@@ -106,12 +165,16 @@ export class MyProfileComponent
           this.form.reset({
             firstname: me.firstname,
             lastname: me.lastname,
-            address: me.address ?? '',
-            city: me.city ?? ''
+            address: me.address ?? "",
+            city: me.city ?? "",
           });
+          this.isPatient = me.role === "Patient";
+          if (this.isPatient) {
+            this.loadPatientProfile();
+          }
           this.stopLoading();
         },
-        error: (err) => this.stopLoading(getErrorMessage(err))
+        error: (err) => this.stopLoading(getErrorMessage(err)),
       });
   }
 
@@ -130,7 +193,7 @@ export class MyProfileComponent
       lastname: value.lastname.trim(),
       // prazno polje → null (adresa i grad nisu obavezni)
       address: value.address.trim() || null,
-      city: value.city.trim() || null
+      city: value.city.trim() || null,
     };
 
     this.startLoading();
@@ -139,9 +202,9 @@ export class MyProfileComponent
         this.stopLoading();
         // snimljeno → forma je ponovo "čista", dugme "Sačuvaj" se gasi do sljedeće izmjene
         this.form.markAsPristine();
-        this.toaster.success(this.translate.instant('ACCOUNT.PROFILE.SAVED'));
+        this.toaster.success(this.translate.instant("ACCOUNT.PROFILE.SAVED"));
       },
-      error: (err) => this.stopLoading(applyServerErrors(this.form, err))
+      error: (err) => this.stopLoading(applyServerErrors(this.form, err)),
     });
   }
 
@@ -163,39 +226,108 @@ export class MyProfileComponent
     this.passwordError = null;
 
     this.auth
-      .changePassword({ currentPassword: value.currentPassword, newPassword: value.newPassword })
+      .changePassword({
+        currentPassword: value.currentPassword,
+        newPassword: value.newPassword,
+      })
       .subscribe({
         next: () => {
           this.isChangingPassword = false;
           formDirective.resetForm();
-          this.toaster.success(this.translate.instant('ACCOUNT.CHANGE_PASSWORD.SUCCESS'), 5000);
+          this.toaster.success(
+            this.translate.instant("ACCOUNT.CHANGE_PASSWORD.SUCCESS"),
+            5000,
+          );
         },
         error: (err) => {
           this.isChangingPassword = false;
           // pogrešna trenutna lozinka → 400 na "currentPassword" → poruka ispod tog polja
           this.passwordError = applyServerErrors(this.passwordForm, err);
-        }
+        },
       });
+  }
+
+  // === (c) podaci pacijenta ===
+
+  loadPatientProfile(): void {
+    this.isLoadingPatient = true;
+    this.patientError = null;
+
+    this.patientsApi
+      .getMyProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (profile) => {
+          this.patientForm.reset({
+            phone: profile.phone ?? "",
+            dateOfBirth: profile.dateOfBirth
+              ? fromDateOnly(profile.dateOfBirth)
+              : null,
+          });
+          this.patientLoaded = true;
+          this.isLoadingPatient = false;
+        },
+        error: (err) => {
+          this.isLoadingPatient = false;
+          this.patientError = getErrorMessage(err);
+        },
+      });
+  }
+
+  savePatientProfile(): void {
+    this.patientForm.markAllAsTouched();
+    if (this.patientForm.invalid || this.isSavingPatient) {
+      return;
+    }
+
+    const value = this.patientForm.getRawValue();
+    const command: UpdateMyPatientProfileCommand = {
+      // prazno polje → null (briše vrijednost na backendu)
+      phone: value.phone.trim() || null,
+      dateOfBirth: value.dateOfBirth ? toDateOnly(value.dateOfBirth) : null,
+    };
+
+    this.isSavingPatient = true;
+    this.patientError = null;
+
+    this.patientsApi.updateMyProfile(command).subscribe({
+      next: () => {
+        this.isSavingPatient = false;
+        this.patientForm.markAsPristine();
+        this.toaster.success(this.translate.instant("ACCOUNT.PATIENT.SAVED"));
+      },
+      error: (err) => {
+        this.isSavingPatient = false;
+        // 400 sa greškom na "phone" / "dateOfBirth" → poruka ispod tog polja
+        this.patientError = applyServerErrors(this.patientForm, err);
+      },
+    });
   }
 
   private createProfileForm(): FormGroup<ProfileForm> {
     return new FormGroup<ProfileForm>({
-      firstname: new FormControl('', {
+      firstname: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.required, Validators.maxLength(this.limits.firstnameMaxLength)]
+        validators: [
+          Validators.required,
+          Validators.maxLength(this.limits.firstnameMaxLength),
+        ],
       }),
-      lastname: new FormControl('', {
+      lastname: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.required, Validators.maxLength(this.limits.lastnameMaxLength)]
+        validators: [
+          Validators.required,
+          Validators.maxLength(this.limits.lastnameMaxLength),
+        ],
       }),
-      address: new FormControl('', {
+      address: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.maxLength(this.limits.addressMaxLength)]
+        validators: [Validators.maxLength(this.limits.addressMaxLength)],
       }),
-      city: new FormControl('', {
+      city: new FormControl("", {
         nonNullable: true,
-        validators: [Validators.maxLength(this.limits.cityMaxLength)]
-      })
+        validators: [Validators.maxLength(this.limits.cityMaxLength)],
+      }),
     });
   }
 }

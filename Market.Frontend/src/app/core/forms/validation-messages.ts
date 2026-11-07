@@ -1,4 +1,4 @@
-import { ValidationErrors } from '@angular/forms';
+import { ValidationErrors } from "@angular/forms";
 
 /**
  * Poruka za grešku validacije:
@@ -18,25 +18,44 @@ type MessageFactory = (error: any) => ValidationMessage;
  * Novi validator = nova linija ovdje + ključ u bs.json i en.json.
  */
 const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
-  required: () => ({ key: 'VALIDATION.REQUIRED' }),
-  email: () => ({ key: 'VALIDATION.EMAIL' }),
-  minlength: (e) => ({ key: 'VALIDATION.MIN_LENGTH', params: { min: e.requiredLength } }),
-  maxlength: (e) => ({ key: 'VALIDATION.MAX_LENGTH', params: { max: e.requiredLength } }),
-  min: (e) => ({ key: 'VALIDATION.MIN_VALUE', params: { min: e.min } }),
-  max: (e) => ({ key: 'VALIDATION.MAX_VALUE', params: { max: e.max } }),
-  pattern: () => ({ key: 'VALIDATION.PATTERN' }),
+  required: () => ({ key: "VALIDATION.REQUIRED" }),
+  email: () => ({ key: "VALIDATION.EMAIL" }),
+  minlength: (e) => ({
+    key: "VALIDATION.MIN_LENGTH",
+    params: { min: e.requiredLength },
+  }),
+  maxlength: (e) => ({
+    key: "VALIDATION.MAX_LENGTH",
+    params: { max: e.requiredLength },
+  }),
+  min: (e) => ({ key: "VALIDATION.MIN_VALUE", params: { min: e.min } }),
+  max: (e) => ({ key: "VALIDATION.MAX_VALUE", params: { max: e.max } }),
+  pattern: () => ({ key: "VALIDATION.PATTERN" }),
   // AppValidators (core/forms/validators.ts)
-  integer: () => ({ key: 'VALIDATION.INTEGER' }),
-  url: () => ({ key: 'VALIDATION.URL' }),
-  urlOrPath: () => ({ key: 'VALIDATION.URL_OR_PATH' }),
-  maxDecimals: (e) => ({ key: 'VALIDATION.MAX_DECIMALS', params: { max: e.max } }),
-  multipleOf: (e) => ({ key: 'VALIDATION.MULTIPLE_OF', params: { step: e.step } }),
-  dateRange: () => ({ key: 'VALIDATION.DATE_RANGE' }),
-  timeRange: () => ({ key: 'VALIDATION.TIME_RANGE' }),
-  password: (e) => ({ key: 'VALIDATION.PASSWORD', params: { min: e.minLength } }),
-  passwordMismatch: () => ({ key: 'VALIDATION.PASSWORD_MATCH' }),
+  integer: () => ({ key: "VALIDATION.INTEGER" }),
+  url: () => ({ key: "VALIDATION.URL" }),
+  urlOrPath: () => ({ key: "VALIDATION.URL_OR_PATH" }),
+  maxDecimals: (e) => ({
+    key: "VALIDATION.MAX_DECIMALS",
+    params: { max: e.max },
+  }),
+  multipleOf: (e) => ({
+    key: "VALIDATION.MULTIPLE_OF",
+    params: { step: e.step },
+  }),
+  dateRange: () => ({ key: "VALIDATION.DATE_RANGE" }),
+  timeRange: () => ({ key: "VALIDATION.TIME_RANGE" }),
+  password: (e) => ({
+    key: "VALIDATION.PASSWORD",
+    params: { min: e.minLength },
+  }),
+  phone: (e) => ({
+    key: "VALIDATION.PHONE_DIGITS",
+    params: { min: e.minDigits, max: e.maxDigits },
+  }),
+  passwordMismatch: () => ({ key: "VALIDATION.PASSWORD_MATCH" }),
   // mat-datepicker: tekst u polju nije datum
-  matDatepickerParse: () => ({ key: 'VALIDATION.DATE' }),
+  matDatepickerParse: () => ({ key: "VALIDATION.DATE" }),
 };
 
 /**
@@ -50,15 +69,15 @@ const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
  */
 export function getValidationMessage(
   errors: ValidationErrors | null | undefined,
-  custom: Record<string, string> = {}
+  custom: Record<string, string> = {},
 ): ValidationMessage | null {
   if (!errors) {
     return null;
   }
 
   // greška sa backenda ima prednost: to je ono što je server odbio
-  if (typeof errors['server'] === 'string') {
-    return { text: errors['server'] };
+  if (typeof errors["server"] === "string") {
+    return { text: errors["server"] };
   }
 
   const errorKey = Object.keys(errors)[0];
@@ -71,5 +90,5 @@ export function getValidationMessage(
   }
 
   const factory = DEFAULT_MESSAGES[errorKey];
-  return factory ? factory(errors[errorKey]) : { key: 'VALIDATION.CUSTOM' };
+  return factory ? factory(errors[errorKey]) : { key: "VALIDATION.CUSTOM" };
 }

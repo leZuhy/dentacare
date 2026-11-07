@@ -74,7 +74,9 @@
       "CONFIRM_PASSWORD": "Ponovite lozinku",
       "CURRENT_PASSWORD": "Trenutna lozinka",
       "NEW_PASSWORD": "Nova lozinka",
-      "PASSWORD_HINT": "Najmanje {{min}} znakova, bar jedno slovo i jedna cifra"
+      "PASSWORD_HINT": "Najmanje {{min}} znakova, bar jedno slovo i jedna cifra",
+      "PHONE": "Telefon",
+      "DATE_OF_BIRTH": "Datum rođenja"
     },
     "PROFILE": {
       "TITLE": "Moj profil",
@@ -90,6 +92,15 @@
       "SUBTITLE": "Nakon promjene bićete odjavljeni na ostalim uređajima.",
       "BUTTON": "Promijeni lozinku",
       "SUCCESS": "Lozinka je promijenjena. Ostali uređaji su odjavljeni."
+    },
+    "PATIENT": {
+      "TITLE": "Podaci pacijenta",
+      "SUBTITLE": "Kontakt i datum rođenja za ordinaciju",
+      "PHONE_HINT": "npr. 061 123 456 ili +387 61 123 456",
+      "DOB_HINT": "dd.mm.gggg, npr. 20.04.1995",
+      "DOB_FUTURE": "Datum rođenja ne može biti u budućnosti",
+      "DOB_TOO_OLD": "Datum rođenja ne može biti stariji od 120 godina",
+      "SAVED": "Podaci pacijenta su sačuvani."
     }
   },
   "PUBLIC": {
@@ -439,6 +450,7 @@
     "DATE": "Unesite validan datum",
     "TIME": "Unesite validno vrijeme",
     "PHONE": "Unesite validan broj telefona",
+    "PHONE_DIGITS": "Telefon: {{min}}–{{max}} cifara; dozvoljeni su još razmak i + ( ) / -, a + samo na početku",
     "PASSWORD": "Lozinka mora imati najmanje {{min}} znakova, bar jedno slovo i jednu cifru",
     "PASSWORD_MATCH": "Lozinke se ne podudaraju",
     "UNIQUE": "Ova vrijednost već postoji",

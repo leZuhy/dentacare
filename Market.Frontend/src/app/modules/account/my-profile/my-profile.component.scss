@@ -102,3 +102,9 @@ mat-card-content {
   height: 56px;
   color: #c62828;
 }
+// spinner dok se učitavaju podaci pacijenta (kartica (c))
+.card-loading {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+}

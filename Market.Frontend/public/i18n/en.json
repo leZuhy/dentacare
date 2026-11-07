@@ -74,7 +74,9 @@
       "CONFIRM_PASSWORD": "Confirm password",
       "CURRENT_PASSWORD": "Current password",
       "NEW_PASSWORD": "New password",
-      "PASSWORD_HINT": "At least {{min}} characters, including a letter and a digit"
+      "PASSWORD_HINT": "At least {{min}} characters, including a letter and a digit",
+      "PHONE": "Phone",
+      "DATE_OF_BIRTH": "Date of birth"
     },
     "PROFILE": {
       "TITLE": "My profile",
@@ -90,6 +92,15 @@
       "SUBTITLE": "After the change you will be signed out on your other devices.",
       "BUTTON": "Change password",
       "SUCCESS": "Your password has been changed. Your other devices have been signed out."
+    },
+    "PATIENT": {
+      "TITLE": "Patient details",
+      "SUBTITLE": "Contact and date of birth for the clinic",
+      "PHONE_HINT": "e.g. 061 123 456 or +387 61 123 456",
+      "DOB_HINT": "dd.mm.yyyy, e.g. 20.04.1995",
+      "DOB_FUTURE": "Date of birth can't be in the future",
+      "DOB_TOO_OLD": "Date of birth can't be more than 120 years ago",
+      "SAVED": "Patient details saved."
     }
   },
   "PUBLIC": {
@@ -439,6 +450,7 @@
     "DATE": "Please enter a valid date",
     "TIME": "Please enter a valid time",
     "PHONE": "Please enter a valid phone number",
+    "PHONE_DIGITS": "Phone: {{min}}–{{max}} digits; spaces and + ( ) / - are also allowed, + only at the start",
     "PASSWORD": "Password must be at least {{min}} characters long and contain a letter and a digit",
     "PASSWORD_MATCH": "Passwords do not match",
     "UNIQUE": "This value already exists",
