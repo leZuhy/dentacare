@@ -49,6 +49,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - file-scoped namespace (`namespace X;`), bez nekorištenih `using` redova;
   - svaka akcija je folder u `Modules/<Grupa>/<Entitet>/Commands|Queries/<Akcija>/` s Command/Query, Dto, Handler i (za Create/Update) Validator;
   - imena u jednini kao `ListSpecializationQuery`, `ListSpecializationQueryDto`;
+    - komanda koja ništa ne vraća je `IRequest` (handler `IRequestHandler<Command>`, `Task Handle`), ne `IRequest<Unit>` i `return Unit.Value` (starije Update/Delete komande se prebacuju u issueu "Sitnice");
   - svako pravilo validatora ima `.WithMessage(...)` na bosanskom; granice (npr. dužina) dolaze iz `Entity.Constraints`;
   - jedinstveni indeks uvijek s `HasFilter("[IsDeleted] = 0")`; validator za Update isključuje vlastiti red (`x.Id != command.Id`);
   - `AsNoTracking()` samo kod čitanja, nikad u Update i Delete handleru; brisanje je soft delete kroz `Remove`;
@@ -59,6 +60,21 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - svaki kontroler ima `[Authorize(Policy = ...)]`, osim `PublicCatalogController` (`[AllowAnonymous]`, ruta `api/public`): javni podaci se vraćaju kroz posebne upite i DTO-e (samo aktivne usluge, stomatolozi s aktivnim nalogom, bez emaila), a admin endpointi ostaju admin-only; integracijski test `List_AsNonAdmin_Returns403` je obavezan za svaki novi admin kontroler.
   - zapisi koji moraju nastati zajedno (npr. korisnik, pacijent i loyalty račun) povezuju se navigacijama i snimaju jednim `SaveChangesAsync`, bez `BeginTransaction`, jer InMemory baza u testovima ne podržava transakcije.
   - soft delete je UPDATE, pa FK `Restrict` ne štiti od brisanja: provjera "u upotrebi" (409) uvijek ide u Delete handler.
+  - IDOR zaštita: svaki handler koji čita ili mijenja termin, račun, plaćanje, karton ili ocjenu
+    provjerava da zapis pripada trenutnom korisniku (`IAppCurrentUser.UserId`):
+  - pacijent: `x.Patient.UserId == userId` (za račun i ostalo preko `Appointment.Patient`);
+  - stomatolog: `x.Dentist.UserId == userId`;
+  - admin: sve.
+    Provjera ide u sam upit (`Where`), ne poslije učitavanja. Tuđi zapis vraća 404, ne 403,
+    da se ne otkrije da zapis postoji. Id pacijenta ili stomatologa nikad ne dolazi od klijenta
+    (iz body-ja ili rute), nego se nalazi preko `UserId` iz tokena.
+    Za svaki takav endpoint je obavezan integracijski test "tuđi zapis → 404".
+- Termin (Appointment) čuva StartUtc i EndUtc u UTC; trajanje se ne čuva posebno (EndUtc - StartUtc).
+  Statusi: Scheduled = 1, Cancelled = 2, Completed = 3. CancelledAtUtc je popunjen samo za otkazan termin.
+- Pacijent pri zakazivanju bira jednu uslugu. Stomatolog pri završetku može dodati izvedene usluge.
+  Svaki red u AppointmentService je jedan zahvat (ista usluga može biti više puta), cijena se kopira
+  u PriceAtTimeBam, a račun je zbir tih cijena.
+- Stomatolog sa bar jednim terminom u statusu Scheduled ne može se obrisati (409).
 - Frontend:
   - fajlovi `ime.vrsta.ts` (`.service.ts`, `.model.ts`, `.component.ts`);
   - tipovi prate backend DTO-e i imena (`ListSpecializationQuery` → `ListSpecializationRequest`);
