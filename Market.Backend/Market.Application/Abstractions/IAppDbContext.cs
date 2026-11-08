@@ -1,6 +1,7 @@
-﻿using Market.Domain.Entities.Finance;
+﻿using Market.Domain.Entities.Appointments;
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Entities.Clinic;
+using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Loyalty;
 using Market.Domain.Entities.Patients;
 
@@ -25,5 +26,7 @@ public interface IAppDbContext
     DbSet<LoyaltyTierEntity> LoyaltyTiers { get; }
     DbSet<LoyaltyAccountEntity> LoyaltyAccounts { get; }
     DbSet<PatientEntity> Patients { get; }
+    DbSet<AppointmentEntity> Appointments { get; }
+    DbSet<AppointmentServiceEntity> AppointmentServices { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

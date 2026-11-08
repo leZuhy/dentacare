@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.Appointments;
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Entities.Identity;
 using System;
@@ -18,6 +19,7 @@ namespace Market.Domain.Entities.Clinic
 
         public string? Bio { get; set; }
         public ICollection<WorkingHoursEntity> WorkingHours { get; set; } = new List<WorkingHoursEntity>();
+        public ICollection<AppointmentEntity> Appointments { get; set; } = new List<AppointmentEntity>();
 
         public static class Constraints
         {

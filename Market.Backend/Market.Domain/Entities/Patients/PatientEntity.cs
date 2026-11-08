@@ -1,6 +1,7 @@
 ﻿using Market.Domain.Common;
 using Market.Domain.Entities.Identity;
 using Market.Domain.Entities.Loyalty;
+using Market.Domain.Entities.Appointments;
 
 namespace Market.Domain.Entities.Patients;
 
@@ -15,6 +16,7 @@ public sealed class PatientEntity : BaseEntity
     public string? Phone { get; set; }
     public DateOnly? DateOfBirth { get; set; }
     public LoyaltyAccountEntity LoyaltyAccount { get; set; } = null!;
+    public ICollection<AppointmentEntity> Appointments { get; set; } = new List<AppointmentEntity>();
 
 
 

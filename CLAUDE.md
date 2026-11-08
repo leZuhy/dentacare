@@ -20,7 +20,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 
 - Loyalty bodovi: 1 bod po plaćenoj KM. Nivoi: Bronze, Silver, Gold. Popust ne smije preći iznos računa.
 - Plaćanje je simulirano (bez pravog novca). Uz svako plaćanje i povrat čuvaju se valuta, iznos, primijenjeni kurs i RateValidFromUtc. Preračun ide kroz `ICurrencyConverter` iz startera (bazna valuta KM).
-- Cijena usluge se kopira u `AppointmentService` (`PriceAtTime`), da kasnija promjena cjenovnika ne mijenja stare račune.
+- Cijena usluge se kopira u `AppointmentService` (`PriceAtTimeBam`), da kasnija promjena cjenovnika ne mijenja stare račune.
 - Ocjena stomatologa: jedna po terminu, samo za završen termin. Ocjena se može izmijeniti, ali se ne briše.
 - Svi entiteti nasljeđuju `BaseEntity` (`Id`, `IsDeleted` za soft delete, `CreatedAtUtc`, `ModifiedAtUtc`). `DentalService.IsActive` znači "trenutno se ne nudi", a `IsDeleted` znači obrisano.
 - Šifarnik koji koristi drugi entitet (npr. Specialization kod Dentist, ServiceCategory kod DentalService) ne smije se obrisati dok je u upotrebi (409). Neaktivna usluga se računa kao upotreba.
