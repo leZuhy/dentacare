@@ -1,7 +1,8 @@
 ﻿using Market.Application.Abstractions;
-using Market.Domain.Entities.Finance;
+using Market.Domain.Entities.Appointments;
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Entities.Clinic;
+using Market.Domain.Entities.Finance;
 using Market.Domain.Entities.Loyalty;
 using Market.Domain.Entities.Patients;
 
@@ -23,6 +24,8 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<LoyaltyTierEntity> LoyaltyTiers => Set<LoyaltyTierEntity>();
     public DbSet<LoyaltyAccountEntity> LoyaltyAccounts => Set<LoyaltyAccountEntity>();
     public DbSet<PatientEntity> Patients => Set<PatientEntity>();
+    public DbSet<AppointmentEntity> Appointments => Set<AppointmentEntity>();
+    public DbSet<AppointmentServiceEntity> AppointmentServices => Set<AppointmentServiceEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
