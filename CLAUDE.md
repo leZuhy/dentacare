@@ -29,6 +29,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Usluga (DentalService) se ne briše, nego isključuje (`IsActive = false`). Nema Delete endpointa, jer bi obrisana usluga nestala iz starih termina i računa. Naziv usluge je jedinstven u cijeloj ordinaciji. Cijena je veća od 0 KM, najviše 2 decimale, do 10 000 KM. Trajanje je od 15 do 480 minuta, u koracima od 15 (zbog slobodnih termina).
 - Loyalty nivoi (LoyaltyTier): naziv i prag bodova (MinPoints) su jedinstveni. Viši nivo mora imati strogo veći popust (0–40 %, najviše 2 decimale). Početni nivo (0 bodova) se ne briše (409) i prag mu ostaje 0; prepoznaje se po bodovima, ne po nazivu. Nivo koji koristi neki loyalty račun se ne briše (409). Seed: Bronze 0/0 %, Silver 500/5 %, Gold 1500/10 % (StaticDataSeeder).
 - Registracija pravi MarketUser (uloga Patient), Patient i LoyaltyAccount na početnom nivou (0/0 bodova) jednim `SaveChangesAsync`, tj. u jednoj transakciji baze. Telefon i datum rođenja su opcionalni i unose se u profilu pacijenta (#9). PointsBalance se smanjuje pri korištenju bodova, LifetimePoints samo raste i po njemu se određuje nivo. Pacijent bez profila (stariji nalozi, demo seed) dobija ga u `SeedPatientProfilesAsync`.
+- Slobodni termini se računaju iz radnog vremena, koje je u lokalnom vremenu ordinacije (zona iz `Clinic:TimeZoneId` u `appsettings.json`), pa se pretvaraju u UTC. Koraci su 15 minuta od početka intervala, a termin mora cijeli stati u interval. Termin zauzima svaki termin koji nije otkazan (`Status != Cancelled`); dodirivanje je dozvoljeno. Termini u prošlosti se ne nude.
+- Slobodne termine vidi i neprijavljen posjetilac (`GET api/public/free-slots`), a za zakazivanje mora biti prijavljen (#13). Raspon je najviše 14 dana. Lista nema paging, jer nije CRUD lista nego izračun nad ograničenim rasponom.
 
 ## Tehnička pravila (iz uputa predmeta)
 
@@ -75,6 +77,8 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   Svaki red u AppointmentService je jedan zahvat (ista usluga može biti više puta), cijena se kopira
   u PriceAtTimeBam, a račun je zbir tih cijena.
 - Stomatolog sa bar jednim terminom u statusu Scheduled ne može se obrisati (409).
+- trenutno vrijeme se uzima iz `TimeProvider` (DI), nikad `DateTime.UtcNow` u handlerima i servisima, da se može testirati;
+- logika bez baze (npr. `FreeSlotCalculator`) ide u posebnu klasu koja prima sve podatke kao parametre, pa se testira unit testovima.
 - Frontend:
   - fajlovi `ime.vrsta.ts` (`.service.ts`, `.model.ts`, `.component.ts`);
   - tipovi prate backend DTO-e i imena (`ListSpecializationQuery` → `ListSpecializationRequest`);
