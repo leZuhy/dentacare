@@ -54,6 +54,15 @@ public static class DependencyInjection
         // TimeProvider (if used in handlers/services)
         services.AddSingleton<TimeProvider>(TimeProvider.System);
 
+        // Clinic time zone (working hours are local, appointments are UTC)
+        services.AddOptions<ClinicOptions>()
+            .Bind(configuration.GetSection(ClinicOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                o => TimeZoneInfo.TryFindSystemTimeZoneById(o.TimeZoneId, out _),
+                $"{ClinicOptions.SectionName}:{nameof(ClinicOptions.TimeZoneId)} is not a known time zone.")
+            .ValidateOnStart();
+
         // Currency conversion (reads rates from the database)
         services.AddScoped<ICurrencyConverter, CurrencyConverter>();
 
