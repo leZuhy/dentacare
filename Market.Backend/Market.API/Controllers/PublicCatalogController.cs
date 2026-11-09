@@ -2,6 +2,7 @@
 using Market.Application.Modules.Public.Queries.ListSpecializations;
 using Market.Application.Modules.Public.Queries.ListServices;
 using Market.Application.Modules.Public.Queries.ListDentists;
+using Market.Application.Modules.Public.Queries.ListFreeSlots;
 using Market.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +56,19 @@ public sealed class PublicCatalogController(ISender sender) : ControllerBase
     [ProducesResponseType(typeof(PageResult<ListPublicDentistsQueryDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
     public async Task<PageResult<ListPublicDentistsQueryDto>> ListDentists([FromQuery] ListPublicDentistsQuery query, CancellationToken ct)
+    {
+        return await sender.Send(query, ct);
+    }
+
+    /// <summary>
+    /// Free slots (UTC) of a dentist for a service, from fromDate to toDate (local clinic dates, max 14 days).
+    /// Not paged. Anyone can see them; booking requires login (#13).
+    /// </summary>
+    [HttpGet("free-slots")]
+    [ProducesResponseType(typeof(List<ListPublicFreeSlotsQueryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    public async Task<List<ListPublicFreeSlotsQueryDto>> ListFreeSlots([FromQuery] ListPublicFreeSlotsQuery query, CancellationToken ct)
     {
         return await sender.Send(query, ct);
     }
