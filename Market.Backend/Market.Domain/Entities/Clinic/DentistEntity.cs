@@ -18,6 +18,12 @@ namespace Market.Domain.Entities.Clinic
         public SpecializationEntity Specialization { get; set; } = null!;
 
         public string? Bio { get; set; }
+        /// <summary>
+        /// "Version" of this dentist's schedule. Changed on every booking.
+        /// If two bookings for the same dentist happen at the same moment,
+        /// only the first one is saved; the second gets 409 (optimistic concurrency).
+        /// </summary>
+        public Guid ScheduleVersion { get; set; }
         public ICollection<WorkingHoursEntity> WorkingHours { get; set; } = new List<WorkingHoursEntity>();
         public ICollection<AppointmentEntity> Appointments { get; set; } = new List<AppointmentEntity>();
 

@@ -271,4 +271,22 @@ public class PublicFreeSlotsIntegrationTests
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task FreeSlots_MoreThan60DaysAhead_ReturnsEmptyList()
+    {
+        // Arrange: the dentist works on that day, but it is after MaxBookingDaysAhead (60)
+        var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, ClinicZone);
+        var date = DateOnly.FromDateTime(localNow).AddDays(61);
+        var dentistId = await CreateDentistAsync();
+        await AddWorkingHoursAsync(dentistId, date);
+        var serviceId = await AddServiceAsync();
+        var client = _factory.CreateClient();
+
+        // Act
+        var slots = await client.GetFromJsonAsync<List<SlotItem>>(Url(dentistId, serviceId, date));
+
+        // Assert: not an error, just no slots
+        Assert.Empty(slots!);
+    }
 }

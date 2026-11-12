@@ -340,6 +340,10 @@ namespace Market.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("ScheduleVersion")
+                        .IsConcurrencyToken()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("SpecializationId")
                         .HasColumnType("int");
 

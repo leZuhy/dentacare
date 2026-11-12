@@ -18,6 +18,13 @@ namespace Market.Infrastructure.Database.Configurations.Clinic
             builder
                     .Property(x => x.Bio)
                     .HasMaxLength(DentistEntity.Constraints.BioMaxLength);
+
+            // Checked by EF on every UPDATE of a dentist: the row is saved only
+            // if ScheduleVersion in the database is still the one we read.
+            builder
+                    .Property(x => x.ScheduleVersion)
+                    .IsConcurrencyToken();
+
             builder
                     .HasOne(x => x.User)
                     .WithOne()

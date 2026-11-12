@@ -36,9 +36,21 @@ public sealed class ListPublicFreeSlotsQueryHandler(
         // 4. Clinic time zone (validated on startup)
         var timeZone = TimeZoneInfo.FindSystemTimeZoneById(clinicOptions.Value.TimeZoneId);
 
+        // 4b. Not more than MaxBookingDaysAhead days ahead, same rule as booking (#13).
+        //     Slots that can't be booked are not shown.
+        var nowUtc = timeProvider.GetUtcNow().UtcDateTime;
+        var today = DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(nowUtc, timeZone));
+        var lastDate = today.AddDays(clinicOptions.Value.MaxBookingDaysAhead);
+
+        if (request.FromDate > lastDate)
+            return new List<ListPublicFreeSlotsQueryDto>();
+
+        var toDate = request.ToDate ?? request.FromDate;
+        if (toDate > lastDate)
+            toDate = lastDate;
+
         // 5. Busy appointments that touch the range. The UTC bounds are wide on purpose
         //    (one extra day on each side), so they don't depend on converting midnight through the zone.
-        var toDate = request.ToDate ?? request.FromDate;
         var rangeStartUtc = DateTime.SpecifyKind(request.FromDate.AddDays(-1).ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
         var rangeEndUtc = DateTime.SpecifyKind(toDate.AddDays(2).ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
 
@@ -51,10 +63,8 @@ public sealed class ListPublicFreeSlotsQueryHandler(
             .Select(x => new TimeSlot(x.StartUtc, x.EndUtc))
             .ToListAsync(ct);
 
-        // 6. Current time from TimeProvider (testable), never DateTime.UtcNow
-        var nowUtc = timeProvider.GetUtcNow().UtcDateTime;
 
-        // 7. Calculate free slots and map them to DTOs
+        // 6. Calculate free slots and map them to DTOs
         var slots = FreeSlotCalculator.Calculate(
             request.FromDate,
             toDate,
