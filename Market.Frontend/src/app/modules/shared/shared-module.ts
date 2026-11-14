@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import {FitPaginatorBarComponent} from './components/fit-paginator-bar/fit-paginator-bar.component';
-import {materialModules} from './material-modules';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TranslatePipe} from '@ngx-translate/core';
+import { FitPaginatorBarComponent } from './components/fit-paginator-bar/fit-paginator-bar.component';
+import { materialModules } from './material-modules';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 import { FitConfirmDialogComponent } from './components/fit-confirm-dialog/fit-confirm-dialog.component';
-import {DialogHelperService} from './services/dialog-helper.service';
+import { DialogHelperService } from './services/dialog-helper.service';
 import { FitLoadingBarComponent } from './components/fit-loading-bar/fit-loading-bar.component';
 import { FitTableSkeletonComponent } from './components/fit-table-skeleton/fit-table-skeleton.component';
 import { FitFieldErrorComponent } from './components/fit-field-error/fit-field-error.component';
 import { CurrencySelectorComponent } from './components/currency-selector/currency-selector.component';
 import { StoreHeaderComponent } from './components/store-header/store-header.component';
 import { MoneyPipe } from './pipes/money.pipe';
-
-
+import { ClinicTimePipe } from './pipes/clinic-time.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,8 @@ import { MoneyPipe } from './pipes/money.pipe';
     FitFieldErrorComponent,
     CurrencySelectorComponent,
     StoreHeaderComponent,
-    MoneyPipe
+    MoneyPipe,
+    ClinicTimePipe,
   ],
   imports: [
     CommonModule,
@@ -34,12 +34,10 @@ import { MoneyPipe } from './pipes/money.pipe';
     ReactiveFormsModule,
     FormsModule,
     TranslatePipe,
-    ...materialModules
+    ...materialModules,
   ],
-  providers: [
-    DialogHelperService
-  ],
-  exports:[
+  providers: [DialogHelperService],
+  exports: [
     FitPaginatorBarComponent,
     CommonModule,
     ReactiveFormsModule,
@@ -51,7 +49,8 @@ import { MoneyPipe } from './pipes/money.pipe';
     CurrencySelectorComponent,
     StoreHeaderComponent,
     MoneyPipe,
-    materialModules
-  ]
+    materialModules,
+    ClinicTimePipe,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

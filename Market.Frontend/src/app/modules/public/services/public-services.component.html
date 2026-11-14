@@ -53,7 +53,13 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-stroked-button type="button" class="clear-button" (click)="clearFilters()" [disabled]="!hasActiveFilters">
+    <button
+      mat-stroked-button
+      type="button"
+      class="clear-button"
+      (click)="clearFilters()"
+      [disabled]="!hasActiveFilters"
+    >
       <mat-icon>filter_alt_off</mat-icon>
       {{ 'PUBLIC.CATALOG.CLEAR_FILTERS' | translate }}
     </button>
@@ -111,6 +117,12 @@
               {{ 'PUBLIC.SERVICES.DURATION' | translate: { minutes: service.durationMinutes } }}
             </span>
           </div>
+          <mat-card-actions align="end">
+            <a mat-flat-button routerLink="/book" [queryParams]="{ serviceId: service.id }">
+              <mat-icon>event_available</mat-icon>
+              {{ 'PUBLIC.SERVICES.BOOK' | translate }}
+            </a>
+          </mat-card-actions>
         </mat-card>
       }
     </div>

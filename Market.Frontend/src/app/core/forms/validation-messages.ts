@@ -56,6 +56,10 @@ const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
   passwordMismatch: () => ({ key: "VALIDATION.PASSWORD_MATCH" }),
   // mat-datepicker: tekst u polju nije datum
   matDatepickerParse: () => ({ key: "VALIDATION.DATE" }),
+  // mat-datepicker: date before [min] / after [max]
+  matDatepickerMin: () => ({ key: "VALIDATION.DATE_MIN" }),
+  matDatepickerMax: () => ({ key: "VALIDATION.DATE_MAX" }),
+  utcIsoString: () => ({ key: "VALIDATION.UTC_TIME" }),
 };
 
 /**

@@ -9,13 +9,48 @@
 /** Date → "yyyy-MM-dd" */
 export function toDateOnly(date: Date): string {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
 /** "yyyy-MM-dd" → Date (local midnight of that day) */
 export function fromDateOnly(text: string): Date {
-  const [year, month, day] = text.split("-").map(Number);
+  const [year, month, day] = text.split('-').map(Number);
   return new Date(year, month - 1, day);
+}
+
+/**
+ * Formats a moment as "yyyy-MM-dd" in the given time zone.
+ * The en-CA locale writes dates exactly as yyyy-MM-dd, so no manual padding is needed.
+ */
+function formatDateOnlyInZone(moment: Date, timeZoneId: string): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: timeZoneId,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(moment);
+}
+
+/**
+ * Today in the clinic (not in the browser's zone), as local midnight of that day.
+ * Used for mat-datepicker [min] and [max].
+ */
+export function clinicToday(timeZoneId: string): Date {
+  return fromDateOnly(formatDateOnlyInZone(new Date(), timeZoneId));
+}
+
+/**
+ * The clinic calendar day of a UTC time from the server, as "yyyy-MM-dd".
+ * "2026-11-16T23:30:00Z" is already 17.11. in Sarajevo -> "2026-11-17".
+ * Used to group free slots by day.
+ */
+export function utcToClinicDateOnly(utc: string, timeZoneId: string): string {
+  return formatDateOnlyInZone(new Date(utc), timeZoneId);
+}
+
+/** date + n calendar days (local midnight). Month and year roll over by themselves. */
+export function addDays(date: Date, days: number): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }

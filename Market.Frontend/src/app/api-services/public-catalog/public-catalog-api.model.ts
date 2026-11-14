@@ -1,10 +1,10 @@
-import { BasePagedQuery } from "../../core/models/paging/base-paged-query";
-import { PageResult } from "../../core/models/paging/page-result";
+import { BasePagedQuery } from '../../core/models/paging/base-paged-query';
+import { PageResult } from '../../core/models/paging/page-result';
 
 // === QUERIES (READ, anonymous) ===
 
 /** Sort options for public services; sent to the API as text. */
-export type PublicServiceSort = "name" | "priceAsc" | "priceDesc";
+export type PublicServiceSort = 'name' | 'priceAsc' | 'priceDesc';
 
 /**
  * Query parameters for GET api/public/services
@@ -16,7 +16,7 @@ export class ListPublicServicesRequest extends BasePagedQuery {
   categoryId?: number | null;
   /** upper price limit in KM (BAM) */
   maxPriceBam?: number | null;
-  sort: PublicServiceSort = "name";
+  sort: PublicServiceSort = 'name';
 }
 
 /**
@@ -67,4 +67,29 @@ export type ListPublicDentistsResponse = PageResult<ListPublicDentistsQueryDto>;
 export interface PublicLookupDto {
   id: number;
   name: string;
+}
+
+/**
+ * Query parameters for GET api/public/free-slots (anonymous)
+ * Corresponds to: ListPublicFreeSlotsQuery.cs
+ * Not paged: max 14 days (BOOKING_CONSTRAINTS.maxRangeDays).
+ */
+export interface ListPublicFreeSlotsRequest {
+  dentistId: number;
+  dentalServiceId: number;
+  /** first day, local clinic date "yyyy-MM-dd" (DateOnly on the backend) */
+  fromDate: string;
+  /** last day, included, "yyyy-MM-dd"; null = same day as fromDate */
+  toDate?: string | null;
+}
+
+/**
+ * One free slot.
+ * Corresponds to: ListPublicFreeSlotsQueryDto.cs
+ * Times are UTC strings ending with "Z". Show them in clinic time,
+ * and send startUtc back to POST api/appointments exactly as received.
+ */
+export interface ListPublicFreeSlotsQueryDto {
+  startUtc: string;
+  endUtc: string;
 }

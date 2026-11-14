@@ -5,5 +5,10 @@
 // Angular ovim fajlom zamjenjuje environment.ts (vidi "fileReplacements" u angular.json).
 export const environment = {
   production: true,
-  apiUrl: 'https://localhost:7100'
+  apiUrl: 'https://localhost:7100',
+  // Ako se promijeni tamo, promijeni i ovdje (u sva tri environment fajla).
+  clinic: {
+    timeZoneId: 'Europe/Sarajevo',
+    maxBookingDaysAhead: 60,
+  },
 };

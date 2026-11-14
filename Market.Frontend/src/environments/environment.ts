@@ -13,5 +13,10 @@
 export const environment = {
   production: true,
   // TODO: prije deploya postaviti stvarnu adresu produkcijskog API-ja
-  apiUrl: 'https://api.example.com'
+  apiUrl: 'https://api.example.com',
+  // Ako se promijeni tamo, promijeni i ovdje (u sva tri environment fajla).
+  clinic: {
+    timeZoneId: 'Europe/Sarajevo',
+    maxBookingDaysAhead: 60,
+  },
 };
