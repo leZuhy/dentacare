@@ -1,21 +1,23 @@
-import { inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { environment } from "../../../environments/environment";
-import { buildHttpParams } from "../../core/models/build-http-params";
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { buildHttpParams } from '../../core/models/build-http-params';
 import {
   ListPublicDentistsRequest,
   ListPublicDentistsResponse,
+  ListPublicFreeSlotsQueryDto,
+  ListPublicFreeSlotsRequest,
   ListPublicServicesRequest,
   ListPublicServicesResponse,
   PublicLookupDto,
-} from "./public-catalog-api.model";
+} from './public-catalog-api.model';
 
 /**
  * Public catalog (anonymous). One method per endpoint of PublicCatalogController.
  */
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class PublicCatalogApiService {
   private readonly baseUrl = `${environment.apiUrl}/api/public`;
@@ -43,5 +45,12 @@ export class PublicCatalogApiService {
   /** GET api/public/specializations -> specializations with at least one active dentist */
   listSpecializations(): Observable<PublicLookupDto[]> {
     return this.http.get<PublicLookupDto[]>(`${this.baseUrl}/specializations`);
+  }
+
+  /** GET api/public/free-slots?dentistId=&dentalServiceId=&fromDate=&toDate= */
+  listFreeSlots(request: ListPublicFreeSlotsRequest): Observable<ListPublicFreeSlotsQueryDto[]> {
+    return this.http.get<ListPublicFreeSlotsQueryDto[]>(`${this.baseUrl}/free-slots`, {
+      params: buildHttpParams(request),
+    });
   }
 }

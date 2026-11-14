@@ -4,5 +4,10 @@
 export const environment = {
   production: false,
   // Market.API lokalno; ako backend pokrećeš samo na http-u: http://localhost:5100
-  apiUrl: 'https://localhost:7100'
+  apiUrl: 'https://localhost:7100',
+  // Ako se promijeni tamo, promijeni i ovdje (u sva tri environment fajla).
+  clinic: {
+    timeZoneId: 'Europe/Sarajevo',
+    maxBookingDaysAhead: 60,
+  },
 };

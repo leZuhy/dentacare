@@ -6,6 +6,7 @@ import { LandingComponent } from './landing/landing.component';
 import { ConverterComponent } from './converter/converter.component';
 import { PublicServicesComponent } from './services/public-services.component';
 import { PublicDentistsComponent } from './dentists/public-dentists.component';
+import { BookingComponent } from './booking/booking.component';
 
 const routes: Routes = [
   {
@@ -15,31 +16,35 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: LandingComponent
+        component: LandingComponent,
       },
       {
         path: 'converter',
-        component: ConverterComponent
+        component: ConverterComponent,
       },
       {
         path: 'services',
-        component: PublicServicesComponent
+        component: PublicServicesComponent,
       },
       {
         path: 'dentists',
-        component: PublicDentistsComponent
+        component: PublicDentistsComponent,
+      },
+      {
+        path: 'book',
+        component: BookingComponent,
       },
       // kasnije može i ovako:
       // { path: 'about', component: AboutComponent },
       // { path: 'contact', component: ContactComponent },
 
-      { path: '**', redirectTo: '' }
-    ]
-  }
+      { path: '**', redirectTo: '' },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PublicRoutingModule {}

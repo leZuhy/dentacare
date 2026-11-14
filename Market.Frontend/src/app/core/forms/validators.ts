@@ -55,6 +55,21 @@ export class AppValidators {
     return isAppPath || isAbsoluteHttpUrl(text) ? null : { urlOrPath: true };
   }
 
+  /**
+   * UTC time as the API sends and expects it: ISO text that ends with "Z" and is a real moment,
+   * e.g. "2026-11-16T07:00:00Z". Same rule as CreateAppointmentCommandValidator (Kind == Utc).
+   * Error: { utcIsoString: true }
+   */
+  static utcIsoString(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (isEmpty(value)) {
+      return null;
+    }
+    const text = String(value);
+    const looksLikeUtc = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?Z$/.test(text);
+    return looksLikeUtc && !Number.isNaN(Date.parse(text)) ? null : { utcIsoString: true };
+  }
+
   /** Najviše `max` decimala (npr. kurs sa 6 decimala). Greška: { maxDecimals: { max } } */
   static maxDecimals(max: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {

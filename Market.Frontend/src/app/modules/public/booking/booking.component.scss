@@ -1,0 +1,90 @@
+@use '../catalog-page';
+
+@include catalog-page.layout;
+
+.booking-stepper {
+  background: transparent;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.step-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.load-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slot-day {
+  margin: 16px 0;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+}
+
+.slot-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slot {
+  min-width: 80px;
+}
+
+.no-slots {
+  margin: 0;
+  opacity: 0.7;
+}
+.slot.selected {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
+.slot-warning {
+  color: var(--mat-sys-error);
+}
+
+.slot-summary {
+  margin: 16px 0 0;
+}
+.summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 16px;
+  margin: 0 0 16px;
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.price-hint {
+  display: block;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.success-card {
+  max-width: 560px;
+}
+
+.success-icon {
+  color: var(--mat-sys-primary);
+}

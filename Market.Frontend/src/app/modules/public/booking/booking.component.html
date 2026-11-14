@@ -1,0 +1,200 @@
+<div class="catalog-page">
+  <h1 class="page-title">
+    <mat-icon>event_available</mat-icon>
+    {{ 'PUBLIC.BOOKING.TITLE' | translate }}
+  </h1>
+  <p class="intro">{{ 'PUBLIC.BOOKING.INTRO' | translate }}</p>
+
+  @if (booked) {
+    <mat-card appearance="outlined" class="success-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="success-icon">check_circle</mat-icon>
+        <mat-card-title>{{ 'PUBLIC.BOOKING.SUCCESS_TITLE' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <dl class="summary">
+          <dt>{{ 'PUBLIC.BOOKING.SERVICE' | translate }}</dt>
+          <dd>{{ booked.dentalServiceName }}</dd>
+          <dt>{{ 'PUBLIC.BOOKING.DENTIST' | translate }}</dt>
+          <dd>{{ booked.dentistFullName }}</dd>
+          <dt>{{ 'PUBLIC.BOOKING.TIME' | translate }}</dt>
+          <dd>{{ booked.startUtc | clinicTime: 'dateTime' }} – {{ booked.endUtc | clinicTime }}</dd>
+          <dt>{{ 'PUBLIC.BOOKING.PRICE' | translate }}</dt>
+          <dd>{{ booked.priceBam | money }}</dd>
+        </dl>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <a mat-stroked-button routerLink="/">{{ 'PUBLIC.BOOKING.HOME' | translate }}</a>
+        <button mat-flat-button type="button" (click)="startOver()">
+          {{ 'PUBLIC.BOOKING.BOOK_ANOTHER' | translate }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  } @else if (loadError) {
+    <div class="load-error">
+      <p>{{ loadError }}</p>
+      <button mat-stroked-button type="button" (click)="loadLists()">
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (isLoading) {
+    <p>{{ 'COMMON.LOADING' | translate }}</p>
+  } @else {
+    <mat-stepper linear #stepper class="booking-stepper">
+
+      <!-- Step 1: service -->
+      <mat-step [stepControl]="serviceForm" [completed]="serviceForm.valid" [label]="'PUBLIC.BOOKING.STEP_SERVICE' | translate">
+        <form [formGroup]="serviceForm">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'PUBLIC.BOOKING.SERVICE' | translate }}</mat-label>
+            <mat-select formControlName="dentalServiceId">
+              @for (service of services; track service.id) {
+                <mat-option [value]="service.id">
+                  {{ service.name }} · {{ service.priceBam | money }} ·
+                  {{ 'PUBLIC.SERVICES.DURATION' | translate: { minutes: service.durationMinutes } }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error><app-fit-field-error [control]="serviceForm.controls.dentalServiceId" /></mat-error>
+          </mat-form-field>
+        </form>
+
+        <div class="step-actions">
+          <button mat-flat-button type="button" matStepperNext [disabled]="serviceForm.invalid">
+            {{ 'COMMON.NEXT' | translate }}
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 2: dentist -->
+      <mat-step [stepControl]="dentistForm" [completed]="dentistForm.valid" [label]="'PUBLIC.BOOKING.STEP_DENTIST' | translate">
+        <form [formGroup]="dentistForm">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'PUBLIC.BOOKING.DENTIST' | translate }}</mat-label>
+            <mat-select formControlName="dentistId">
+              @for (dentist of dentists; track dentist.id) {
+                <mat-option [value]="dentist.id">
+                  {{ dentist.firstname }} {{ dentist.lastname }} · {{ dentist.specializationName }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error><app-fit-field-error [control]="dentistForm.controls.dentistId" /></mat-error>
+          </mat-form-field>
+        </form>
+
+        <div class="step-actions">
+          <button mat-stroked-button type="button" matStepperPrevious>
+            {{ 'COMMON.BACK' | translate }}
+          </button>
+          <button mat-flat-button type="button" matStepperNext [disabled]="dentistForm.invalid">
+            {{ 'COMMON.NEXT' | translate }}
+          </button>
+        </div>
+      </mat-step>
+      <!-- Step 3: date and slot -->
+      <mat-step [stepControl]="slotForm" [completed]="slotForm.valid" [label]="'PUBLIC.BOOKING.STEP_SLOT' | translate">
+        <form [formGroup]="slotForm">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'PUBLIC.BOOKING.DATE' | translate }}</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date"
+                   [min]="minDate" [max]="maxDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker" />
+            <mat-datepicker #picker />
+            <mat-hint>{{ 'PUBLIC.BOOKING.DATE_HINT' | translate: { days: maxBookingDaysAhead } }}</mat-hint>
+            <mat-error><app-fit-field-error [control]="slotForm.controls.date" /></mat-error>
+          </mat-form-field>
+        </form>
+
+        @if (slotsError) {
+          <div class="load-error">
+            <p>{{ slotsError }}</p>
+            <button mat-stroked-button type="button" (click)="loadSlots()">
+              {{ 'COMMON.RETRY' | translate }}
+            </button>
+          </div>
+        } @else if (isLoadingSlots) {
+          <p>{{ 'COMMON.LOADING' | translate }}</p>
+        } @else {
+          @for (day of days; track day.date.getTime()) {
+            <section class="slot-day">
+              <h3>{{ day.date | date: 'EEEE, d. MMMM' }}</h3>
+              @if (day.slots.length === 0) {
+                <p class="no-slots">{{ 'PUBLIC.BOOKING.NO_SLOTS' | translate }}</p>
+              } @else {
+                <div class="slot-list">
+                  @for (slot of day.slots; track slot.startUtc) {
+                    <button mat-stroked-button type="button" class="slot"
+                            [class.selected]="slot.startUtc === selectedStartUtc"
+                            [attr.aria-pressed]="slot.startUtc === selectedStartUtc"
+                            (click)="selectSlot(slot)">
+                      {{ slot.startUtc | clinicTime }}
+                    </button>
+                  }
+                </div>
+              }
+            </section>
+          }
+        }
+
+        @if (slotNoLongerFree) {
+          <p class="slot-warning">{{ 'PUBLIC.BOOKING.SLOT_NO_LONGER_FREE' | translate }}</p>
+        }
+
+        @if (selectedStartUtc) {
+          <p class="slot-summary">
+            {{ 'PUBLIC.BOOKING.CHOSEN' | translate }}
+            <strong>{{ selectedStartUtc | clinicTime: 'dateTime' }}</strong>
+          </p>
+        }
+
+        <div class="step-actions">
+          <button mat-stroked-button type="button" matStepperPrevious>
+            {{ 'COMMON.BACK' | translate }}
+          </button>
+          <button mat-flat-button type="button" matStepperNext [disabled]="slotForm.invalid">
+            {{ 'COMMON.NEXT' | translate }}
+          </button>
+        </div>
+      </mat-step>
+      <!-- Step 4: confirmation -->
+      <mat-step [label]="'PUBLIC.BOOKING.STEP_CONFIRM' | translate">
+        <dl class="summary">
+          <dt>{{ 'PUBLIC.BOOKING.SERVICE' | translate }}</dt>
+          <dd>{{ selectedService?.name }}</dd>
+          <dt>{{ 'PUBLIC.BOOKING.DENTIST' | translate }}</dt>
+          <dd>{{ selectedDentist?.firstname }} {{ selectedDentist?.lastname }}</dd>
+          <dt>{{ 'PUBLIC.BOOKING.TIME' | translate }}</dt>
+          <dd>{{ selectedStartUtc | clinicTime: 'dateTime' }}</dd>
+          <dt>{{ 'PUBLIC.BOOKING.PRICE' | translate }}</dt>
+          <dd>
+            {{ selectedService?.priceBam | money }}
+            <span class="price-hint">{{ 'PUBLIC.BOOKING.PRICE_HINT' | translate }}</span>
+          </dd>
+        </dl>
+
+        @if (!currentUser.isAuthenticated()) {
+          <p>{{ 'PUBLIC.BOOKING.LOGIN_REQUIRED' | translate }}</p>
+        } @else if (!currentUser.isPatient()) {
+          <p class="slot-warning">{{ 'PUBLIC.BOOKING.PATIENTS_ONLY' | translate }}</p>
+        }
+
+        <div class="step-actions">
+          <button mat-stroked-button type="button" matStepperPrevious>
+            {{ 'COMMON.BACK' | translate }}
+          </button>
+
+          @if (!currentUser.isAuthenticated()) {
+            <a mat-flat-button routerLink="/auth/login" [queryParams]="{ returnUrl: currentUrl }">
+              {{ 'PUBLIC.BOOKING.LOGIN_AND_CONFIRM' | translate }}
+            </a>
+          } @else if (currentUser.isPatient()) {
+            <button mat-flat-button type="button" (click)="confirm()" [disabled]="isSubmitting">
+              {{ 'PUBLIC.BOOKING.CONFIRM' | translate }}
+            </button>
+          }
+        </div>
+      </mat-step>
+
+    </mat-stepper>
+  }
+</div>

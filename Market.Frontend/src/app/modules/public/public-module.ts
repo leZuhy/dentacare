@@ -1,13 +1,13 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 
-import {PublicRoutingModule} from './public-routing-module';
-import {PublicLayoutComponent} from './public-layout/public-layout.component';
-import {LandingComponent} from './landing/landing.component';
-import {SharedModule} from '../shared/shared-module';
-import {ConverterComponent} from './converter/converter.component';
-import {PublicServicesComponent} from './services/public-services.component';
-import {PublicDentistsComponent} from './dentists/public-dentists.component';
-
+import { PublicRoutingModule } from './public-routing-module';
+import { PublicLayoutComponent } from './public-layout/public-layout.component';
+import { LandingComponent } from './landing/landing.component';
+import { SharedModule } from '../shared/shared-module';
+import { ConverterComponent } from './converter/converter.component';
+import { PublicServicesComponent } from './services/public-services.component';
+import { PublicDentistsComponent } from './dentists/public-dentists.component';
+import { BookingComponent } from './booking/booking.component';
 
 @NgModule({
   declarations: [
@@ -15,11 +15,9 @@ import {PublicDentistsComponent} from './dentists/public-dentists.component';
     LandingComponent,
     ConverterComponent,
     PublicServicesComponent,
-    PublicDentistsComponent
+    PublicDentistsComponent,
+    BookingComponent,
   ],
-  imports: [
-    SharedModule,
-    PublicRoutingModule,
-  ]
+  imports: [SharedModule, PublicRoutingModule],
 })
-export class PublicModule { }
+export class PublicModule {}

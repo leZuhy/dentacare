@@ -112,7 +112,8 @@
       "ADMIN_PANEL": "Admin panel",
       "LOGOUT": "Log out",
       "SERVICES": "Services",
-      "DENTISTS": "Dentists"
+      "DENTISTS": "Dentists",
+      "BOOK": "Book an appointment"
     },
     "CATALOG": {
       "CLEAR_FILTERS": "Clear filters",
@@ -135,7 +136,8 @@
       "SORT_PRICE_ASC": "Price: lowest first",
       "SORT_PRICE_DESC": "Price: highest first",
       "DURATION": "{{minutes}} min",
-      "EMPTY_TITLE": "No services match the selected filters"
+      "EMPTY_TITLE": "No services match the selected filters",
+      "BOOK": "Book"
     },
     "DENTISTS": {
       "TITLE": "Dentists",
@@ -145,6 +147,31 @@
       "SPECIALIZATION": "Specialization",
       "ALL_SPECIALIZATIONS": "All",
       "EMPTY_TITLE": "No dentists match the selected filters"
+    },
+    "BOOKING": {
+      "TITLE": "Book an appointment",
+      "INTRO": "Choose a service, a dentist and a free slot. You need to log in to confirm.",
+      "STEP_SERVICE": "Service",
+      "STEP_DENTIST": "Dentist",
+      "STEP_SLOT": "Date and time",
+      "STEP_CONFIRM": "Confirmation",
+      "SERVICE": "Service",
+      "DENTIST": "Dentist",
+      "DATE": "From date",
+      "DATE_HINT": "7 days are shown. You can book up to {{days}} days ahead.",
+      "NO_SLOTS": "No free slots",
+      "SLOT_NO_LONGER_FREE": "The slot you chose is no longer free. Please choose another one.",
+      "CHOSEN": "Chosen slot:",
+      "TIME": "Time",
+      "PRICE": "Price",
+      "PRICE_HINT": "The loyalty discount is applied on the invoice.",
+      "LOGIN_REQUIRED": "To confirm, log in or create an account. Your choice is kept.",
+      "LOGIN_AND_CONFIRM": "Log in and confirm",
+      "PATIENTS_ONLY": "Only patients can book appointments.",
+      "CONFIRM": "Confirm appointment",
+      "SUCCESS_TITLE": "Your appointment is booked",
+      "BOOK_ANOTHER": "Book another",
+      "HOME": "Home"
     }
   },
   "LANDING": {
@@ -493,7 +520,10 @@
     "MAX_DECIMALS": "At most {{max}} decimals",
     "MULTIPLE_OF": "The value must be a multiple of {{step}}",
     "DATE_RANGE": "The end must be after the start",
-    "TIME_RANGE": "The end time must be after the start time"
+    "TIME_RANGE": "The end time must be after the start time",
+    "DATE_MIN": "Datum je prije najranijeg dozvoljenog",
+    "DATE_MAX": "Datum je poslije najkasnijeg dozvoljenog",
+    "UTC_TIME": "Vrijeme mora biti u UTC obliku (završava sa Z)"
   },
   "ERRORS": {
     "GENERIC": "An error occurred. Please try again.",

@@ -112,7 +112,8 @@
       "ADMIN_PANEL": "Admin panel",
       "LOGOUT": "Odjava",
       "SERVICES": "Usluge",
-      "DENTISTS": "Stomatolozi"
+      "DENTISTS": "Stomatolozi",
+      "BOOK": "Zakaži termin"
     },
     "CATALOG": {
       "CLEAR_FILTERS": "Očisti filtere",
@@ -135,7 +136,8 @@
       "SORT_PRICE_ASC": "Cijena: od najniže",
       "SORT_PRICE_DESC": "Cijena: od najviše",
       "DURATION": "{{minutes}} min",
-      "EMPTY_TITLE": "Nema usluga za odabrane filtere"
+      "EMPTY_TITLE": "Nema usluga za odabrane filtere",
+      "BOOK": "Zakaži"
     },
     "DENTISTS": {
       "TITLE": "Stomatolozi",
@@ -145,6 +147,31 @@
       "SPECIALIZATION": "Specijalizacija",
       "ALL_SPECIALIZATIONS": "Sve",
       "EMPTY_TITLE": "Nema stomatologa za odabrane filtere"
+    },
+    "BOOKING": {
+      "TITLE": "Zakazivanje termina",
+      "INTRO": "Izaberite uslugu, stomatologa i slobodan termin. Za potvrdu je potrebna prijava.",
+      "STEP_SERVICE": "Usluga",
+      "STEP_DENTIST": "Stomatolog",
+      "STEP_SLOT": "Datum i termin",
+      "STEP_CONFIRM": "Potvrda",
+      "SERVICE": "Usluga",
+      "DENTIST": "Stomatolog",
+      "DATE": "Od datuma",
+      "DATE_HINT": "Prikazuje se 7 dana. Zakazivanje najviše {{days}} dana unaprijed.",
+      "NO_SLOTS": "Nema slobodnih termina",
+      "SLOT_NO_LONGER_FREE": "Termin koji ste izabrali više nije slobodan. Izaberite drugi.",
+      "CHOSEN": "Izabrani termin:",
+      "TIME": "Termin",
+      "PRICE": "Cijena",
+      "PRICE_HINT": "Loyalty popust se obračunava na računu.",
+      "LOGIN_REQUIRED": "Za potvrdu termina prijavite se ili napravite nalog. Vaš izbor ostaje sačuvan.",
+      "LOGIN_AND_CONFIRM": "Prijavi se i potvrdi",
+      "PATIENTS_ONLY": "Termin mogu zakazati samo pacijenti.",
+      "CONFIRM": "Potvrdi termin",
+      "SUCCESS_TITLE": "Termin je zakazan",
+      "BOOK_ANOTHER": "Zakaži još jedan",
+      "HOME": "Početna"
     }
   },
   "LANDING": {
@@ -493,7 +520,10 @@
     "MAX_DECIMALS": "Najviše {{max}} decimala",
     "MULTIPLE_OF": "Vrijednost mora biti višekratnik od {{step}}",
     "DATE_RANGE": "Kraj mora biti nakon početka",
-    "TIME_RANGE": "Kraj mora biti poslije početka"
+    "TIME_RANGE": "Kraj mora biti poslije početka",
+    "DATE_MIN": "Datum je prije najranijeg dozvoljenog",
+    "DATE_MAX": "Datum je poslije najkasnijeg dozvoljenog",
+    "UTC_TIME": "Vrijeme mora biti u UTC obliku (završava sa Z)"
   },
   "ERRORS": {
     "GENERIC": "Došlo je do greške. Pokušajte ponovo.",

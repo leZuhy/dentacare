@@ -5,16 +5,37 @@
   </a>
 
   <nav class="store-nav">
-    <a mat-button class="nav-button" routerLink="/services" routerLinkActive="active"
-       [attr.aria-label]="'PUBLIC.NAV.SERVICES' | translate">
+    <a
+      mat-button
+      class="nav-button"
+      routerLink="/services"
+      routerLinkActive="active"
+      [attr.aria-label]="'PUBLIC.NAV.SERVICES' | translate"
+    >
       <mat-icon>medical_services</mat-icon>
       <span class="nav-label">{{ 'PUBLIC.NAV.SERVICES' | translate }}</span>
     </a>
 
-    <a mat-button class="nav-button" routerLink="/dentists" routerLinkActive="active"
-       [attr.aria-label]="'PUBLIC.NAV.DENTISTS' | translate">
+    <a
+      mat-button
+      class="nav-button"
+      routerLink="/dentists"
+      routerLinkActive="active"
+      [attr.aria-label]="'PUBLIC.NAV.DENTISTS' | translate"
+    >
       <mat-icon>groups</mat-icon>
       <span class="nav-label">{{ 'PUBLIC.NAV.DENTISTS' | translate }}</span>
+    </a>
+
+    <a
+      mat-button
+      class="nav-button"
+      routerLink="/book"
+      routerLinkActive="active"
+      [attr.aria-label]="'PUBLIC.NAV.BOOK' | translate"
+    >
+      <mat-icon>event_available</mat-icon>
+      <span class="nav-label">{{ 'PUBLIC.NAV.BOOK' | translate }}</span>
     </a>
 
     <a mat-button class="nav-button" routerLink="/converter" routerLinkActive="active">
