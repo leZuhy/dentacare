@@ -113,7 +113,8 @@
       "LOGOUT": "Log out",
       "SERVICES": "Services",
       "DENTISTS": "Dentists",
-      "BOOK": "Book an appointment"
+      "BOOK": "Book an appointment",
+      "MY_APPOINTMENTS": "My appointments"
     },
     "CATALOG": {
       "CLEAR_FILTERS": "Clear filters",
@@ -171,6 +172,7 @@
       "CONFIRM": "Confirm appointment",
       "SUCCESS_TITLE": "Your appointment is booked",
       "BOOK_ANOTHER": "Book another",
+      "MY_APPOINTMENTS": "My appointments",
       "HOME": "Home"
     }
   },
@@ -205,6 +207,38 @@
       "LOGGED_IN_AS": "You are logged in as {{email}}.",
       "DESCRIPTION": "Here you can edit your profile.",
       "LOGOUT": "Log out"
+    },
+    "APPOINTMENTS": {
+      "TITLE": "My appointments",
+      "INTRO": "Your scheduled, cancelled and completed appointments. Times are in the clinic's time zone.",
+      "PERIOD": {
+        "LABEL": "Period",
+        "UPCOMING": "Upcoming",
+        "PAST": "Past",
+        "ALL": "All"
+      },
+      "STATUS_FILTER": "Status",
+      "ALL_STATUSES": "All",
+      "STATUS": {
+        "SCHEDULED": "Scheduled",
+        "CANCELLED": "Cancelled",
+        "COMPLETED": "Completed"
+      },
+      "EMPTY_TITLE": "No appointments",
+      "EMPTY_TEXT": "You have no appointments for the selected filters.",
+      "BOOK": "Book an appointment",
+      "DETAILS_TITLE": "Appointment details",
+      "DENTIST": "Dentist",
+      "TIME": "Time",
+      "CANCELLED_AT": "Cancelled on",
+      "SERVICES": "Services",
+      "SERVICE": "Service",
+      "PRICE": "Price",
+      "TOTAL": "Total",
+      "LOYALTY_NOTE": "The loyalty discount is applied on the invoice.",
+      "NOT_FOUND_TITLE": "Appointment not found",
+      "NOT_FOUND_TEXT": "The appointment does not exist or is not yours.",
+      "BACK_TO_LIST": "Back to my appointments"
     }
   },
   "ADMIN_PANEL": {

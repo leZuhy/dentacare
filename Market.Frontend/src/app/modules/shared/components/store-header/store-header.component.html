@@ -53,6 +53,12 @@
 
       <mat-menu #accountMenu="matMenu">
         <div class="account-email">{{ currentUser.currentUser()?.email }}</div>
+        @if (currentUser.isPatient()) {
+          <a mat-menu-item routerLink="/client/appointments">
+            <mat-icon>event_note</mat-icon>
+            <span>{{ 'PUBLIC.NAV.MY_APPOINTMENTS' | translate }}</span>
+          </a>
+        }
         <a mat-menu-item routerLink="/client/profile">
           <mat-icon>manage_accounts</mat-icon>
           <span>{{ 'PUBLIC.NAV.MY_PROFILE' | translate }}</span>

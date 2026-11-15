@@ -13,6 +13,12 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
+      @if (isPatient()) {
+        <a mat-flat-button routerLink="/client/appointments">
+          <mat-icon>event_note</mat-icon>
+          {{ 'PUBLIC.NAV.MY_APPOINTMENTS' | translate }}
+        </a>
+      }
       <a mat-flat-button routerLink="/client/profile">
         <mat-icon>manage_accounts</mat-icon>
         {{ 'PUBLIC.NAV.MY_PROFILE' | translate }}

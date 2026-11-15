@@ -1,0 +1,42 @@
+// Status chip colors of an appointment, shared by the list and the details page.
+// Used as: @use '../appointment-status';  then  @include appointment-status.chips;
+// HTML: <mat-chip class="status-chip" [class]="'status-' + (status | lowercase)">
+@use '@angular/material' as mat;
+@use '../../public/shop-page';
+
+@mixin chips {
+  .status-chip {
+    font-weight: 600;
+
+    // mat-chip ignores "color" and "background": its colors are set through Material tokens
+    &.status-scheduled {
+      @include mat.chips-overrides(
+        (
+          elevated-container-color: shop-page.$light-blue,
+          label-text-color: shop-page.$primary-blue,
+          outline-color: transparent,
+        )
+      );
+    }
+
+    &.status-cancelled {
+      @include mat.chips-overrides(
+        (
+          elevated-container-color: #eeeeee,
+          label-text-color: #616161,
+          outline-color: transparent,
+        )
+      );
+    }
+
+    &.status-completed {
+      @include mat.chips-overrides(
+        (
+          elevated-container-color: #e8f5e9,
+          label-text-color: #2e7d32,
+          outline-color: transparent,
+        )
+      );
+    }
+  }
+}

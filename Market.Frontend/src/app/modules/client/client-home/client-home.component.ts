@@ -12,5 +12,8 @@ import { CurrentUserService } from '../../../core/services/auth/current-user.ser
   styleUrl: './client-home.component.scss',
 })
 export class ClientHomeComponent {
-  protected currentUser = inject(CurrentUserService).currentUser;
+  private currentUserService = inject(CurrentUserService);
+  protected currentUser = this.currentUserService.currentUser;
+  /** only a patient has "My appointments" */
+  protected isPatient = this.currentUserService.isPatient;
 }
