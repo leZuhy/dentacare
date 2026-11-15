@@ -113,7 +113,8 @@
       "LOGOUT": "Odjava",
       "SERVICES": "Usluge",
       "DENTISTS": "Stomatolozi",
-      "BOOK": "Zakaži termin"
+      "BOOK": "Zakaži termin",
+      "MY_APPOINTMENTS": "Moji termini"
     },
     "CATALOG": {
       "CLEAR_FILTERS": "Očisti filtere",
@@ -171,6 +172,7 @@
       "CONFIRM": "Potvrdi termin",
       "SUCCESS_TITLE": "Termin je zakazan",
       "BOOK_ANOTHER": "Zakaži još jedan",
+      "MY_APPOINTMENTS": "Moji termini",
       "HOME": "Početna"
     }
   },
@@ -205,6 +207,38 @@
       "LOGGED_IN_AS": "Prijavljeni ste kao {{email}}.",
       "DESCRIPTION": "Ovdje možete urediti svoj profil.",
       "LOGOUT": "Odjava"
+    },
+    "APPOINTMENTS": {
+      "TITLE": "Moji termini",
+      "INTRO": "Pregled vaših zakazanih, otkazanih i završenih termina. Vremena su po vremenu ordinacije.",
+      "PERIOD": {
+        "LABEL": "Period",
+        "UPCOMING": "Predstojeći",
+        "PAST": "Prošli",
+        "ALL": "Svi"
+      },
+      "STATUS_FILTER": "Status",
+      "ALL_STATUSES": "Svi",
+      "STATUS": {
+        "SCHEDULED": "Zakazan",
+        "CANCELLED": "Otkazan",
+        "COMPLETED": "Završen"
+      },
+      "EMPTY_TITLE": "Nema termina",
+      "EMPTY_TEXT": "Za odabrane filtere nemate nijedan termin.",
+      "BOOK": "Zakaži termin",
+      "DETAILS_TITLE": "Detalji termina",
+      "DENTIST": "Stomatolog",
+      "TIME": "Termin",
+      "CANCELLED_AT": "Otkazan",
+      "SERVICES": "Usluge",
+      "SERVICE": "Usluga",
+      "PRICE": "Cijena",
+      "TOTAL": "Ukupno",
+      "LOYALTY_NOTE": "Loyalty popust se obračunava na računu.",
+      "NOT_FOUND_TITLE": "Termin nije pronađen",
+      "NOT_FOUND_TEXT": "Termin ne postoji ili nije vaš.",
+      "BACK_TO_LIST": "Nazad na moje termine"
     }
   },
   "ADMIN_PANEL": {

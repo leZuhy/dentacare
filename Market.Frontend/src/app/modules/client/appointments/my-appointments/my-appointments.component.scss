@@ -1,0 +1,110 @@
+@use '../../../public/catalog-page';
+@use '../../../public/shop-page';
+@use '../appointment-status';
+
+@include catalog-page.layout;
+@include appointment-status.chips;
+
+// the toggle is shorter than a form field, so it is moved down to the same line
+.period-toggle {
+  margin: 4px 0 16px;
+}
+
+.state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+// one card under another (a list of dates reads better as a column than as a grid)
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  transition: opacity 0.2s;
+
+  &.reloading {
+    opacity: 0.5;
+  }
+}
+
+.appointment-link {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover .appointment-card,
+  &:focus-visible .appointment-card {
+    border-color: shop-page.$primary-blue;
+  }
+}
+
+.appointment-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  transition: border-color 0.2s;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: shop-page.$primary-blue;
+  }
+
+  .time {
+    font-weight: 600;
+  }
+
+  .services {
+    color: shop-page.$text-light;
+  }
+}
+
+.card-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+
+  .price {
+    font-size: 18px;
+    font-weight: 700;
+    color: shop-page.$primary-blue;
+  }
+
+  .chevron {
+    color: shop-page.$text-light;
+  }
+
+  @media (max-width: 600px) {
+    justify-content: space-between;
+
+    .chevron {
+      display: none;
+    }
+  }
+}

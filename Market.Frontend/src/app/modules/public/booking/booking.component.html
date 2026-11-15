@@ -25,6 +25,9 @@
       </mat-card-content>
       <mat-card-actions align="end">
         <a mat-stroked-button routerLink="/">{{ 'PUBLIC.BOOKING.HOME' | translate }}</a>
+        <a mat-stroked-button routerLink="/client/appointments">
+          {{ 'PUBLIC.BOOKING.MY_APPOINTMENTS' | translate }}
+        </a>
         <button mat-flat-button type="button" (click)="startOver()">
           {{ 'PUBLIC.BOOKING.BOOK_ANOTHER' | translate }}
         </button>
