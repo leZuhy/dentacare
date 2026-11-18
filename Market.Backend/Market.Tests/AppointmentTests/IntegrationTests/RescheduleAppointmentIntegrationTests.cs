@@ -1,5 +1,6 @@
 ﻿using Market.Application.Modules.Auth.Commands.Register;
 using Market.Domain.Entities.Appointments;
+using Market.Application.Modules.Appointments.Queries.ListRescheduleFreeSlots;
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Entities.Clinic;
 using Microsoft.Extensions.DependencyInjection;
@@ -444,5 +445,69 @@ public class RescheduleAppointmentIntegrationTests
         var response = await client.PostAsJsonAsync(RescheduleUrl(1), Body(LocalToUtc(TestDate(), 9, 0)));
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    // ===== GET api/appointments/{id}/free-slots =====
+
+    private static string SlotsUrl(int id, DateOnly date) =>
+        $"api/appointments/{id}/free-slots?fromDate={date:yyyy-MM-dd}";
+
+    [Fact]
+    public async Task FreeSlots_Own_DoesNotBlockItself_AndHidesCurrentTime()
+    {
+        // Arrange: 08:00-10:00, 30 min, own appointment 08:00-08:30.
+        // Slots: 08:00, 08:15, ..., 09:30 = 7; without the current 08:00 = 6.
+        var date = TestDate();
+        var (dentistId, _) = await CreateDentistAsync(date);
+        var (client, email) = await RegisterPatientAsync();
+        var id = await AddAppointmentAsync(email, dentistId, LocalToUtc(date, 8, 0));
+
+        // Act
+        var slots = await client.GetFromJsonAsync<List<ListRescheduleFreeSlotsQueryDto>>(SlotsUrl(id, date));
+
+        // Assert
+        Assert.Equal(6, slots!.Count);
+        Assert.Contains(slots, x => x.StartUtc == LocalToUtc(date, 8, 15));     // overlaps own old time
+        Assert.DoesNotContain(slots, x => x.StartUtc == LocalToUtc(date, 8, 0)); // current time
+    }
+
+    [Fact]
+    public async Task FreeSlots_SomebodyElses_Returns404()
+    {
+        var date = TestDate();
+        var (dentistId, _) = await CreateDentistAsync(date);
+        var (_, emailA) = await RegisterPatientAsync();
+        var (clientB, _) = await RegisterPatientAsync();
+        var idOfA = await AddAppointmentAsync(emailA, dentistId, LocalToUtc(date, 8, 0));
+
+        var response = await clientB.GetAsync(SlotsUrl(idOfA, date));
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task FreeSlots_LessThan24hBefore_Returns409()
+    {
+        var (dentistId, _) = await CreateDentistAsync(TestDate());
+        var (client, email) = await RegisterPatientAsync();
+        var id = await AddAppointmentAsync(email, dentistId, DateTime.UtcNow.AddHours(23));
+
+        var response = await client.GetAsync(SlotsUrl(id, TestDate()));
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task FreeSlots_AsDentist_Returns403()
+    {
+        var date = TestDate();
+        var (dentistId, dentistEmail) = await CreateDentistAsync(date);
+        var (_, patientEmail) = await RegisterPatientAsync();
+        var id = await AddAppointmentAsync(patientEmail, dentistId, LocalToUtc(date, 8, 0));
+        var dentist = await _factory.GetAuthenticatedClientAsync(dentistEmail, DentistPassword);
+
+        var response = await dentist.GetAsync(SlotsUrl(id, date));
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 }

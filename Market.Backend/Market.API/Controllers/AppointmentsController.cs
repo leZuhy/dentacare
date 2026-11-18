@@ -3,6 +3,7 @@ using Market.Application.Modules.Appointments.Commands.Create;
 using Market.Application.Modules.Appointments.Commands.Reschedule;
 using Market.Application.Modules.Appointments.Queries.GetMyById;
 using Market.Application.Modules.Appointments.Queries.ListMy;
+using Market.Application.Modules.Appointments.Queries.ListRescheduleFreeSlots;
 using Market.Shared.Constants;
 using Market.Shared.Dtos;
 using Microsoft.AspNetCore.Http;
@@ -87,5 +88,27 @@ public sealed class AppointmentsController(ISender sender) : ControllerBase
         command.Id = id;
         await sender.Send(command, ct);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Free slots where the logged-in patient can move own appointment (same dentist, same duration).
+    /// </summary>
+    [HttpGet("{id:int}/free-slots")]
+    [Authorize(Policy = PolicyNames.Patient)]
+    [ProducesResponseType(typeof(List<ListRescheduleFreeSlotsQueryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<List<ListRescheduleFreeSlotsQueryDto>>> ListRescheduleFreeSlots(
+        int id, [FromQuery] DateOnly fromDate, [FromQuery] DateOnly? toDate, CancellationToken ct)
+    {
+        return await sender.Send(new ListRescheduleFreeSlotsQuery
+        {
+            Id = id,
+            FromDate = fromDate,
+            ToDate = toDate
+        }, ct);
     }
 }
