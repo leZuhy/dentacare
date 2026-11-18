@@ -20,4 +20,9 @@ public static class PolicyNames
     /// Only users with the Patient role.
     /// </summary>
     public const string Patient = "Patient";
+
+    /// <summary>
+    /// Users with the Patient or the Dentist role.
+    /// </summary>
+    public const string PatientOrDentist = "PatientOrDentist";
 }

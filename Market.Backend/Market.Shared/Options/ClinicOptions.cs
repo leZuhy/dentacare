@@ -21,4 +21,10 @@ public sealed class ClinicOptions
     /// </summary>
     [Range(1, 365)]
     public int MaxBookingDaysAhead { get; init; }
+
+    /// <summary>
+    /// Minimum number of hours before the start when an appointment can still be cancelled (e.g. 24).
+    /// </summary>
+    [Range(1, 168)]
+    public int CancellationMinHoursBefore { get; init; }
 }

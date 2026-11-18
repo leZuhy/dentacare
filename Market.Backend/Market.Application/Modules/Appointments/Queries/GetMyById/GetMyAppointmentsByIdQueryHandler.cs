@@ -23,6 +23,7 @@ public sealed class GetMyAppointmentByIdQueryHandler(
                 EndUtc = x.EndUtc,
                 Status = x.Status,
                 CancelledAtUtc = x.CancelledAtUtc,
+                CancelledByDentist = x.CancelledByUserId == x.Dentist.UserId,
                 DentistFullName = x.Dentist.User.Firstname + " " + x.Dentist.User.Lastname,
                 DentistSpecializationName = x.Dentist.Specialization.Name,
                 Services = x.Services

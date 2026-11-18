@@ -1,8 +1,10 @@
 ﻿using Market.Application.Modules.Appointments.Commands.Create;
+using Market.Application.Modules.Appointments.Queries.GetMyById;
+using Market.Application.Modules.Appointments.Queries.ListMy;
+using Market.Application.Modules.Appointments.Commands.Cancel;
 using Market.Shared.Constants;
 using Market.Shared.Dtos;
-using Market.Application.Modules.Appointments.Queries.ListMy;
-using Market.Application.Modules.Appointments.Queries.GetMyById;
+using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,5 +55,18 @@ public sealed class AppointmentsController(ISender sender) : ControllerBase
     public async Task<ActionResult<GetMyAppointmentByIdQueryDto>> GetMyById(int id, CancellationToken ct)
     {
         return await sender.Send(new GetMyAppointmentByIdQuery { Id = id }, ct);
+    }
+
+    [HttpPost("{id:int}/cancel")]
+    [Authorize(Policy = PolicyNames.PatientOrDentist)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Cancel(int id, CancellationToken ct)
+    {
+        await sender.Send(new CancelAppointmentCommand { Id = id }, ct);
+        return NoContent();
     }
 }

@@ -33,6 +33,9 @@ namespace Market.Infrastructure.Migrations
                     b.Property<DateTime?>("CancelledAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("CancelledByUserId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
@@ -58,6 +61,8 @@ namespace Market.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CancelledByUserId");
 
                     b.HasIndex("DentistId", "StartUtc")
                         .IsUnique()
@@ -881,6 +886,11 @@ namespace Market.Infrastructure.Migrations
 
             modelBuilder.Entity("Market.Domain.Entities.Appointments.AppointmentEntity", b =>
                 {
+                    b.HasOne("Market.Domain.Entities.Identity.MarketUserEntity", "CancelledByUser")
+                        .WithMany()
+                        .HasForeignKey("CancelledByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Market.Domain.Entities.Clinic.DentistEntity", "Dentist")
                         .WithMany("Appointments")
                         .HasForeignKey("DentistId")
@@ -892,6 +902,8 @@ namespace Market.Infrastructure.Migrations
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("CancelledByUser");
 
                     b.Navigation("Dentist");
 

@@ -1,5 +1,6 @@
 ﻿using Market.Domain.Common;
 using Market.Domain.Entities.Clinic;
+using Market.Domain.Entities.Identity;
 using Market.Domain.Entities.Patients;
 
 namespace Market.Domain.Entities.Appointments;
@@ -20,6 +21,9 @@ public sealed class AppointmentEntity : BaseEntity
 
     public AppointmentStatus Status { get; set; } = AppointmentStatus.Scheduled;
     public DateTime? CancelledAtUtc { get; set; }
+
+    public int? CancelledByUserId { get; set; }
+    public MarketUserEntity? CancelledByUser { get; set; }
 
     public ICollection<AppointmentServiceEntity> Services { get; set; } = new List<AppointmentServiceEntity>();
 }

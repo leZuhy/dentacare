@@ -18,6 +18,9 @@ public sealed class GetMyAppointmentByIdQueryDto
     /// <summary>Filled only for a cancelled appointment.</summary>
     public required DateTime? CancelledAtUtc { get; init; }
 
+    /// <summary>True when the dentist cancelled the appointment (false: the patient did, or not cancelled).</summary>
+    public required bool CancelledByDentist { get; init; }
+
     public required string DentistFullName { get; init; }
     public required string DentistSpecializationName { get; init; }
 
