@@ -9,7 +9,7 @@ using System.Text;
 namespace Market.Application.Modules.Appointments.Commands.Create;
 
 public sealed class CreateAppointmentCommandHandler(IAppDbContext ctx,IAppCurrentUser currentUser,
-    TimeProvider timeProvider, IOptions<ClinicOptions> clinicOptions) 
+    AppointmentSlotChecker slotChecker) 
     : IRequestHandler<CreateAppointmentCommand,CreateAppointmentCommandDto>
 {
     public async Task<CreateAppointmentCommandDto> Handle(CreateAppointmentCommand request,CancellationToken ct)
@@ -39,69 +39,9 @@ public sealed class CreateAppointmentCommandHandler(IAppDbContext ctx,IAppCurren
             ?? throw new MarketNotFoundException("Stomatolog nije pronaden");
 
 
-        // 4. Not more than MaxBookingDaysAhead days ahead (local clinic dates)
-        var timeZone = TimeZoneInfo.FindSystemTimeZoneById(clinicOptions.Value.TimeZoneId);
-        var nowUtc = timeProvider.GetUtcNow().UtcDateTime;
-
-        var startDate = DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(request.StartUtc, timeZone));
-        var today = DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(nowUtc, timeZone));
-        var lastDate = today.AddDays(clinicOptions.Value.MaxBookingDaysAhead);
-
-        if (startDate > lastDate)
-            throw new MarketConflictException($"Termin se moze zakazati najvise {clinicOptions.Value.MaxBookingDaysAhead} dana unaprijed");
-
-
-        // 5. End of the appointment, from the service duration
-        var endUtc = request.StartUtc.AddMinutes(service.DurationMinutes);
-
-        // 6. The patient can't have two active appointments at the same time, with any dentist.
-        //    Same overlap rule as everywhere: touching is allowed (9:00-10:00 and 10:00-10:30).
-        var patientIsBusy = await ctx.Appointments
-            .AnyAsync(x => x.PatientId == patientId
-                            && x.Status != AppointmentStatus.Cancelled
-                            && x.StartUtc < endUtc
-                            && request.StartUtc < x.EndUtc, ct);
-
-        if (patientIsBusy)
-            throw new MarketConflictException("Vec imate termin u to vrijeme");
-
-
-        // 7. Check again that the requested start is still a free slot.
-        //    The list the patient saw may be old. Same calculation as GET api/public/free-slots (#12).
-        var workingHours = await ctx.WorkingHours
-            .AsNoTracking()
-            .Where(x => x.DentistId == dentist.Id)
-            .ToListAsync(ct);
-
-
-        // Wide UTC bounds (one extra day on each side), same as in #12
-        var rangeStartUtc = DateTime.SpecifyKind(startDate.AddDays(-1).ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
-        var rangeEndUtc = DateTime.SpecifyKind(startDate.AddDays(2).ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
-
-
-        var busy = await ctx.Appointments
-            .AsNoTracking()
-            .Where(x => x.DentistId == dentist.Id
-                        && x.Status != AppointmentStatus.Cancelled
-                        && x.StartUtc < rangeEndUtc
-                        && x.EndUtc > rangeStartUtc)
-            .Select(x => new TimeSlot(x.StartUtc, x.EndUtc))
-            .ToListAsync(ct);
-
-        var freeSlots = FreeSlotCalculator.Calculate(
-            startDate,
-            startDate,
-            workingHours,
-            busy,
-            service.DurationMinutes,
-            nowUtc,
-            timeZone);
-
-
-        var isFree = freeSlots.Any(x => x.StartUtc == request.StartUtc);
-
-        if (!isFree)
-            throw new MarketConflictException("Termin vise nije slobodan. Izaberite drugi");
+        // 4. Max days ahead, patient not busy, slot still free (shared with rescheduling, #58)
+        var endUtc = await slotChecker.EnsureCanTakeAsync(patientId, dentist.Id, request.StartUtc,
+            service.DurationMinutes, excludeAppointmentId: null, ct);
 
 
         // 8. New appointment with the one chosen service.

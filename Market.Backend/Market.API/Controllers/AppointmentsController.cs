@@ -1,12 +1,13 @@
-﻿using Market.Application.Modules.Appointments.Commands.Create;
+﻿using Market.Application.Modules.Appointments.Commands.Cancel;
+using Market.Application.Modules.Appointments.Commands.Create;
+using Market.Application.Modules.Appointments.Commands.Reschedule;
 using Market.Application.Modules.Appointments.Queries.GetMyById;
 using Market.Application.Modules.Appointments.Queries.ListMy;
-using Market.Application.Modules.Appointments.Commands.Cancel;
 using Market.Shared.Constants;
 using Market.Shared.Dtos;
-using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Market.API.Controllers;
 
@@ -67,6 +68,24 @@ public sealed class AppointmentsController(ISender sender) : ControllerBase
     public async Task<IActionResult> Cancel(int id, CancellationToken ct)
     {
         await sender.Send(new CancelAppointmentCommand { Id = id }, ct);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// The logged-in patient moves own appointment to another free slot (same dentist and services).
+    /// </summary>
+    [HttpPost("{id:int}/reschedule")]
+    [Authorize(Policy = PolicyNames.Patient)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Reschedule(int id, [FromBody] RescheduleAppointmentCommand command, CancellationToken ct)
+    {
+        command.Id = id;
+        await sender.Send(command, ct);
         return NoContent();
     }
 }
