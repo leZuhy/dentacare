@@ -2,6 +2,7 @@
 using Market.Application.Modules.Auth.Commands.Register;
 using Market.Domain.Entities.Appointments;
 using Market.Domain.Entities.Catalog;
+using Market.Domain.Entities.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Headers;
@@ -176,7 +177,9 @@ public class CancelAppointmentIntegrationTests
         var saved = await GetAppointmentAsync(id);
         Assert.Equal(AppointmentStatus.Cancelled, saved.Status);
         Assert.NotNull(saved.CancelledAtUtc);
-        Assert.Equal(await GetPatientUserIdAsync(email), saved.CancelledByUserId);
+        // The patient sees in the details that he cancelled
+        var details = await client.GetFromJsonAsync<GetMyAppointmentByIdQueryDto>($"api/appointments/my/{id}");
+        Assert.Equal(Role.Patient, details!.CancelledByRole);
     }
 
     [Fact]
@@ -200,7 +203,7 @@ public class CancelAppointmentIntegrationTests
 
         // The patient sees in the details that the dentist cancelled
         var details = await patientClient.GetFromJsonAsync<GetMyAppointmentByIdQueryDto>($"api/appointments/my/{id}");
-        Assert.True(details!.CancelledByDentist);
+        Assert.Equal(Role.Dentist, details!.CancelledByRole);
     }
 
     // ===== IDOR: somebody else's appointment → 404 =====
