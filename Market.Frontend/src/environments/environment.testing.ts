@@ -10,5 +10,6 @@ export const environment = {
   clinic: {
     timeZoneId: 'Europe/Sarajevo',
     maxBookingDaysAhead: 60,
+    cancellationMinHoursBefore: 24,
   },
 };

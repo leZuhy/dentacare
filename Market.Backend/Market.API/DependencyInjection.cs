@@ -123,6 +123,11 @@ public static class DependencyInjection
             o.AddPolicy(PolicyNames.Patient, policy => policy
             .RequireAuthenticatedUser()
                 .RequireRole(Role.Patient.ToString()));
+
+            // Patient OR Dentist: RequireRole with more roles means "any of them"
+            o.AddPolicy(PolicyNames.PatientOrDentist, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireRole(Role.Patient.ToString(), Role.Dentist.ToString()));
         });
 
         // Swagger with Bearer auth

@@ -33,5 +33,10 @@ public sealed class AppointmentConfiguration : IEntityTypeConfiguration<Appointm
         builder
             .HasIndex(x => new { x.PatientId, x.StartUtc })
             .HasFilter("[IsDeleted] = 0");
+
+        builder.HasOne(x => x.CancelledByUser)
+            .WithMany()
+            .HasForeignKey(x => x.CancelledByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -238,7 +238,18 @@
       "LOYALTY_NOTE": "The loyalty discount is applied on the invoice.",
       "NOT_FOUND_TITLE": "Appointment not found",
       "NOT_FOUND_TEXT": "The appointment does not exist or is not yours.",
-      "BACK_TO_LIST": "Back to my appointments"
+      "BACK_TO_LIST": "Back to my appointments",
+      "CANCELLED_BY_LABEL": "Cancelled by",
+      "CANCELLED_BY": {
+        "PATIENT": "You",
+        "DENTIST": "Dentist",
+        "ADMIN": "Clinic"
+      },
+      "CANCEL": "Cancel appointment",
+      "CANCEL_TITLE": "Cancel appointment",
+      "CANCEL_MESSAGE": "Are you sure you want to cancel the appointment on {{dateTime}} with {{dentist}}? Cancellation cannot be undone.",
+      "CANCELLED_SUCCESS": "The appointment has been cancelled.",
+      "CANCEL_TOO_LATE": "Cancellation is possible no later than {{hours}} h before the appointment starts."
     }
   },
   "ADMIN_PANEL": {

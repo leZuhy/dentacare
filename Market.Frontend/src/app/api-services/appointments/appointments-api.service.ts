@@ -46,4 +46,13 @@ export class AppointmentsApiService {
   getMyById(id: number): Observable<GetMyAppointmentByIdQueryDto> {
     return this.http.get<GetMyAppointmentByIdQueryDto>(`${this.baseUrl}/my/${id}`);
   }
+
+  /**
+   * POST api/appointments/{id}/cancel (no body) -> 204 (Patient or Dentist, own appointment only).
+   * 404 when it does not exist OR belongs to someone else.
+   * 409 when it is not Scheduled or starts in less than Clinic:CancellationMinHoursBefore hours.
+   */
+  cancel(id: number): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${id}/cancel`, null);
+  }
 }

@@ -18,6 +18,10 @@ public sealed class GetMyAppointmentByIdQueryDto
     /// <summary>Filled only for a cancelled appointment.</summary>
     public required DateTime? CancelledAtUtc { get; init; }
 
+    /// <summary>Role of the user who cancelled (null when not cancelled).</summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public required Role? CancelledByRole { get; init; }
+
     public required string DentistFullName { get; init; }
     public required string DentistSpecializationName { get; init; }
 

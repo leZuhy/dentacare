@@ -36,6 +36,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
 - Pacijent ne smije imati dva termina koja se preklapaju, ni kod različitih stomatologa (409). Dodirivanje je dozvoljeno.
 - Termin se može zakazati najviše `Clinic:MaxBookingDaysAhead` (60) dana unaprijed, po lokalnom datumu ordinacije (409). Free-slots poštuje istu granicu: iza nje vraća praznu listu.
 - Zaštita od istovremenog zakazivanja: `Dentist.ScheduleVersion` je concurrency token. Svako zakazivanje mijenja `ScheduleVersion` u istom `SaveChangesAsync` kao i termin. Ako je neko drugi u međuvremenu zakazao kod istog stomatologa, EF baci `DbUpdateConcurrencyException`, ništa se ne snimi, a handler vraća 409. Unique indeks `(DentistId, StartUtc)` ostaje kao dodatna zaštita. Svaka buduća izmjena termina koja zauzima vrijeme (npr. pomjeranje u #15) mora takođe promijeniti `ScheduleVersion`.
+- Otkazivanje (`POST api/appointments/{id}/cancel`, bez body-ja, 204) smiju pacijent i stomatolog (svako samo svoj termin; tuđi → 404), najkasnije `Clinic:CancellationMinHoursBefore` (24) sati prije početka, i samo termin u statusu Scheduled; inače 409. Pamte se `CancelledAtUtc` i `CancelledByUserId`, a detalji termina vraćaju `CancelledByRole`. Frontend (`environment.clinic.cancellationMinHoursBefore`) samo onemogući dugme; pravilo provjerava server.
 
 ## Tehnička pravila (iz uputa predmeta)
 
