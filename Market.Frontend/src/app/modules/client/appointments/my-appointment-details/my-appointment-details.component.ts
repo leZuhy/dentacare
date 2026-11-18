@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, EMPTY, filter, Subject, switchMap, tap } from 'rxjs';
@@ -14,6 +15,10 @@ import { ToasterService } from '../../../../core/services/toaster.service';
 import { DialogButton } from '../../../shared/models/dialog-config.model';
 import { ClinicTimePipe } from '../../../shared/pipes/clinic-time.pipe';
 import { DialogHelperService } from '../../../shared/services/dialog-helper.service';
+import {
+  RescheduleAppointmentDialogComponent,
+  RescheduleAppointmentDialogData
+} from '../reschedule-appointment-dialog/reschedule-appointment-dialog.component';
 
 /** One hour in milliseconds (JavaScript dates are counted in milliseconds). */
 const HOUR_MS = 60 * 60 * 1000;
@@ -46,6 +51,7 @@ export class MyAppointmentDetailsComponent extends BaseComponent implements OnIn
   private toaster = inject(ToasterService);
   private translate = inject(TranslateService);
   private clinicTime = inject(ClinicTimePipe);
+  private dialog = inject(MatDialog);
 
   appointment: GetMyAppointmentByIdQueryDto | null = null;
   /** true after a 404 (or an id in the URL that is not a number) */
@@ -112,7 +118,7 @@ export class MyAppointmentDetailsComponent extends BaseComponent implements OnIn
     this.load$.next();
   }
 
-  /** The Cancel button is shown only for a Scheduled appointment. */
+  /** The Cancel and Reschedule buttons are shown only for a Scheduled appointment. */
   get canCancel(): boolean {
     return this.appointment?.status === 'Scheduled';
   }
@@ -160,6 +166,45 @@ export class MyAppointmentDetailsComponent extends BaseComponent implements OnIn
         this.isCancelling = false;
         this.toaster.success(this.translate.instant('CLIENT.APPOINTMENTS.CANCELLED_SUCCESS'));
         // the server is the source of truth: reload, so the chip shows "Cancelled"
+        this.load();
+      });
+  }
+
+  /**
+   * Opens the dialog for choosing a new time. The dialog sends POST .../reschedule itself
+   * (so it can stay open on a 409) and closes with true only after a success.
+   */
+  onReschedule(): void {
+    const appointment = this.appointment;
+    if (!appointment || this.isCancelling) {
+      return;
+    }
+
+    // C#: like new RescheduleForm(data).ShowDialog() — data goes in, the result comes back on close
+    this.dialog
+      .open<RescheduleAppointmentDialogComponent, RescheduleAppointmentDialogData, boolean>(
+        RescheduleAppointmentDialogComponent,
+        {
+          data: {
+            appointmentId: appointment.id,
+            startUtc: appointment.startUtc,
+            endUtc: appointment.endUtc,
+            dentistFullName: appointment.dentistFullName
+          },
+          width: '640px',
+          maxWidth: '95vw',
+          // focus the dialog itself, not the date input (no keyboard popping up on a phone)
+          autoFocus: 'dialog'
+        }
+      )
+      .afterClosed()
+      .pipe(
+        filter((moved) => moved === true),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.toaster.success(this.translate.instant('CLIENT.APPOINTMENTS.RESCHEDULE.SUCCESS'));
+        // the server is the source of truth: reload, so the new time is shown
         this.load();
       });
   }

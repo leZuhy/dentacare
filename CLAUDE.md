@@ -101,6 +101,7 @@ Glavni flow: registracija pacijenta, izbor usluge i stomatologa, prikaz slobodni
   - vremena sa servera su UTC stringovi (`startUtc: string`, ne `Date`) i šalju se nazad netaknuta. Prikazuju se pipeom `clinicTime` u zoni ordinacije (`environment.clinic.timeZoneId`), ne Angularovim `date` pipeom (on prima samo pomak, pa griješi oko ljetnog računanja vremena). Kalendarski dan (`DateOnly`) ide kroz `toDateOnly`, nikad `toISOString()`.
   - `environment.clinic` (zona, `maxBookingDaysAhead`) mora odgovarati sekciji `Clinic` u `appsettings.json`, u sva tri environment fajla. Granica raspona free-slots (14 dana) je u `booking-constraints.ts`, kao `FreeSlotCalculator.MaxRangeDays`.
   - greška pri zakazivanju: 409 → poruka servera, povratak na izbor termina i ponovno učitavanje slobodnih termina; 404 → povratak na prvi korak. 401 i 403 rješavaju interceptori.
+  - pomjeranje termina (#58) je modal (`RescheduleAppointmentDialogComponent`, MatDialog) na detaljima termina; dugme "Pomjeri termin" je vidljivo i onemogućeno pod istim uslovima kao "Otkaži termin". Modal dobija podatke kroz `data` (`MAT_DIALOG_DATA`) i sam šalje POST: pri 409 ostaje otvoren, prikaže poruku servera i ponovo učita slotove. `afterClosed()` vraća `true` samo pri uspjehu, pa stranica prikaže poruku i ponovo učita detalje. Grupisanje slotova po danu je u `groupSlotsByDay` (`modules/shared/utils/slot-days.ts`).
 
 ## Način rada (git)
 

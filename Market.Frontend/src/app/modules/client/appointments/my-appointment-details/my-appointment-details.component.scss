@@ -99,6 +99,14 @@
   gap: 4px;
 }
 
+// Reschedule and Cancel next to each other; they wrap on a narrow screen
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .cancel-button:not(:disabled) {
   color: #c62828;
 }
