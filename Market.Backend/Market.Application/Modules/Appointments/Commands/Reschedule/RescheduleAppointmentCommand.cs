@@ -7,7 +7,7 @@ namespace Market.Application.Modules.Appointments.Commands.Reschedule;
 /// Same dentist, same services, same duration. Only the time changes.
 /// Body: { "startUtc": "2026-11-25T09:30:00Z" }
 /// </summary>
-public sealed class RescheduleAppointmentCommand : IRequest<Unit>
+public sealed class RescheduleAppointmentCommand : IRequest
 {
     /// <summary>From the route, not from the body.</summary>
     [JsonIgnore]

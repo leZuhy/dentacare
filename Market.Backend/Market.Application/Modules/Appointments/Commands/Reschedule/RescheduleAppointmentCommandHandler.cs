@@ -7,9 +7,9 @@ namespace Market.Application.Modules.Appointments.Commands.Reschedule;
 
 public sealed class RescheduleAppointmentCommandHandler(IAppDbContext ctx, IAppCurrentUser currentUser,
     TimeProvider timeProvider, IOptions<ClinicOptions> clinicOptions, AppointmentSlotChecker slotChecker)
-    : IRequestHandler<RescheduleAppointmentCommand, Unit>
+    : IRequestHandler<RescheduleAppointmentCommand>
 {
-    public async Task<Unit> Handle(RescheduleAppointmentCommand request, CancellationToken ct)
+    public async Task Handle(RescheduleAppointmentCommand request, CancellationToken ct)
     {
         // 1. Who is moving: always from the access token
         var userId = currentUser.UserId
@@ -67,7 +67,5 @@ public sealed class RescheduleAppointmentCommandHandler(IAppDbContext ctx, IAppC
             // or the unique index (DentistId, StartUtc).
             throw new MarketConflictException("Termin je upravo zauzet. Izaberite drugi.");
         }
-
-        return Unit.Value;
     }
 }
