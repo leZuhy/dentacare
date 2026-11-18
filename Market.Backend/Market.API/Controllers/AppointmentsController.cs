@@ -1,12 +1,14 @@
-﻿using Market.Application.Modules.Appointments.Commands.Create;
+﻿using Market.Application.Modules.Appointments.Commands.Cancel;
+using Market.Application.Modules.Appointments.Commands.Create;
+using Market.Application.Modules.Appointments.Commands.Reschedule;
 using Market.Application.Modules.Appointments.Queries.GetMyById;
 using Market.Application.Modules.Appointments.Queries.ListMy;
-using Market.Application.Modules.Appointments.Commands.Cancel;
+using Market.Application.Modules.Appointments.Queries.ListRescheduleFreeSlots;
 using Market.Shared.Constants;
 using Market.Shared.Dtos;
-using static System.Net.Mime.MediaTypeNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Market.API.Controllers;
 
@@ -68,5 +70,45 @@ public sealed class AppointmentsController(ISender sender) : ControllerBase
     {
         await sender.Send(new CancelAppointmentCommand { Id = id }, ct);
         return NoContent();
+    }
+
+    /// <summary>
+    /// The logged-in patient moves own appointment to another free slot (same dentist and services).
+    /// </summary>
+    [HttpPost("{id:int}/reschedule")]
+    [Authorize(Policy = PolicyNames.Patient)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Reschedule(int id, [FromBody] RescheduleAppointmentCommand command, CancellationToken ct)
+    {
+        command.Id = id;
+        await sender.Send(command, ct);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Free slots where the logged-in patient can move own appointment (same dentist, same duration).
+    /// </summary>
+    [HttpGet("{id:int}/free-slots")]
+    [Authorize(Policy = PolicyNames.Patient)]
+    [ProducesResponseType(typeof(List<ListRescheduleFreeSlotsQueryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<List<ListRescheduleFreeSlotsQueryDto>>> ListRescheduleFreeSlots(
+        int id, [FromQuery] DateOnly fromDate, [FromQuery] DateOnly? toDate, CancellationToken ct)
+    {
+        return await sender.Send(new ListRescheduleFreeSlotsQuery
+        {
+            Id = id,
+            FromDate = fromDate,
+            ToDate = toDate
+        }, ct);
     }
 }

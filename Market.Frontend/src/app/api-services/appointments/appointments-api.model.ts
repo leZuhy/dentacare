@@ -43,7 +43,41 @@ export interface CreateAppointmentCommandDto {
   priceBam: number;
 }
 
+/**
+ * Body for POST api/appointments/{id}/reschedule (204, no response body)
+ * Corresponds to: RescheduleAppointmentCommand.cs
+ * The appointment id goes into the route, not into the body.
+ * Only the time changes: same dentist, same service, same duration.
+ */
+export interface RescheduleAppointmentCommand {
+  /** new start, exactly as GET api/appointments/{id}/free-slots returned it (UTC, ends with "Z") */
+  startUtc: string;
+}
+
 // === QUERIES (READ, Patient only, only the patient's own appointments) ===
+
+/**
+ * Query for GET api/appointments/{id}/free-slots?fromDate=&toDate=
+ * Corresponds to: ListRescheduleFreeSlotsQuery.cs
+ * The id goes into the route. Dentist and duration are taken from the appointment on the server.
+ * Not paged: max 14 days (BOOKING_CONSTRAINTS.maxRangeDays).
+ */
+export interface ListRescheduleFreeSlotsRequest {
+  /** first day, local clinic date "yyyy-MM-dd" (DateOnly on the backend) */
+  fromDate: string;
+  /** last day, included, "yyyy-MM-dd"; null = same day as fromDate */
+  toDate?: string | null;
+}
+
+/**
+ * One free slot for moving the appointment.
+ * Corresponds to: ListRescheduleFreeSlotsQueryDto.cs
+ * UTC strings ending with "Z"; startUtc is sent back to .../reschedule exactly as received.
+ */
+export interface ListRescheduleFreeSlotsQueryDto {
+  startUtc: string;
+  endUtc: string;
+}
 
 /**
  * Query for GET api/appointments/my?period=&status=&paging.page=&paging.pageSize=

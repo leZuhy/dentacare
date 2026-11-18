@@ -1,4 +1,5 @@
 ﻿using Market.Application.Common.Behaviors;
+using Market.Application.Modules.Appointments.Common;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -21,6 +22,9 @@ public static class DependencyInjection
 
         // TimeProvider — if used by handlers
         services.AddSingleton(TimeProvider.System);
+
+        // Shared slot rules for booking and rescheduling (#58)
+        services.AddScoped<AppointmentSlotChecker>();
 
         return services;
     }

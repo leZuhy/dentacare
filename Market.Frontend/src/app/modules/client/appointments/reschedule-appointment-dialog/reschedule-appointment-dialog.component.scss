@@ -1,0 +1,104 @@
+// label on the left, value on the right (same as the details page)
+.summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0 0 8px;
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.muted {
+  margin: 0 0 16px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.date-field {
+  width: 100%;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+// a line with an icon: "no free slots" and errors
+.message {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+
+  &.error {
+    color: var(--mat-sys-error);
+  }
+}
+
+// slots by day: the same look as step 3 of the booking stepper
+.slot-day {
+  margin: 16px 0;
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+}
+
+.slot-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slot {
+  min-width: 80px;
+}
+
+.slot.selected {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
+.no-slots {
+  margin: 0;
+  opacity: 0.7;
+}
+
+// "Change: old time → new time"
+.change-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--mat-sys-surface-container);
+
+  .label {
+    font-weight: 600;
+  }
+
+  .old-time {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+}
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}

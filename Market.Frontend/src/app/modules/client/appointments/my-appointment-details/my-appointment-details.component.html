@@ -104,19 +104,31 @@
         </p>
       </mat-card-content>
 
-      <!-- Only for a Scheduled appointment. Pomjeranje (next issue): the Reschedule button goes here too. -->
+      <!-- Only for a Scheduled appointment. Reschedule and Cancel follow the same 24 h rule. -->
       @if (canCancel) {
         <mat-card-actions align="end" class="actions">
-          <button
-            mat-stroked-button
-            type="button"
-            class="cancel-button"
-            [disabled]="isTooLateToCancel || isCancelling"
-            (click)="onCancel()"
-          >
-            <mat-icon>event_busy</mat-icon>
-            {{ 'CLIENT.APPOINTMENTS.CANCEL' | translate }}
-          </button>
+          <div class="action-buttons">
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="isTooLateToCancel || isCancelling"
+              (click)="onReschedule()"
+            >
+              <mat-icon>edit_calendar</mat-icon>
+              {{ 'CLIENT.APPOINTMENTS.RESCHEDULE.BUTTON' | translate }}
+            </button>
+
+            <button
+              mat-stroked-button
+              type="button"
+              class="cancel-button"
+              [disabled]="isTooLateToCancel || isCancelling"
+              (click)="onCancel()"
+            >
+              <mat-icon>event_busy</mat-icon>
+              {{ 'CLIENT.APPOINTMENTS.CANCEL' | translate }}
+            </button>
+          </div>
 
           @if (isTooLateToCancel) {
             <p class="action-note">

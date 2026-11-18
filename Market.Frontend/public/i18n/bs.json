@@ -249,7 +249,21 @@
       "CANCEL_TITLE": "Otkazivanje termina",
       "CANCEL_MESSAGE": "Da li sigurno želite otkazati termin {{dateTime}} kod stomatologa {{dentist}}? Otkazivanje se ne može poništiti.",
       "CANCELLED_SUCCESS": "Termin je otkazan.",
-      "CANCEL_TOO_LATE": "Otkazivanje je moguće najkasnije {{hours}} h prije početka termina."
+      "CANCEL_TOO_LATE": "Otkazivanje i pomjeranje su mogući najkasnije {{hours}} h prije početka termina.",
+      "RESCHEDULE": {
+        "BUTTON": "Pomjeri termin",
+        "TITLE": "Pomjeranje termina",
+        "CURRENT_TIME": "Trenutno vrijeme",
+        "ONLY_TIME_CHANGES": "Mijenja se samo vrijeme: stomatolog, usluga i trajanje ostaju isti.",
+        "DATE": "Slobodni termini od",
+        "DATE_HINT": "Prikazuje se {{shown}} dana od izabranog datuma, najviše {{max}} dana unaprijed.",
+        "NO_SLOTS_DAY": "Nema slobodnih termina.",
+        "NO_SLOTS_PERIOD": "Nema slobodnih termina od {{from}} do {{to}}. Izaberite drugi datum.",
+        "CHANGE": "Promjena:",
+        "CONFIRM": "Potvrdi pomjeranje",
+        "CLOSE": "Odustani",
+        "SUCCESS": "Termin je pomjeren."
+      }
     }
   },
   "ADMIN_PANEL": {

@@ -8,7 +8,10 @@ import {
   CreateAppointmentCommandDto,
   GetMyAppointmentByIdQueryDto,
   ListMyAppointmentsRequest,
-  ListMyAppointmentsResponse
+  ListMyAppointmentsResponse,
+  ListRescheduleFreeSlotsQueryDto,
+  ListRescheduleFreeSlotsRequest,
+  RescheduleAppointmentCommand
 } from './appointments-api.model';
 
 /**
@@ -54,5 +57,30 @@ export class AppointmentsApiService {
    */
   cancel(id: number): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/${id}/cancel`, null);
+  }
+
+  /**
+   * GET api/appointments/{id}/free-slots?fromDate=&toDate= -> free slots for moving
+   * the logged-in patient's appointment (the appointment does not block itself).
+   * 400 for invalid dates, 404 for a missing or someone else's appointment,
+   * 409 when it is not Scheduled or starts in less than Clinic:CancellationMinHoursBefore hours.
+   */
+  getRescheduleFreeSlots(
+    id: number,
+    request: ListRescheduleFreeSlotsRequest
+  ): Observable<ListRescheduleFreeSlotsQueryDto[]> {
+    return this.http.get<ListRescheduleFreeSlotsQueryDto[]>(`${this.baseUrl}/${id}/free-slots`, {
+      params: buildHttpParams(request),
+    });
+  }
+
+  /**
+   * POST api/appointments/{id}/reschedule -> 204 (Patient only, own appointment only).
+   * 404 when it does not exist OR belongs to someone else.
+   * 409 when the slot is no longer free, the patient is busy at that time, it is too late
+   * (less than CancellationMinHoursBefore hours before the OLD start), etc. The message is in Bosnian.
+   */
+  reschedule(id: number, payload: RescheduleAppointmentCommand): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${id}/reschedule`, payload);
   }
 }

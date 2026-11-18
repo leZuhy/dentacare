@@ -1,0 +1,104 @@
+<h2 mat-dialog-title>{{ 'CLIENT.APPOINTMENTS.RESCHEDULE.TITLE' | translate }}</h2>
+
+<mat-dialog-content>
+  <!-- current (old) time, in the clinic's time zone -->
+  <dl class="summary">
+    <dt>{{ 'CLIENT.APPOINTMENTS.RESCHEDULE.CURRENT_TIME' | translate }}</dt>
+    <dd>{{ data.startUtc | clinicTime: 'dateTime' }} – {{ data.endUtc | clinicTime }}</dd>
+    <dt>{{ 'CLIENT.APPOINTMENTS.DENTIST' | translate }}</dt>
+    <dd>{{ data.dentistFullName }}</dd>
+  </dl>
+  <p class="muted">{{ 'CLIENT.APPOINTMENTS.RESCHEDULE.ONLY_TIME_CHANGES' | translate }}</p>
+
+  <mat-form-field appearance="outline" class="date-field">
+    <mat-label>{{ 'CLIENT.APPOINTMENTS.RESCHEDULE.DATE' | translate }}</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="dateControl"
+           [min]="minDate" [max]="maxDate" />
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-datepicker #picker />
+    <mat-hint>
+      {{ 'CLIENT.APPOINTMENTS.RESCHEDULE.DATE_HINT' | translate: { shown: daysShown, max: maxBookingDaysAhead } }}
+    </mat-hint>
+    <mat-error><app-fit-field-error [control]="dateControl" /></mat-error>
+  </mat-form-field>
+
+  <!-- States: error → loading → nothing free in the whole range → slots by day -->
+  @if (slotsError) {
+    <div class="message error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ slotsError }}</span>
+      <button mat-stroked-button type="button" (click)="loadSlots()">
+        {{ 'COMMON.RETRY' | translate }}
+      </button>
+    </div>
+  } @else if (isLoadingSlots) {
+    <div class="loading" aria-live="polite">
+      <mat-spinner diameter="32"></mat-spinner>
+      <span>{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+  } @else if (shownRange && !hasAnySlot) {
+    <p class="message">
+      <mat-icon>event_busy</mat-icon>
+      <span>
+        {{ 'CLIENT.APPOINTMENTS.RESCHEDULE.NO_SLOTS_PERIOD' | translate: {
+             from: (shownRange.from | date: 'd. M. y.'),
+             to: (shownRange.to | date: 'd. M. y.')
+           } }}
+      </span>
+    </p>
+  } @else {
+    @for (day of days; track day.date.getTime()) {
+      <section class="slot-day">
+        <!-- day.date is local midnight of a calendar day (no time), so DatePipe is fine here -->
+        <h3>{{ day.date | date: 'EEEE, d. MMMM' }}</h3>
+        @if (day.slots.length === 0) {
+          <p class="no-slots">{{ 'CLIENT.APPOINTMENTS.RESCHEDULE.NO_SLOTS_DAY' | translate }}</p>
+        } @else {
+          <div class="slot-list">
+            @for (slot of day.slots; track slot.startUtc) {
+              <button mat-stroked-button type="button" class="slot"
+                      [class.selected]="slot.startUtc === selectedStartUtc"
+                      [attr.aria-pressed]="slot.startUtc === selectedStartUtc"
+                      [disabled]="isSubmitting"
+                      (click)="selectSlot(slot)">
+                {{ slot.startUtc | clinicTime }}
+              </button>
+            }
+          </div>
+        }
+      </section>
+    }
+  }
+
+  <!-- error of the last confirmation (e.g. 409), stays visible while the slots reload -->
+  @if (submitError) {
+    <p class="message error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ submitError }}</span>
+    </p>
+  }
+
+  @if (selectedStartUtc) {
+    <div class="change-summary">
+      <span class="label">{{ 'CLIENT.APPOINTMENTS.RESCHEDULE.CHANGE' | translate }}</span>
+      <span class="old-time">{{ data.startUtc | clinicTime: 'dateTime' }}</span>
+      <mat-icon>arrow_forward</mat-icon>
+      <strong>{{ selectedStartUtc | clinicTime: 'dateTime' }}</strong>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <!-- mat-dialog-close: closes the dialog with no result (undefined) -->
+  <button mat-button type="button" mat-dialog-close [disabled]="isSubmitting">
+    {{ 'CLIENT.APPOINTMENTS.RESCHEDULE.CLOSE' | translate }}
+  </button>
+  <button mat-flat-button type="button"
+          [disabled]="!selectedStartUtc || isSubmitting"
+          (click)="confirm()">
+    @if (isSubmitting) {
+      <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+    }
+    {{ 'CLIENT.APPOINTMENTS.RESCHEDULE.CONFIRM' | translate }}
+  </button>
+</mat-dialog-actions>

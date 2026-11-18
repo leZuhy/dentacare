@@ -7,6 +7,7 @@ import {ClientHomeComponent} from './client-home/client-home.component';
 import {AccountModule} from '../account/account-module';
 import {MyAppointmentsComponent} from './appointments/my-appointments/my-appointments.component';
 import {MyAppointmentDetailsComponent} from './appointments/my-appointment-details/my-appointment-details.component';
+import {RescheduleAppointmentDialogComponent} from './appointments/reschedule-appointment-dialog/reschedule-appointment-dialog.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {MyAppointmentDetailsComponent} from './appointments/my-appointment-detai
     ClientLayoutComponent,
     ClientHomeComponent,
     MyAppointmentsComponent,
-    MyAppointmentDetailsComponent
+    MyAppointmentDetailsComponent,
+    RescheduleAppointmentDialogComponent
   ],
   imports: [
     SharedModule,

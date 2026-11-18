@@ -249,7 +249,21 @@
       "CANCEL_TITLE": "Cancel appointment",
       "CANCEL_MESSAGE": "Are you sure you want to cancel the appointment on {{dateTime}} with {{dentist}}? Cancellation cannot be undone.",
       "CANCELLED_SUCCESS": "The appointment has been cancelled.",
-      "CANCEL_TOO_LATE": "Cancellation is possible no later than {{hours}} h before the appointment starts."
+      "CANCEL_TOO_LATE": "Cancelling and rescheduling are possible no later than {{hours}} h before the appointment starts.",
+      "RESCHEDULE": {
+        "BUTTON": "Reschedule",
+        "TITLE": "Reschedule appointment",
+        "CURRENT_TIME": "Current time",
+        "ONLY_TIME_CHANGES": "Only the time changes: the dentist, service and duration stay the same.",
+        "DATE": "Free slots from",
+        "DATE_HINT": "Showing {{shown}} days from the chosen date, at most {{max}} days ahead.",
+        "NO_SLOTS_DAY": "No free slots.",
+        "NO_SLOTS_PERIOD": "There are no free slots from {{from}} to {{to}}. Please choose another date.",
+        "CHANGE": "Change:",
+        "CONFIRM": "Confirm reschedule",
+        "CLOSE": "Cancel",
+        "SUCCESS": "The appointment has been rescheduled."
+      }
     }
   },
   "ADMIN_PANEL": {
