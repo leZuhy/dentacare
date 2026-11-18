@@ -238,7 +238,18 @@
       "LOYALTY_NOTE": "Loyalty popust se obračunava na računu.",
       "NOT_FOUND_TITLE": "Termin nije pronađen",
       "NOT_FOUND_TEXT": "Termin ne postoji ili nije vaš.",
-      "BACK_TO_LIST": "Nazad na moje termine"
+      "BACK_TO_LIST": "Nazad na moje termine",
+      "CANCELLED_BY_LABEL": "Otkazao/la",
+      "CANCELLED_BY": {
+        "PATIENT": "Vi",
+        "DENTIST": "Stomatolog",
+        "ADMIN": "Ordinacija"
+      },
+      "CANCEL": "Otkaži termin",
+      "CANCEL_TITLE": "Otkazivanje termina",
+      "CANCEL_MESSAGE": "Da li sigurno želite otkazati termin {{dateTime}} kod stomatologa {{dentist}}? Otkazivanje se ne može poništiti.",
+      "CANCELLED_SUCCESS": "Termin je otkazan.",
+      "CANCEL_TOO_LATE": "Otkazivanje je moguće najkasnije {{hours}} h prije početka termina."
     }
   },
   "ADMIN_PANEL": {

@@ -7,6 +7,12 @@ import { PageResult } from '../../core/models/paging/page-result';
  */
 export type AppointmentStatus = 'Scheduled' | 'Cancelled' | 'Completed';
 
+/**
+ * Role of the user who cancelled the appointment, exactly as the server returns it
+ * (enum name of Role.cs).
+ */
+export type CancelledByRole = 'Patient' | 'Dentist' | 'Admin';
+
 /** Which appointments to list: from now on, before now, or all (backend default: "upcoming"). */
 export type AppointmentPeriod = 'upcoming' | 'past' | 'all';
 
@@ -79,6 +85,8 @@ export interface GetMyAppointmentByIdQueryDto {
   status: AppointmentStatus;
   /** UTC; filled only for a cancelled appointment */
   cancelledAtUtc: string | null;
+  /** who cancelled it; null while the appointment is not cancelled */
+  cancelledByRole: CancelledByRole | null;
   dentistFullName: string;
   dentistSpecializationName: string;
   /** one row = one procedure (the same service can appear more than once) */

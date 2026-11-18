@@ -3,11 +3,20 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, EMPTY, Subject, switchMap, tap } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { catchError, EMPTY, filter, Subject, switchMap, tap } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 import { AppointmentsApiService } from '../../../../api-services/appointments/appointments-api.service';
 import { GetMyAppointmentByIdQueryDto } from '../../../../api-services/appointments/appointments-api.model';
 import { BaseComponent } from '../../../../core/components/base-classes/base-component';
 import { getErrorMessage } from '../../../../core/interceptors/error-logging-interceptor.service';
+import { ToasterService } from '../../../../core/services/toaster.service';
+import { DialogButton } from '../../../shared/models/dialog-config.model';
+import { ClinicTimePipe } from '../../../shared/pipes/clinic-time.pipe';
+import { DialogHelperService } from '../../../shared/services/dialog-helper.service';
+
+/** One hour in milliseconds (JavaScript dates are counted in milliseconds). */
+const HOUR_MS = 60 * 60 * 1000;
 
 /** Address of the list; the "Back" button never leaves it (see backToList). */
 const LIST_URL = '/client/appointments';
@@ -22,7 +31,10 @@ const LIST_URL = '/client/appointments';
   selector: 'app-my-appointment-details',
   standalone: false,
   templateUrl: './my-appointment-details.component.html',
-  styleUrl: './my-appointment-details.component.scss'
+  styleUrl: './my-appointment-details.component.scss',
+  // the pipe is also needed in TypeScript (text of the confirm dialog), so it is provided here
+  // and injected like a service; this instance lives only as long as this component
+  providers: [ClinicTimePipe]
 })
 export class MyAppointmentDetailsComponent extends BaseComponent implements OnInit {
   private api = inject(AppointmentsApiService);
@@ -30,10 +42,19 @@ export class MyAppointmentDetailsComponent extends BaseComponent implements OnIn
   private router = inject(Router);
   private location = inject(Location);
   private destroyRef = inject(DestroyRef);
+  private dialogHelper = inject(DialogHelperService);
+  private toaster = inject(ToasterService);
+  private translate = inject(TranslateService);
+  private clinicTime = inject(ClinicTimePipe);
 
   appointment: GetMyAppointmentByIdQueryDto | null = null;
   /** true after a 404 (or an id in the URL that is not a number) */
   notFound = false;
+
+  /** must match Clinic:CancellationMinHoursBefore in appsettings.json */
+  readonly cancellationMinHours = environment.clinic.cancellationMinHoursBefore;
+  /** true while POST .../cancel is running, so the button cannot be clicked twice */
+  isCancelling = false;
 
   /** columns of the services table */
   readonly displayedColumns = ['name', 'price'];
@@ -89,6 +110,58 @@ export class MyAppointmentDetailsComponent extends BaseComponent implements OnIn
 
   load(): void {
     this.load$.next();
+  }
+
+  /** The Cancel button is shown only for a Scheduled appointment. */
+  get canCancel(): boolean {
+    return this.appointment?.status === 'Scheduled';
+  }
+
+  /**
+   * true when less than cancellationMinHours are left until the start: the button is disabled.
+   * Only for display (the browser clock can be wrong): the server checks the rule again (409).
+   */
+  get isTooLateToCancel(): boolean {
+    if (!this.appointment) {
+      return false;
+    }
+    const msLeft = Date.parse(this.appointment.startUtc) - Date.now();
+    return msLeft < this.cancellationMinHours * HOUR_MS;
+  }
+
+  /** Confirm dialog -> POST .../cancel -> success message and reload, or the server's error. */
+  onCancel(): void {
+    const appointment = this.appointment;
+    if (!appointment || this.isCancelling) {
+      return;
+    }
+
+    this.dialogHelper
+      .confirm('CLIENT.APPOINTMENTS.CANCEL_TITLE', 'CLIENT.APPOINTMENTS.CANCEL_MESSAGE', {
+        dateTime: this.clinicTime.transform(appointment.startUtc, 'dateTime'),
+        dentist: appointment.dentistFullName
+      })
+      .pipe(
+        filter((result) => result?.button === DialogButton.YES),
+        tap(() => (this.isCancelling = true)),
+        switchMap(() =>
+          this.api.cancel(appointment.id).pipe(
+            // inside switchMap: an error ends only this request, not the whole chain
+            catchError((err: HttpErrorResponse) => {
+              this.isCancelling = false;
+              this.toaster.error(getErrorMessage(err));
+              return EMPTY;
+            })
+          )
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.isCancelling = false;
+        this.toaster.success(this.translate.instant('CLIENT.APPOINTMENTS.CANCELLED_SUCCESS'));
+        // the server is the source of truth: reload, so the chip shows "Cancelled"
+        this.load();
+      });
   }
 
   /**

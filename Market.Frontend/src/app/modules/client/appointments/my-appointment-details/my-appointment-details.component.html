@@ -66,6 +66,13 @@
             <dt>{{ 'CLIENT.APPOINTMENTS.CANCELLED_AT' | translate }}</dt>
             <dd>{{ appointment.cancelledAtUtc | clinicTime: 'dateTime' }}</dd>
           }
+
+          @if (appointment.cancelledByRole) {
+            <dt>{{ 'CLIENT.APPOINTMENTS.CANCELLED_BY_LABEL' | translate }}</dt>
+            <dd>
+              {{ 'CLIENT.APPOINTMENTS.CANCELLED_BY.' + (appointment.cancelledByRole | uppercase) | translate }}
+            </dd>
+          }
         </dl>
 
         <h3 class="section-title">{{ 'CLIENT.APPOINTMENTS.SERVICES' | translate }}</h3>
@@ -97,8 +104,27 @@
         </p>
       </mat-card-content>
 
-      <!-- Otkazivanje i Pomjeranje (sljedeći issuei): the Cancel and Reschedule buttons go here,
-           in <mat-card-actions align="end">, only for a Scheduled appointment. -->
+      <!-- Only for a Scheduled appointment. Pomjeranje (next issue): the Reschedule button goes here too. -->
+      @if (canCancel) {
+        <mat-card-actions align="end" class="actions">
+          <button
+            mat-stroked-button
+            type="button"
+            class="cancel-button"
+            [disabled]="isTooLateToCancel || isCancelling"
+            (click)="onCancel()"
+          >
+            <mat-icon>event_busy</mat-icon>
+            {{ 'CLIENT.APPOINTMENTS.CANCEL' | translate }}
+          </button>
+
+          @if (isTooLateToCancel) {
+            <p class="action-note">
+              {{ 'CLIENT.APPOINTMENTS.CANCEL_TOO_LATE' | translate: { hours: cancellationMinHours } }}
+            </p>
+          }
+        </mat-card-actions>
+      }
 
     </mat-card>
   }

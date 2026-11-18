@@ -91,3 +91,20 @@
 .loyalty-note {
   @include shop-page.km-note;
 }
+
+// the button and the note below it, both on the right
+.actions {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.cancel-button:not(:disabled) {
+  color: #c62828;
+}
+
+.action-note {
+  margin: 0;
+  font-size: 13px;
+  color: shop-page.$text-light;
+}
