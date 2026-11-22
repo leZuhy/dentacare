@@ -15,13 +15,11 @@ import { ToasterService } from '../../../../core/services/toaster.service';
 import { DialogButton } from '../../../shared/models/dialog-config.model';
 import { ClinicTimePipe } from '../../../shared/pipes/clinic-time.pipe';
 import { DialogHelperService } from '../../../shared/services/dialog-helper.service';
+import { isTooLateToCancel } from '../../../shared/utils/appointment-cancellation';
 import {
   RescheduleAppointmentDialogComponent,
   RescheduleAppointmentDialogData
 } from '../reschedule-appointment-dialog/reschedule-appointment-dialog.component';
-
-/** One hour in milliseconds (JavaScript dates are counted in milliseconds). */
-const HOUR_MS = 60 * 60 * 1000;
 
 /** Address of the list; the "Back" button never leaves it (see backToList). */
 const LIST_URL = '/client/appointments';
@@ -131,8 +129,7 @@ export class MyAppointmentDetailsComponent extends BaseComponent implements OnIn
     if (!this.appointment) {
       return false;
     }
-    const msLeft = Date.parse(this.appointment.startUtc) - Date.now();
-    return msLeft < this.cancellationMinHours * HOUR_MS;
+    return isTooLateToCancel(this.appointment.startUtc, this.cancellationMinHours);
   }
 
   /** Confirm dialog -> POST .../cancel -> success message and reload, or the server's error. */

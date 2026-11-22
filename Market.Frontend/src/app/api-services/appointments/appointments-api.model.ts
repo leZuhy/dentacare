@@ -134,3 +134,55 @@ export interface GetMyAppointmentByIdServiceDto {
   name: string;
   priceAtTimeBam: number;
 }
+
+// === DENTIST SCHEDULE (READ, Dentist only, only the dentist's own appointments) ===
+
+/**
+ * Query for GET api/appointments/schedule?date=
+ * Corresponds to: GetDentistScheduleQuery.cs
+ * There is no dentistId: the backend takes the dentist from the access token.
+ */
+export interface GetDentistScheduleRequest {
+  /** local clinic date "yyyy-MM-dd" (DateOnly on the backend); required (400 without it) */
+  date: string;
+}
+
+/**
+ * Response of GET api/appointments/schedule
+ * Corresponds to: GetDentistScheduleQueryDto.cs
+ */
+export interface GetDentistScheduleQueryDto {
+  /** the same day that was asked for, "yyyy-MM-dd" */
+  date: string;
+  /** sorted by start; empty = the dentist does not work that day */
+  workingHours: DentistScheduleWorkingHoursDto[];
+  /** sorted by startUtc; cancelled appointments are included too */
+  appointments: DentistScheduleAppointmentDto[];
+}
+
+/**
+ * One working hours interval, in LOCAL clinic time (TimeOnly on the backend, e.g. "08:00:00").
+ * Corresponds to: DentistScheduleWorkingHoursDto.cs
+ */
+export interface DentistScheduleWorkingHoursDto {
+  startTime: string;
+  endTime: string;
+}
+
+/**
+ * One appointment in the dentist's day.
+ * Corresponds to: DentistScheduleAppointmentDto.cs
+ */
+export interface DentistScheduleAppointmentDto {
+  id: number;
+  /** UTC, ends with "Z" */
+  startUtc: string;
+  endUtc: string;
+  status: AppointmentStatus;
+  patientFullName: string;
+  /** null when the patient has not entered a phone number */
+  patientPhone: string | null;
+  dentalServiceNames: string[];
+  /** sum of the copied prices (PriceAtTimeBam), without the loyalty discount */
+  totalPriceBam: number;
+}

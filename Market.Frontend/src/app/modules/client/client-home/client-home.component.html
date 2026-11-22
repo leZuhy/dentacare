@@ -19,6 +19,12 @@
           {{ 'PUBLIC.NAV.MY_APPOINTMENTS' | translate }}
         </a>
       }
+      @if (isDentist()) {
+        <a mat-flat-button routerLink="/client/schedule">
+          <mat-icon>calendar_month</mat-icon>
+          {{ 'PUBLIC.NAV.MY_SCHEDULE' | translate }}
+        </a>
+      }
       <a mat-flat-button routerLink="/client/profile">
         <mat-icon>manage_accounts</mat-icon>
         {{ 'PUBLIC.NAV.MY_PROFILE' | translate }}

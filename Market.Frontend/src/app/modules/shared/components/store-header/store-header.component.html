@@ -59,6 +59,12 @@
             <span>{{ 'PUBLIC.NAV.MY_APPOINTMENTS' | translate }}</span>
           </a>
         }
+        @if (currentUser.isDentist()) {
+          <a mat-menu-item routerLink="/client/schedule">
+            <mat-icon>calendar_month</mat-icon>
+            <span>{{ 'PUBLIC.NAV.MY_SCHEDULE' | translate }}</span>
+          </a>
+        }
         <a mat-menu-item routerLink="/client/profile">
           <mat-icon>manage_accounts</mat-icon>
           <span>{{ 'PUBLIC.NAV.MY_PROFILE' | translate }}</span>

@@ -114,7 +114,8 @@
       "SERVICES": "Usluge",
       "DENTISTS": "Stomatolozi",
       "BOOK": "Zakaži termin",
-      "MY_APPOINTMENTS": "Moji termini"
+      "MY_APPOINTMENTS": "Moji termini",
+      "MY_SCHEDULE": "Moj raspored"
     },
     "CATALOG": {
       "CLEAR_FILTERS": "Očisti filtere",
@@ -264,6 +265,23 @@
         "CLOSE": "Odustani",
         "SUCCESS": "Termin je pomjeren."
       }
+    },
+    "SCHEDULE": {
+      "TITLE": "Moj raspored",
+      "PREVIOUS_DAY": "Prethodni dan",
+      "TODAY": "Danas",
+      "NEXT_DAY": "Sljedeći dan",
+      "DATE": "Datum",
+      "WORKING_HOURS": "Radno vrijeme",
+      "NOT_WORKING": "Ne radite ovaj dan",
+      "NO_APPOINTMENTS": "Nema termina za ovaj dan.",
+      "PATIENT": "Pacijent",
+      "PHONE": "Telefon",
+      "SERVICES": "Usluge",
+      "CANCEL": "Otkaži",
+      "CANCEL_TITLE": "Otkazivanje termina",
+      "CANCEL_MESSAGE": "Da li sigurno želite otkazati termin pacijenta {{patient}} ({{dateTime}})? Otkazivanje se ne može poništiti.",
+      "CANCELLED_SUCCESS": "Termin je otkazan."
     }
   },
   "ADMIN_PANEL": {

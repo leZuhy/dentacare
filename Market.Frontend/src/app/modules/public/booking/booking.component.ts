@@ -16,8 +16,7 @@ import { getErrorMessage } from '../../../core/interceptors/error-logging-interc
 import { readPositiveInt } from '../public-catalog-query-params';
 import {BOOKING_CONSTRAINTS} from './booking-constraint';
 import {environment} from '../../../../environments/environment';
-import {addDays, clinicToday, toDateOnly, utcToClinicDateOnly} from '../../../core/forms/date-only';
-import {readDateOnly} from './booking-query-params';
+import {addDays, clinicToday, readDateOnly, toDateOnly, utcToClinicDateOnly} from '../../../core/forms/date-only';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material/stepper';
 import { AppointmentsApiService } from '../../../api-services/appointments/appointments-api.service';
