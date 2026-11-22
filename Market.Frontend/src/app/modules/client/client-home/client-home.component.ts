@@ -16,4 +16,6 @@ export class ClientHomeComponent {
   protected currentUser = this.currentUserService.currentUser;
   /** only a patient has "My appointments" */
   protected isPatient = this.currentUserService.isPatient;
+  /** only a dentist has "My schedule" */
+  protected isDentist = this.currentUserService.isDentist;
 }

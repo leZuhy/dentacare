@@ -3,6 +3,7 @@ using Market.Application.Modules.Appointments.Commands.Create;
 using Market.Application.Modules.Appointments.Commands.Reschedule;
 using Market.Application.Modules.Appointments.Queries.GetMyById;
 using Market.Application.Modules.Appointments.Queries.ListMy;
+using Market.Application.Modules.Appointments.Queries.GetDentistSchedule;
 using Market.Application.Modules.Appointments.Queries.ListRescheduleFreeSlots;
 using Market.Shared.Constants;
 using Market.Shared.Dtos;
@@ -57,6 +58,18 @@ public sealed class AppointmentsController(ISender sender) : ControllerBase
     public async Task<ActionResult<GetMyAppointmentByIdQueryDto>> GetMyById(int id, CancellationToken ct)
     {
         return await sender.Send(new GetMyAppointmentByIdQuery { Id = id }, ct);
+    }
+
+    /// <summary>Schedule of the logged-in dentist for one local day (working hours + own appointments).</summary>
+    [HttpGet("schedule")]
+    [Authorize(Policy =PolicyNames.Dentist)]
+    [ProducesResponseType(typeof(GetDentistScheduleQueryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<GetDentistScheduleQueryDto>> GetDentistSchedule([FromQuery] GetDentistScheduleQuery query, CancellationToken ct)
+    {
+        return await sender.Send(query, ct);
     }
 
     [HttpPost("{id:int}/cancel")]

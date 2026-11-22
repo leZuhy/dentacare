@@ -114,7 +114,8 @@
       "SERVICES": "Services",
       "DENTISTS": "Dentists",
       "BOOK": "Book an appointment",
-      "MY_APPOINTMENTS": "My appointments"
+      "MY_APPOINTMENTS": "My appointments",
+      "MY_SCHEDULE": "My schedule"
     },
     "CATALOG": {
       "CLEAR_FILTERS": "Clear filters",
@@ -264,6 +265,23 @@
         "CLOSE": "Cancel",
         "SUCCESS": "The appointment has been rescheduled."
       }
+    },
+    "SCHEDULE": {
+      "TITLE": "My schedule",
+      "PREVIOUS_DAY": "Previous day",
+      "TODAY": "Today",
+      "NEXT_DAY": "Next day",
+      "DATE": "Date",
+      "WORKING_HOURS": "Working hours",
+      "NOT_WORKING": "You do not work on this day",
+      "NO_APPOINTMENTS": "No appointments for this day.",
+      "PATIENT": "Patient",
+      "PHONE": "Phone",
+      "SERVICES": "Services",
+      "CANCEL": "Cancel",
+      "CANCEL_TITLE": "Cancel appointment",
+      "CANCEL_MESSAGE": "Are you sure you want to cancel the appointment of {{patient}} ({{dateTime}})? This cannot be undone.",
+      "CANCELLED_SUCCESS": "The appointment has been cancelled."
     }
   },
   "ADMIN_PANEL": {

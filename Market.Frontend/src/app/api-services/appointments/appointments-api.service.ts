@@ -6,6 +6,8 @@ import { buildHttpParams } from '../../core/models/build-http-params';
 import {
   CreateAppointmentCommand,
   CreateAppointmentCommandDto,
+  GetDentistScheduleQueryDto,
+  GetDentistScheduleRequest,
   GetMyAppointmentByIdQueryDto,
   ListMyAppointmentsRequest,
   ListMyAppointmentsResponse,
@@ -48,6 +50,18 @@ export class AppointmentsApiService {
    */
   getMyById(id: number): Observable<GetMyAppointmentByIdQueryDto> {
     return this.http.get<GetMyAppointmentByIdQueryDto>(`${this.baseUrl}/my/${id}`);
+  }
+
+  /**
+   * GET api/appointments/schedule?date=yyyy-MM-dd -> one day of the logged-in dentist
+   * (working hours + appointments, cancelled ones included). Dentist only (others get 403).
+   * 400 when date is missing or invalid.
+   */
+  getDentistSchedule(date: string): Observable<GetDentistScheduleQueryDto> {
+    const request: GetDentistScheduleRequest = { date };
+    return this.http.get<GetDentistScheduleQueryDto>(`${this.baseUrl}/schedule`, {
+      params: buildHttpParams(request),
+    });
   }
 
   /**

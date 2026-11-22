@@ -8,6 +8,7 @@ import {AccountModule} from '../account/account-module';
 import {MyAppointmentsComponent} from './appointments/my-appointments/my-appointments.component';
 import {MyAppointmentDetailsComponent} from './appointments/my-appointment-details/my-appointment-details.component';
 import {RescheduleAppointmentDialogComponent} from './appointments/reschedule-appointment-dialog/reschedule-appointment-dialog.component';
+import {DentistScheduleComponent} from './schedule/dentist-schedule/dentist-schedule.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {RescheduleAppointmentDialogComponent} from './appointments/reschedule-ap
     ClientHomeComponent,
     MyAppointmentsComponent,
     MyAppointmentDetailsComponent,
-    RescheduleAppointmentDialogComponent
+    RescheduleAppointmentDialogComponent,
+    DentistScheduleComponent
   ],
   imports: [
     SharedModule,

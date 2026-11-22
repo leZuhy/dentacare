@@ -1,0 +1,143 @@
+@use '../../../public/catalog-page';
+@use '../../../public/shop-page';
+@use '../../appointments/appointment-status';
+
+@include catalog-page.layout;
+@include appointment-status.chips;
+
+.day-title {
+  font-weight: 600;
+  // "ponedjeljak" with a capital letter
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.day-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .date-field {
+    width: 200px;
+  }
+}
+
+.schedule-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: opacity 0.2s;
+
+  &.reloading {
+    opacity: 0.5;
+  }
+}
+
+.working-hours-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+
+  > mat-icon {
+    color: shop-page.$primary-blue;
+  }
+
+  .label {
+    font-size: 13px;
+    color: shop-page.$text-light;
+  }
+
+  .value {
+    font-weight: 600;
+  }
+
+  .muted {
+    color: shop-page.$text-light;
+  }
+}
+
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appointment-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+
+  // a cancelled appointment stays in the list (the dentist sees what happened), but faded
+  &.cancelled {
+    opacity: 0.55;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: shop-page.$primary-blue;
+  }
+
+  .time {
+    font-weight: 600;
+  }
+
+  .services {
+    color: shop-page.$text-light;
+  }
+}
+
+.card-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+
+  .price {
+    font-size: 18px;
+    font-weight: 700;
+    color: shop-page.$primary-blue;
+  }
+
+  .cancel-button {
+    color: #c62828;
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    justify-content: space-between;
+  }
+}
