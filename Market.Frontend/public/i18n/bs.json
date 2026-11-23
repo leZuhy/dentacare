@@ -281,7 +281,28 @@
       "CANCEL": "Otkaži",
       "CANCEL_TITLE": "Otkazivanje termina",
       "CANCEL_MESSAGE": "Da li sigurno želite otkazati termin pacijenta {{patient}} ({{dateTime}})? Otkazivanje se ne može poništiti.",
-      "CANCELLED_SUCCESS": "Termin je otkazan."
+      "CANCELLED_SUCCESS": "Termin je otkazan.",
+      "COMPLETE": "Završi posjetu",
+      "COMPLETED_SUCCESS": "Posjeta je završena.",
+      "COMPLETE_DIALOG": {
+        "TITLE": "Završetak posjete",
+        "TIME": "Termin",
+        "BOOKED_SERVICES": "Zakazana usluga",
+        "BOOKED_SERVICES_HINT": "Usluga koju je pacijent izabrao ostaje na računu i ne može se ukloniti.",
+        "FINDINGS": "Nalaz",
+        "THERAPY": "Terapija",
+        "ADDITIONAL_SERVICES": "Dodatne izvedene usluge",
+        "ADDITIONAL_SERVICES_HINT": "Svaki red je jedan zahvat. Ista usluga se može dodati više puta (najviše {{max}} redova).",
+        "NO_ADDITIONAL_SERVICES": "Nema dodatnih usluga.",
+        "SERVICE": "Usluga",
+        "ADD_SERVICE": "Dodaj uslugu",
+        "REMOVE_SERVICE": "Ukloni uslugu",
+        "TOTAL": "Ukupno (bez loyalty popusta)",
+        "SERVICES_ERROR": "Lista usluga se nije učitala.",
+        "SERVICE_UNAVAILABLE": "Usluga više nije dostupna. Izaberite drugu.",
+        "CLOSE": "Odustani",
+        "CONFIRM": "Završi posjetu"
+      }
     }
   },
   "ADMIN_PANEL": {
@@ -600,7 +621,8 @@
     "TIME_RANGE": "Kraj mora biti poslije početka",
     "DATE_MIN": "Datum je prije najranijeg dozvoljenog",
     "DATE_MAX": "Datum je poslije najkasnijeg dozvoljenog",
-    "UTC_TIME": "Vrijeme mora biti u UTC obliku (završava sa Z)"
+    "UTC_TIME": "Vrijeme mora biti u UTC obliku (završava sa Z)",
+    "NOT_BLANK": "Polje ne smije sadržavati samo razmake"
   },
   "ERRORS": {
     "GENERIC": "Došlo je do greške. Pokušajte ponovo.",

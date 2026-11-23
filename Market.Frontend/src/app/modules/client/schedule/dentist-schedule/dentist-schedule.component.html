@@ -110,13 +110,27 @@
                 </mat-chip-set>
                 <span class="price">{{ appointment.totalPriceBam | money }}</span>
 
+                <!-- shown only for a Scheduled appointment that has started; disabled while a cancel or completion is running -->
+                @if (canComplete(appointment)) {
+                  <button
+                    mat-flat-button
+                    type="button"
+                    class="complete-button"
+                    [disabled]="cancellingId !== null || completingId !== null"
+                    (click)="onComplete(appointment)"
+                  >
+                    <mat-icon>task_alt</mat-icon>
+                    {{ 'CLIENT.SCHEDULE.COMPLETE' | translate }}
+                  </button>
+                }
+
                 <!-- hidden (not disabled) when it is too late; disabled while any cancel is running -->
                 @if (canCancel(appointment)) {
                   <button
                     mat-stroked-button
                     type="button"
                     class="cancel-button"
-                    [disabled]="cancellingId !== null"
+                    [disabled]="cancellingId !== null || completingId !== null"
                     (click)="onCancel(appointment)"
                   >
                     @if (cancellingId === appointment.id) {

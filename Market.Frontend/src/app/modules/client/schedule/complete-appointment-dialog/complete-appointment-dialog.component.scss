@@ -1,0 +1,80 @@
+// label on the left, value on the right (same as the reschedule dialog)
+.summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0 0 8px;
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.muted {
+  margin: 0 0 12px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.full-width {
+  width: 100%;
+}
+
+h3 {
+  margin: 8px 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+// a line with an icon: errors
+.message {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 16px;
+
+  &.error {
+    color: var(--mat-sys-error);
+  }
+}
+
+.service-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.service-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.service-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.total {
+  margin: 16px 0 0;
+  text-align: right;
+}
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}

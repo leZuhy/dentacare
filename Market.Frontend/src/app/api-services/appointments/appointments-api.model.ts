@@ -54,6 +54,21 @@ export interface RescheduleAppointmentCommand {
   startUtc: string;
 }
 
+/**
+ * Body for POST api/appointments/{id}/complete (204, no response body, Dentist only)
+ * Corresponds to: CompleteAppointmentCommand.cs
+ * The appointment id goes into the route, not into the body.
+ * Limits: MEDICAL_RECORD_CONSTRAINTS (= MedicalRecordEntity.Constraints on the backend).
+ */
+export interface CompleteAppointmentCommand {
+  /** required, not only spaces */
+  findings: string;
+  /** optional; null = no therapy */
+  therapy: string | null;
+  /** extra performed services; each id is one procedure, the same id may repeat; [] = none */
+  additionalDentalServiceIds: number[];
+}
+
 // === QUERIES (READ, Patient only, only the patient's own appointments) ===
 
 /**

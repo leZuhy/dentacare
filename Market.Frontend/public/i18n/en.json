@@ -281,7 +281,28 @@
       "CANCEL": "Cancel",
       "CANCEL_TITLE": "Cancel appointment",
       "CANCEL_MESSAGE": "Are you sure you want to cancel the appointment of {{patient}} ({{dateTime}})? This cannot be undone.",
-      "CANCELLED_SUCCESS": "The appointment has been cancelled."
+      "CANCELLED_SUCCESS": "The appointment has been cancelled.",
+      "COMPLETE": "Complete visit",
+      "COMPLETED_SUCCESS": "The visit has been completed.",
+      "COMPLETE_DIALOG": {
+        "TITLE": "Complete visit",
+        "TIME": "Appointment",
+        "BOOKED_SERVICES": "Booked service",
+        "BOOKED_SERVICES_HINT": "The service the patient chose stays on the invoice and cannot be removed.",
+        "FINDINGS": "Findings",
+        "THERAPY": "Therapy",
+        "ADDITIONAL_SERVICES": "Additional performed services",
+        "ADDITIONAL_SERVICES_HINT": "Each row is one procedure. The same service can be added more than once (at most {{max}} rows).",
+        "NO_ADDITIONAL_SERVICES": "No additional services.",
+        "SERVICE": "Service",
+        "ADD_SERVICE": "Add service",
+        "REMOVE_SERVICE": "Remove service",
+        "TOTAL": "Total (without loyalty discount)",
+        "SERVICES_ERROR": "The list of services could not be loaded.",
+        "SERVICE_UNAVAILABLE": "This service is no longer available. Choose another one.",
+        "CLOSE": "Cancel",
+        "CONFIRM": "Complete visit"
+      }
     }
   },
   "ADMIN_PANEL": {
@@ -600,7 +621,8 @@
     "TIME_RANGE": "The end time must be after the start time",
     "DATE_MIN": "Datum je prije najranijeg dozvoljenog",
     "DATE_MAX": "Datum je poslije najkasnijeg dozvoljenog",
-    "UTC_TIME": "Vrijeme mora biti u UTC obliku (završava sa Z)"
+    "UTC_TIME": "Vrijeme mora biti u UTC obliku (završava sa Z)",
+    "NOT_BLANK": "The field must not contain only spaces"
   },
   "ERRORS": {
     "GENERIC": "An error occurred. Please try again.",

@@ -36,6 +36,9 @@ namespace Market.Infrastructure.Migrations
                     b.Property<int?>("CancelledByUserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("CompletedAtUtc")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
@@ -108,6 +111,44 @@ namespace Market.Infrastructure.Migrations
                     b.HasIndex("DentalServiceId");
 
                     b.ToTable("AppointmentServices", (string)null);
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Appointments.MedicalRecordEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Findings")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Therapy")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("MedicalRecords", (string)null);
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Catalog.DentalServiceEntity", b =>
@@ -929,6 +970,17 @@ namespace Market.Infrastructure.Migrations
                     b.Navigation("DentalService");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Appointments.MedicalRecordEntity", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.Appointments.AppointmentEntity", "Appointment")
+                        .WithOne("MedicalRecord")
+                        .HasForeignKey("Market.Domain.Entities.Appointments.MedicalRecordEntity", "AppointmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Catalog.DentalServiceEntity", b =>
                 {
                     b.HasOne("Market.Domain.Entities.Catalog.ServiceCategoryEntity", "Category")
@@ -1035,6 +1087,8 @@ namespace Market.Infrastructure.Migrations
 
             modelBuilder.Entity("Market.Domain.Entities.Appointments.AppointmentEntity", b =>
                 {
+                    b.Navigation("MedicalRecord");
+
                     b.Navigation("Services");
                 });
 
