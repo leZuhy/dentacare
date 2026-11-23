@@ -28,5 +28,6 @@ public interface IAppDbContext
     DbSet<PatientEntity> Patients { get; }
     DbSet<AppointmentEntity> Appointments { get; }
     DbSet<AppointmentServiceEntity> AppointmentServices { get; }
+    DbSet<MedicalRecordEntity> MedicalRecords { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

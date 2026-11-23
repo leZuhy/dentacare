@@ -1,4 +1,5 @@
 ﻿using Market.Application.Modules.Appointments.Commands.Cancel;
+using Market.Application.Modules.Appointments.Commands.Complete;
 using Market.Application.Modules.Appointments.Commands.Create;
 using Market.Application.Modules.Appointments.Commands.Reschedule;
 using Market.Application.Modules.Appointments.Queries.GetMyById;
@@ -97,6 +98,24 @@ public sealed class AppointmentsController(ISender sender) : ControllerBase
     [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Reschedule(int id, [FromBody] RescheduleAppointmentCommand command, CancellationToken ct)
+    {
+        command.Id = id;
+        await sender.Send(command, ct);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// The logged-in dentist completes own appointment: findings, therapy and extra performed services.
+    /// </summary>
+    [HttpPost("{id:int}/complete")]
+    [Authorize(Policy = PolicyNames.Dentist)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Complete(int id, [FromBody] CompleteAppointmentCommand command, CancellationToken ct)
     {
         command.Id = id;
         await sender.Send(command, ct);

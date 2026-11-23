@@ -25,5 +25,11 @@ public sealed class AppointmentEntity : BaseEntity
     public int? CancelledByUserId { get; set; }
     public MarketUserEntity? CancelledByUser { get; set; }
 
+    /// <summary>Filled only for a completed appointment.</summary>
+    public DateTime? CompletedAtUtc { get; set; }
+
+    /// <summary>Exists only for a completed appointment.</summary>
+    public MedicalRecordEntity? MedicalRecord { get; set; }
+
     public ICollection<AppointmentServiceEntity> Services { get; set; } = new List<AppointmentServiceEntity>();
 }

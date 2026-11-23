@@ -26,6 +26,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<PatientEntity> Patients => Set<PatientEntity>();
     public DbSet<AppointmentEntity> Appointments => Set<AppointmentEntity>();
     public DbSet<AppointmentServiceEntity> AppointmentServices => Set<AppointmentServiceEntity>();
+    public DbSet<MedicalRecordEntity> MedicalRecords => Set<MedicalRecordEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
