@@ -60,6 +60,7 @@ const DEFAULT_MESSAGES: Record<string, MessageFactory> = {
   matDatepickerMin: () => ({ key: "VALIDATION.DATE_MIN" }),
   matDatepickerMax: () => ({ key: "VALIDATION.DATE_MAX" }),
   utcIsoString: () => ({ key: "VALIDATION.UTC_TIME" }),
+  notBlank: () => ({ key: "VALIDATION.NOT_BLANK" }),
 };
 
 /**

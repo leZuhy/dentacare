@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, EMPTY, filter, Subject, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
@@ -20,6 +21,11 @@ import { DialogButton } from '../../../shared/models/dialog-config.model';
 import { ClinicTimePipe } from '../../../shared/pipes/clinic-time.pipe';
 import { DialogHelperService } from '../../../shared/services/dialog-helper.service';
 import { isTooLateToCancel } from '../../../shared/utils/appointment-cancellation';
+import { hasAppointmentStarted } from '../../../shared/utils/appointment-completion';
+import {
+  CompleteAppointmentDialogComponent,
+  CompleteAppointmentDialogData
+} from '../complete-appointment-dialog/complete-appointment-dialog.component';
 
 /**
  * "My schedule" (/client/schedule, Dentist only): one day of the logged-in dentist,
@@ -47,6 +53,7 @@ export class DentistScheduleComponent extends BaseComponent implements OnInit {
   private toaster = inject(ToasterService);
   private translate = inject(TranslateService);
   private clinicTime = inject(ClinicTimePipe);
+  private dialog = inject(MatDialog);
 
   /** must match Clinic:TimeZoneId in appsettings.json */
   private readonly timeZoneId = environment.clinic.timeZoneId;
@@ -70,6 +77,11 @@ export class DentistScheduleComponent extends BaseComponent implements OnInit {
   schedule: GetDentistScheduleQueryDto | null = null;
   /** id of the appointment being cancelled; while not null, every "Cancel" button is disabled */
   cancellingId: number | null = null;
+  /**
+   * id of the appointment whose "Complete visit" dialog is open; while not null, every
+   * "Complete visit" and "Cancel" button is disabled (e.g. a double click opens only one dialog)
+   */
+  completingId: number | null = null;
 
   /** every next() = "load the schedule for this.selectedDate" (also used by "Try again") */
   private readonly load$ = new Subject<void>();
@@ -191,6 +203,58 @@ export class DentistScheduleComponent extends BaseComponent implements OnInit {
         this.cancellingId = null;
         this.toaster.success(this.translate.instant('CLIENT.SCHEDULE.CANCELLED_SUCCESS'));
         // the server is the source of truth: reload, so the chip shows "Cancelled"
+        this.load();
+      });
+  }
+
+  /**
+   * "Complete visit" is shown only for a Scheduled appointment that has already started.
+   * Only for display: the server checks both rules again (409).
+   */
+  canComplete(appointment: DentistScheduleAppointmentDto): boolean {
+    return appointment.status === 'Scheduled' && hasAppointmentStarted(appointment.startUtc);
+  }
+
+  /**
+   * Opens the "Complete visit" dialog. The dialog sends POST .../complete itself and
+   * closes with true only after a success -> success message and reload of the same day.
+   */
+  onComplete(appointment: DentistScheduleAppointmentDto): void {
+    if (this.completingId !== null || this.cancellingId !== null) {
+      return;
+    }
+
+    this.completingId = appointment.id;
+
+    // C#: like new CompleteForm(data).ShowDialog() — data goes in, the result comes back on close
+    this.dialog
+      .open<CompleteAppointmentDialogComponent, CompleteAppointmentDialogData, boolean>(
+        CompleteAppointmentDialogComponent,
+        {
+          data: {
+            appointmentId: appointment.id,
+            startUtc: appointment.startUtc,
+            endUtc: appointment.endUtc,
+            patientFullName: appointment.patientFullName,
+            dentalServiceNames: appointment.dentalServiceNames,
+            totalPriceBam: appointment.totalPriceBam
+          },
+          width: '640px',
+          maxWidth: '95vw',
+          // focus the dialog itself, not the first field (no keyboard popping up on a phone)
+          autoFocus: 'dialog'
+        }
+      )
+      .afterClosed()
+      .pipe(
+        // runs for every close (success, "Cancel", Esc), so the buttons are enabled again
+        tap(() => (this.completingId = null)),
+        filter((completed) => completed === true),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.toaster.success(this.translate.instant('CLIENT.SCHEDULE.COMPLETED_SUCCESS'));
+        // the server is the source of truth: reload, so the chip shows "Completed"
         this.load();
       });
   }

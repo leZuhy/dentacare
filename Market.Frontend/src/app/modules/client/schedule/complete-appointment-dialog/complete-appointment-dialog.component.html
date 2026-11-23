@@ -1,0 +1,128 @@
+<h2 mat-dialog-title>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.TITLE' | translate }}</h2>
+
+<mat-dialog-content>
+  <!-- what is being completed (read-only) -->
+  <dl class="summary">
+    <dt>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.TIME' | translate }}</dt>
+    <dd>{{ data.startUtc | clinicTime: 'dateTime' }} – {{ data.endUtc | clinicTime }}</dd>
+    <dt>{{ 'CLIENT.SCHEDULE.PATIENT' | translate }}</dt>
+    <dd>{{ data.patientFullName }}</dd>
+    <dt>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.BOOKED_SERVICES' | translate }}</dt>
+    <dd>{{ data.dentalServiceNames.join(', ') }}</dd>
+  </dl>
+  <p class="muted">{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.BOOKED_SERVICES_HINT' | translate }}</p>
+
+  <!-- general server error (e.g. 409 "already completed") -->
+  @if (errorMessage) {
+    <div class="message error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  <!-- (ngSubmit) -> onSubmit() from BaseFormComponent -> save() only if the form is valid -->
+  <form id="complete-appointment-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.FINDINGS' | translate }}</mat-label>
+      <textarea matInput formControlName="findings" rows="5" required></textarea>
+      <mat-hint align="end">
+        {{ form.controls.findings.value.length }} / {{ limits.findingsMaxLength }}
+      </mat-hint>
+      <mat-error><app-fit-field-error [control]="form.controls.findings" /></mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.THERAPY' | translate }}</mat-label>
+      <textarea matInput formControlName="therapy" rows="3"></textarea>
+      <mat-hint align="end">
+        {{ form.controls.therapy.value.length }} / {{ limits.therapyMaxLength }}
+      </mat-hint>
+      <mat-error><app-fit-field-error [control]="form.controls.therapy" /></mat-error>
+    </mat-form-field>
+
+    <h3>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.ADDITIONAL_SERVICES' | translate }}</h3>
+    <p class="muted">
+      {{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.ADDITIONAL_SERVICES_HINT' | translate: { max: limits.additionalServicesMax } }}
+    </p>
+
+    @if (servicesError) {
+      <div class="message error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.SERVICES_ERROR' | translate }} {{ servicesError }}</span>
+        <button mat-stroked-button type="button" (click)="loadData()">
+          {{ 'COMMON.RETRY' | translate }}
+        </button>
+      </div>
+    } @else if (isLoadingServices) {
+      <div class="loading" aria-live="polite">
+        <mat-spinner diameter="24"></mat-spinner>
+        <span>{{ 'COMMON.LOADING' | translate }}</span>
+      </div>
+    }
+
+    <!-- one row = one procedure; [formControl]="row" binds the select to the row's control in the FormArray -->
+    <div class="service-rows">
+      @for (row of serviceRows; track row; let i = $index) {
+        <div class="service-row">
+          <mat-form-field appearance="outline" class="service-field" subscriptSizing="dynamic">
+            <mat-label>{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.SERVICE' | translate }} {{ i + 1 }}</mat-label>
+            <mat-select [formControl]="row">
+              @for (service of services; track service.id) {
+                <mat-option [value]="service.id">
+                  {{ service.name }} ({{ service.priceBam | money }})
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error>
+              <app-fit-field-error
+                [control]="row"
+                [messages]="{ serviceUnavailable: 'CLIENT.SCHEDULE.COMPLETE_DIALOG.SERVICE_UNAVAILABLE' }"
+              />
+            </mat-error>
+          </mat-form-field>
+
+          <button
+            mat-icon-button
+            type="button"
+            [attr.aria-label]="'CLIENT.SCHEDULE.COMPLETE_DIALOG.REMOVE_SERVICE' | translate"
+            [matTooltip]="'CLIENT.SCHEDULE.COMPLETE_DIALOG.REMOVE_SERVICE' | translate"
+            [disabled]="isSaving"
+            (click)="removeService(i)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      } @empty {
+        <p class="muted">{{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.NO_ADDITIONAL_SERVICES' | translate }}</p>
+      }
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="!canAddService || isLoadingServices || servicesError !== null || isSaving"
+      (click)="addService()"
+    >
+      <mat-icon>add</mat-icon>
+      {{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.ADD_SERVICE' | translate }}
+    </button>
+
+    <p class="total">
+      {{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.TOTAL' | translate }}: <strong>{{ totalBam | money }}</strong>
+    </p>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <!-- mat-dialog-close: closes the dialog with no result (undefined) -->
+  <button mat-button type="button" mat-dialog-close [disabled]="isSaving">
+    {{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.CLOSE' | translate }}
+  </button>
+  <!-- form="...": the button is outside <form>, but still submits it -->
+  <button mat-flat-button type="submit" form="complete-appointment-form" [disabled]="isSaving">
+    @if (isSaving) {
+      <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+    }
+    {{ 'CLIENT.SCHEDULE.COMPLETE_DIALOG.CONFIRM' | translate }}
+  </button>
+</mat-dialog-actions>

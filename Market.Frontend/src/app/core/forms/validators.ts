@@ -70,6 +70,19 @@ export class AppValidators {
     return looksLikeUtc && !Number.isNaN(Date.parse(text)) ? null : { utcIsoString: true };
   }
 
+  /**
+   * Text that is not made only of spaces, e.g. "   " is not allowed.
+   * Validators.required accepts "   ", but FluentValidation NotEmpty() on the backend does not.
+   * An empty value ("") is left to Validators.required. Error: { notBlank: true }
+   */
+  static notBlank(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (value === null || value === undefined || value === "") {
+      return null;
+    }
+    return String(value).trim() === "" ? { notBlank: true } : null;
+  }
+
   /** Najviše `max` decimala (npr. kurs sa 6 decimala). Greška: { maxDecimals: { max } } */
   static maxDecimals(max: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {

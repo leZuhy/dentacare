@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
 import {
+  CompleteAppointmentCommand,
   CreateAppointmentCommand,
   CreateAppointmentCommandDto,
   GetDentistScheduleQueryDto,
@@ -96,5 +97,15 @@ export class AppointmentsApiService {
    */
   reschedule(id: number, payload: RescheduleAppointmentCommand): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/${id}/reschedule`, payload);
+  }
+
+  /**
+   * POST api/appointments/{id}/complete -> 204 (Dentist only, own appointment only).
+   * 400 for invalid findings/therapy/service ids (field errors, see applyServerErrors).
+   * 404 when it does not exist OR belongs to another dentist.
+   * 409 when it is not Scheduled, has not started yet, or a chosen service is no longer active.
+   */
+  complete(id: number, payload: CompleteAppointmentCommand): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${id}/complete`, payload);
   }
 }
